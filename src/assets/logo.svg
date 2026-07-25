@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360">
+  <defs>
+    <linearGradient id="gradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f5d2e" />
+      <stop offset="100%" stop-color="#247c3f" />
+    </linearGradient>
+    <path id="topTextPath" d="M60 90 A120 120 0 0 1 300 90" />
+    <path id="bottomTextPath" d="M300 270 A120 120 0 0 1 60 270" />
+  </defs>
+  <rect width="360" height="360" rx="180" fill="#0f5d2e" />
+  <circle cx="180" cy="180" r="138" fill="#fff" />
+  <circle cx="180" cy="180" r="120" fill="url(#gradient)" />
+  <circle cx="180" cy="180" r="96" fill="#fff" />
+  <circle cx="180" cy="180" r="82" fill="#0f5d2e" />
+  <g transform="translate(180 180)">
+    <g fill="#fff">
+      <circle cx="0" cy="-22" r="16" />
+      <circle cx="-30" cy="30" r="16" />
+      <circle cx="30" cy="30" r="16" />
+      <path d="M-28 40 C-28 20 28 20 28 40 C28 52 -28 52 -28 40 Z" />
+      <path d="M-8 8 C-8 0 8 0 8 8 C8 16 -8 16 -8 8 Z" fill="#f4c84f" />
+    </g>
+    <g fill="#fff" opacity="0.8">
+      <path d="M-64 -14 L-80 -10 L-88 6 L-80 20 L-64 24 L-56 12 Z" />
+      <path d="M64 -14 L80 -10 L88 6 L80 20 L64 24 L56 12 Z" />
+      <path d="M-14 -64 L-10 -80 L6 -88 L20 -80 L24 -64 L12 -56 Z" />
+      <path d="M-14 64 L-10 80 L6 88 L20 80 L24 64 L12 56 Z" />
+    </g>
+  </g>
+  <text font-family="Arial, sans-serif" font-size="14" fill="#fff" letter-spacing="0.5">
+    <textPath href="#topTextPath" startOffset="50%" text-anchor="middle">ST. MARGARET CO-OPERATIVE SAVINGS AND DEVELOPMENT SOCIETY LTD.</textPath>
+  </text>
+  <text font-family="Arial, sans-serif" font-size="16" fill="#e72b26" font-weight="bold" text-anchor="middle">
+    <textPath href="#bottomTextPath" startOffset="50%">* ST. MARGARET *</textPath>
+  </text>
+</svg>
