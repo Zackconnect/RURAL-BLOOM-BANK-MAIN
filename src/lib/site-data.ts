@@ -46,12 +46,12 @@ export const savings = [
 ];
 
 export const loans = [
-  { icon: Users, name: "Personal Loan", max: "GHS 100,000", rate: "18% p.a.", requirements: ["Valid ID", "3 months payslip", "Guarantor"], desc: "Fast, flexible cash for life's moments." },
-  { icon: Briefcase, name: "Business Loan", max: "GHS 500,000", rate: "22% p.a.", requirements: ["Business registration", "6 months bank statement", "Collateral"], desc: "Working capital and expansion finance for SMEs." },
-  { icon: Tractor, name: "Agriculture Loan", max: "GHS 250,000", rate: "16% p.a.", requirements: ["Farm assessment", "Off-taker letter", "Insurance"], desc: "Seasonal and asset finance for farmers." },
-  { icon: Home, name: "Mortgage", max: "GHS 1,500,000", rate: "19% p.a.", requirements: ["Property valuation", "Down payment 20%", "Income proof"], desc: "Own your home with terms up to 20 years." },
-  { icon: Car, name: "Vehicle Loan", max: "GHS 300,000", rate: "20% p.a.", requirements: ["Vehicle quotation", "Insurance", "Down payment 25%"], desc: "New and used vehicle finance." },
-  { icon: GraduationCap, name: "Educational Loan", max: "GHS 150,000", rate: "14% p.a.", requirements: ["Admission letter", "Guarantor", "Fee schedule"], desc: "Invest in tuition, books and living costs." },
+  { icon: Users, name: "Susu Loans", max: "GHS 5,000", rate: "18% p.a.", requirements: ["Susu group membership", "ID"], desc: "Small, short-term loans for rotating savings members." },
+  { icon: PiggyBank, name: "Savings Loans", max: "GHS 50,000", rate: "16% p.a.", requirements: ["Linked savings account", "Minimum balance"], desc: "Loans secured against your savings or fixed deposits." },
+  { icon: Users, name: "Group Loans", max: "GHS 100,000", rate: "17% p.a.", requirements: ["Group registration", "Group guarantors"], desc: "Lending to registered groups and cooperatives for joint activities." },
+  { icon: Tractor, name: "Agric Loans", max: "GHS 250,000", rate: "14% p.a.", requirements: ["Farm plan", "Harvest schedule", "Insurance recommended"], desc: "Seasonal and input finance tailored for farmers and agribusiness." },
+  { icon: ShieldCheck, name: "Emergency Loans", max: "GHS 10,000", rate: "20% p.a.", requirements: ["ID", "Account history"], desc: "Quick access to funds for urgent household or health needs." },
+  { icon: HeartHandshake, name: "Funeral Loans", max: "GHS 15,000", rate: "15% p.a.", requirements: ["ID", "Proof of relation"], desc: "Short-term support to cover funeral and related expenses." },
 ];
 
 export const digital = [
