@@ -42,7 +42,7 @@ function Home() {
               Trusted since 2024
             </div>
             <h1 className="text-4xl font-extrabold leading-tight tracking-tight md:text-6xl lg:text-7xl">
-              Banking Made <span className="text-gradient-gold">Simple</span> for Everyone
+              Welcome to <span className="text-gradient-gold">{bank.name}</span>
             </h1>
             <p className="mt-5 max-w-xl text-lg opacity-90 md:text-xl">
               From the farm to the city — grow your money, fund your dreams and bank
