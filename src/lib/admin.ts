@@ -17,7 +17,7 @@ const ADMIN_SESSION_KEY = "akrb-admin-session";
 
 // Read admin credentials from Vite env vars if provided for better security in deployments.
 // Fallback to the previous defaults for local development.
-const maybeImportMeta = (typeof import !== "undefined") ? (import.meta as any) : undefined;
+const maybeImportMeta = (typeof window !== "undefined") ? (import.meta as any) : undefined;
 const maybeEnv = maybeImportMeta?.env as Record<string, string> | undefined;
 const ADMIN_USERNAME = maybeEnv?.VITE_ADMIN_USER ? String(maybeEnv.VITE_ADMIN_USER) : "admin";
 const ADMIN_PASSWORD = maybeEnv?.VITE_ADMIN_PASSWORD ? String(maybeEnv.VITE_ADMIN_PASSWORD) : "admin123";
