@@ -8,9 +8,9 @@ export const Route = createFileRoute("/loans")({
   head: () => ({
     meta: [
       { title: "Loans — St. Margaret Co-operative Savings and Development Society." },
-      { name: "description", content: "Personal, business, agriculture, mortgage, vehicle and educational loans with competitive rates and fast approvals." },
+      { name: "description", content: "Susu, Savings, Group, Agric, Emergency and Funeral loan packages — quick approvals and member-focused terms." },
       { property: "og:title", content: "Loans — St. Margaret Co-operative Savings and Development Society." },
-      { property: "og:description", content: "Financing that moves at the speed of your ambition." },
+      { property: "og:description", content: "Susu, Savings, Group, Agric, Emergency and Funeral loan packages — quick approvals and member-focused terms." },
     ],
   }),
   component: Loans,
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/loans")({
 function Loans() {
   return (
     <>
-      <PageHeader eyebrow="Loans" title="Funding your ambition" desc="Six flexible loan products — approved in days, not months." />
+      <PageHeader eyebrow="Loans" title="Loan packages for every need" desc="Six loan packages: Susu, Savings, Group, Agric, Emergency and Funeral — designed for our members with fast approvals." />
       <Section>
         <div className="mb-14 grid gap-8 md:grid-cols-2 md:items-center">
           <div>
