@@ -113,42 +113,7 @@ export function Header() {
           <NavItem to="/">Home</NavItem>
           <NavItem to="/about">About</NavItem>
           <NavItem to="/accounts">Accounts</NavItem>
-          <div className="group relative">
-            <button className="flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
-              Accounts <ChevronDown className="h-4 w-4" />
-            </button>
-            <div className="invisible absolute left-1/2 top-full z-50 w-72 -translate-x-1/2 pt-2 opacity-0 transition-all group-hover:visible group-hover:opacity-100">
-              <div className="rounded-2xl border bg-popover p-2 shadow-elegant">
-                {accountLinks.map((l) => (
-                  <Link
-                    key={l.to}
-                    to={l.to}
-                    className="block rounded-xl px-4 py-2.5 text-sm hover:bg-accent hover:text-accent-foreground"
-                  >
-                    {l.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div className="group relative">
-            <button className="flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
-              Products <ChevronDown className="h-4 w-4" />
-            </button>
-            <div className="invisible absolute left-1/2 top-full z-50 w-72 -translate-x-1/2 pt-2 opacity-0 transition-all group-hover:visible group-hover:opacity-100">
-              <div className="rounded-2xl border bg-popover p-2 shadow-elegant">
-                {productLinks.map((l) => (
-                  <Link
-                    key={l.to}
-                    to={l.to}
-                    className="block rounded-xl px-4 py-2.5 text-sm hover:bg-accent hover:text-accent-foreground"
-                  >
-                    {l.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
+          <NavItem to="/products">Products</NavItem>
           <NavItem to="/branches">Branches</NavItem>
           <NavItem to="/news">News</NavItem>
           <NavItem to="/careers">Careers</NavItem>
