@@ -12,8 +12,15 @@ export type ContactSubmission = {
 
 const STORAGE_KEY = "akrb-contact-submissions";
 const ADMIN_SESSION_KEY = "akrb-admin-session";
-const ADMIN_USERNAME = "admin";
-const ADMIN_PASSWORD = "admin123";
+
+// Read admin credentials from Vite env vars if provided for better security in deployments.
+// Fallback to the previous defaults for local development.
+const ADMIN_USERNAME = (typeof import !== "undefined" && (import.meta as any)?.env?.VITE_ADMIN_USER)
+  ? String((import.meta as any).env.VITE_ADMIN_USER)
+  : "admin";
+const ADMIN_PASSWORD = (typeof import !== "undefined" && (import.meta as any)?.env?.VITE_ADMIN_PASSWORD)
+  ? String((import.meta as any).env.VITE_ADMIN_PASSWORD)
+  : "admin123";
 
 const isBrowser = typeof window !== "undefined";
 
