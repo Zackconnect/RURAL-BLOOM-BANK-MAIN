@@ -128,6 +128,7 @@ export function Header() {
         <nav className="hidden lg:flex items-center gap-1">
           <NavItem to="/">Home</NavItem>
           <NavItem to="/about">About</NavItem>
+          <NavItem to="/accounts">Accounts</NavItem>
           <div className="group relative">
             <button className="flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
               Accounts <ChevronDown className="h-4 w-4" />
