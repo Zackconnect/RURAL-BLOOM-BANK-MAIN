@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Menu, X, ChevronDown, Search, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { bank } from "@/lib/site-data";
@@ -27,6 +27,7 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [dark, setDark] = useState(false);
+  const logoClickRef = useRef({ count: 0, timer: 0 } as { count: number; timer: number });
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -76,7 +77,29 @@ export function Header() {
       </div>
 
       <div className="container-x flex h-16 items-center justify-between gap-4 md:h-20">
-        <Link to="/" className="flex items-center gap-3 shrink-0">
+        <Link
+          to="/"
+          className="flex items-center gap-3 shrink-0"
+          onClick={(e) => {
+            // Triple-click secret: three quick clicks on the logo navigates to /admin
+            const ref = logoClickRef.current;
+            ref.count += 1;
+            if (ref.timer) window.clearTimeout(ref.timer);
+            ref.timer = window.setTimeout(() => {
+              ref.count = 0;
+              ref.timer = 0;
+            }, 700);
+            if (ref.count >= 3) {
+              ref.count = 0;
+              if (ref.timer) {
+                window.clearTimeout(ref.timer);
+                ref.timer = 0;
+              }
+              e.preventDefault();
+              window.location.href = "/admin";
+            }
+          }}
+        >
           <img
             src={logo}
             alt="St. Margaret Co-operative logo"
