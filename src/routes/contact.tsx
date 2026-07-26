@@ -8,6 +8,7 @@ import { Phone, Mail, MapPin, Clock, Facebook, Twitter, Instagram, Linkedin, Sen
 import { useState } from "react";
 import { toast } from "sonner";
 import { bank } from "@/lib/site-data";
+import { createContactSubmissionId, saveContactSubmission } from "@/lib/admin";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -26,11 +27,26 @@ function Contact() {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+
+    const submission = {
+      id: createContactSubmissionId(),
+      name: String(formData.get("name") ?? "").trim(),
+      email: String(formData.get("email") ?? "").trim(),
+      phone: String(formData.get("phone") ?? "").trim(),
+      subject: String(formData.get("subject") ?? "").trim(),
+      message: String(formData.get("message") ?? "").trim(),
+      submittedAt: new Date().toISOString(),
+      status: "new" as const,
+    };
+
+    saveContactSubmission(submission);
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
       toast.success("Message sent! We'll be in touch within 24 hours.");
-      (e.target as HTMLFormElement).reset();
+      form.reset();
     }, 900);
   };
 
@@ -77,13 +93,13 @@ function Contact() {
             <h2 className="text-2xl font-extrabold">Send us a message</h2>
             <p className="mt-1 text-sm text-muted-foreground">We reply within 24 hours on business days.</p>
             <div className="mt-6 grid gap-4 md:grid-cols-2">
-              <Field label="Full name"><Input required maxLength={100} placeholder="Kwame Boateng" /></Field>
-              <Field label="Email"><Input type="email" required maxLength={255} placeholder="you@email.com" /></Field>
-              <Field label="Phone"><Input type="tel" maxLength={20} placeholder="+233 …" /></Field>
-              <Field label="Subject"><Input required maxLength={120} placeholder="Account opening" /></Field>
+              <Field label="Full name"><Input name="name" required maxLength={100} placeholder="Kwame Boateng" /></Field>
+              <Field label="Email"><Input name="email" type="email" required maxLength={255} placeholder="you@email.com" /></Field>
+              <Field label="Phone"><Input name="phone" type="tel" maxLength={20} placeholder="+233 …" /></Field>
+              <Field label="Subject"><Input name="subject" required maxLength={120} placeholder="Account opening" /></Field>
             </div>
             <Field label="Message" className="mt-4">
-              <Textarea required maxLength={1000} rows={5} placeholder="How can we help?" />
+              <Textarea name="message" required maxLength={1000} rows={5} placeholder="How can we help?" />
             </Field>
             <Button type="submit" size="lg" disabled={loading} className="mt-6 w-full rounded-full gradient-primary md:w-auto">
               {loading ? "Sending…" : <>Send message <Send className="ml-2 h-4 w-4" /></>}
