@@ -156,20 +156,6 @@ export function Header() {
           <NavItem to="/contact">Contact</NavItem>
           {showAdmin ? <NavItem to="/admin">Admin</NavItem> : null}
         </nav>
-        {/* Right: contact + actions */}
-        <div className="hidden md:flex items-center gap-6 mr-2 text-sm text-muted-foreground">
-          <div className="flex items-center gap-4 text-xs opacity-90">
-            <span className="whitespace-nowrap">📞 {bank.phone}</span>
-            <span className="whitespace-nowrap">✉ {bank.email}</span>
-          </div>
-          <div className="flex items-center gap-4 opacity-90">
-            <span className="whitespace-nowrap">Mon–Fri 8:30am–4pm</span>
-            <span className="rounded-full bg-gold px-2 py-0.5 text-[10px] font-semibold text-gold-foreground">
-              24/7 Digital Banking
-            </span>
-          </div>
-        </div>
-
         <div className="flex items-center gap-2">
           <button
             aria-label="Search"
