@@ -1,14 +1,10 @@
 import type { ContactSubmission } from "./admin";
 
-const NOTIFY_WEBHOOK = (typeof import !== "undefined" && (import.meta as any)?.env?.VITE_NOTIFICATION_WEBHOOK)
-  ? String((import.meta as any).env.VITE_NOTIFICATION_WEBHOOK)
-  : "";
-const SMS_WEBHOOK = (typeof import !== "undefined" && (import.meta as any)?.env?.VITE_SMS_WEBHOOK)
-  ? String((import.meta as any).env.VITE_SMS_WEBHOOK)
-  : "";
-const NOTIFY_SECRET = (typeof import !== "undefined" && (import.meta as any)?.env?.VITE_NOTIFICATION_SECRET)
-  ? String((import.meta as any).env.VITE_NOTIFICATION_SECRET)
-  : "";
+const _maybeImportMeta = (typeof window !== "undefined") ? (import.meta as any) : undefined;
+const _maybeEnv = _maybeImportMeta?.env as Record<string, string> | undefined;
+const NOTIFY_WEBHOOK = _maybeEnv?.VITE_NOTIFICATION_WEBHOOK ? String(_maybeEnv.VITE_NOTIFICATION_WEBHOOK) : "";
+const SMS_WEBHOOK = _maybeEnv?.VITE_SMS_WEBHOOK ? String(_maybeEnv.VITE_SMS_WEBHOOK) : "";
+const NOTIFY_SECRET = _maybeEnv?.VITE_NOTIFICATION_SECRET ? String(_maybeEnv.VITE_NOTIFICATION_SECRET) : "";
 
 export async function notifyNewSubmission(submission: ContactSubmission) {
   // If no webhook configured, no-op.
