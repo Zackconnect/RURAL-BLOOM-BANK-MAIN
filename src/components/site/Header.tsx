@@ -70,60 +70,63 @@ export function Header() {
       }`}
     >
       <div className="container-x flex h-16 items-center justify-between gap-4 md:h-20">
-        <Link
-          to="/"
-          className="flex items-center gap-3 shrink-0"
-          onClick={(e) => {
-            // Triple-click secret: three quick clicks on the logo navigates to /admin
-            const ref = logoClickRef.current;
-            ref.count += 1;
-            if (ref.timer) window.clearTimeout(ref.timer);
-            ref.timer = window.setTimeout(() => {
-              ref.count = 0;
-              ref.timer = 0;
-            }, 700);
-            if (ref.count >= 3) {
-              ref.count = 0;
-              if (ref.timer) {
-                window.clearTimeout(ref.timer);
+        <div className="flex items-center gap-3">
+          <Link
+            to="/"
+            className="flex shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/10 p-2"
+            onClick={(e) => {
+              // Triple-click secret: three quick clicks on the logo navigates to /admin
+              const ref = logoClickRef.current;
+              ref.count += 1;
+              if (ref.timer) window.clearTimeout(ref.timer);
+              ref.timer = window.setTimeout(() => {
+                ref.count = 0;
                 ref.timer = 0;
+              }, 700);
+              if (ref.count >= 3) {
+                ref.count = 0;
+                if (ref.timer) {
+                  window.clearTimeout(ref.timer);
+                  ref.timer = 0;
+                }
+                e.preventDefault();
+                window.location.href = "/admin";
               }
-              e.preventDefault();
-              window.location.href = "/admin";
-            }
-          }}
-        >
-          <img
-            src={logo}
-            alt="St. Margaret Co-operative logo"
-            className="h-12 w-12 rounded-xl border border-white/10 bg-white/10 object-contain"
-          />
-          <div className="leading-tight">
-            <div className="text-base font-extrabold tracking-tight md:text-lg">
+            }}
+          >
+            <img
+              src={logo}
+              alt="St. Margaret Co-operative logo"
+              className="h-10 w-10 rounded-xl object-contain"
+            />
+          </Link>
+          <div className="hidden sm:flex flex-col text-center sm:text-left">
+            <div className="text-sm font-extrabold tracking-tight md:text-base">
               {bank.name}
             </div>
             <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
               Est. 2024
             </div>
           </div>
-        </Link>
+        </div>
 
-        {/* Left: main nav */}
-        <nav className="hidden lg:flex items-center gap-1 flex-wrap">
-          <NavItem to="/">Home</NavItem>
-          <NavItem to="/about">About</NavItem>
-          <NavItem to="/accounts">Accounts</NavItem>
-          <NavItem to="/products">Products</NavItem>
-          <NavItem to="/branches">Branches</NavItem>
-          <NavItem to="/news">News</NavItem>
-          <NavItem to="/careers">Careers</NavItem>
-          <NavItem to="/faqs">FAQs</NavItem>
-          <NavItem to="/contact">Contact</NavItem>
-          {showAdmin ? <NavItem to="/admin">Admin</NavItem> : null}
-        </nav>
-        
+        <div className="hidden lg:flex flex-1 justify-center">
+          <nav className="flex items-center gap-3 flex-wrap justify-center">
+            <NavItem to="/">Home</NavItem>
+            <NavItem to="/about">About</NavItem>
+            <NavItem to="/accounts">Accounts</NavItem>
+            <NavItem to="/products">Products</NavItem>
+            <NavItem to="/branches">Branches</NavItem>
+            <NavItem to="/news">News</NavItem>
+            <NavItem to="/careers">Careers</NavItem>
+            <NavItem to="/faqs">FAQs</NavItem>
+            <NavItem to="/contact">Contact</NavItem>
+            {showAdmin ? <NavItem to="/admin">Admin</NavItem> : null}
+          </nav>
+        </div>
+
         <div className="flex items-center gap-2">
-          <button
+            <button
             aria-label="Search"
             className="hidden md:grid h-10 w-10 place-items-center rounded-full text-foreground/70 hover:bg-accent"
           >
@@ -146,7 +149,7 @@ export function Header() {
           <button
             aria-label="Menu"
             onClick={() => setOpen((v) => !v)}
-            className="lg:hidden grid h-10 w-10 place-items-center rounded-full border"
+            className="grid h-10 w-10 place-items-center rounded-full border lg:hidden"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
