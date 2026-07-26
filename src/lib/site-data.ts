@@ -3,7 +3,8 @@ import {
   Landmark, Home, Car, Tractor, HeartHandshake, Smartphone, Globe, CreditCard,
   QrCode, Hash, ShieldCheck, HeadphonesIcon, Zap, Award,
 } from "lucide-react";
-import kwameBoatengAvatar from "@/assets/cocoa.jpg";
+import testimonialAvatar from "@/assets/cocoa.jpg";
+import yawOwusuAvatar from "@/assets/yaw-owusu.jpg";
 
 export const bank = {
   name: "St. Margaret Co-operative Savings and Development Society.",
@@ -70,11 +71,11 @@ export const investments = [
 ];
 
 export const testimonials = [
-  { name: "Ama Serwaa", role: "SME Owner, Kumasi", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&h=120&fit=crop&q=80", rating: 5, quote: "St. Margaret Co-operative Savings and Development Society. funded my expansion in under 10 days. The team truly understands small business." },
-  { name: "Kwame Boateng", role: "Cocoa Farmer, Ashanti", avatar: kwameBoatengAvatar, rating: 5, quote: "Their agriculture loan and mobile banking changed my life. I now farm 40 acres." },
-  { name: "Efua Mensah", role: "Teacher, Cape Coast", avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=120&h=120&fit=crop&q=80", rating: 5, quote: "My salary account and children's savings are both here. Simple, honest, reliable." },
-  { name: "Yaw Owusu", role: "Trader, Tamale", avatar: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=120&h=120&fit=crop&q=80", rating: 4, quote: "USSD banking works even in my village. That's what real financial inclusion looks like." },
-  { name: "Akosua Nyarko", role: "Nurse, Accra", avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&h=120&fit=crop&q=80", rating: 5, quote: "The mobile app is beautiful and fast. Transfers land instantly, every time." },
+  { name: "Ama Serwaa", role: "SME Owner, Kumasi", avatar: testimonialAvatar, rating: 5, quote: "St. Margaret Co-operative Savings and Development Society. funded my expansion in under 10 days. The team truly understands small business." },
+  { name: "Kwame Boateng", role: "Cocoa Farmer, Ashanti", avatar: testimonialAvatar, rating: 5, quote: "Their agriculture loan and mobile banking changed my life. I now farm 40 acres." },
+  { name: "Efua Mensah", role: "Teacher, Cape Coast", avatar: testimonialAvatar, rating: 5, quote: "My salary account and children's savings are both here. Simple, honest, reliable." },
+  { name: "Yaw Owusu", role: "Trader, Tamale", avatar: yawOwusuAvatar, rating: 4, quote: "USSD banking works even in my village. That's what real financial inclusion looks like." },
+  { name: "Akosua Nyarko", role: "Nurse, Accra", avatar: yawOwusuAvatar, rating: 5, quote: "The mobile app is beautiful and fast. Transfers land instantly, every time." },
 ];
 
 export const news = [
