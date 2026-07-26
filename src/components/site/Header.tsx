@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState, useRef } from "react";
-import { Menu, X, ChevronDown, Search, Moon, Sun } from "lucide-react";
+import { Menu, X, ChevronDown, Search, Moon, Sun, Home, Info, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { bank } from "@/lib/site-data";
 import logo from "@/routes/logo.svg.jpeg";
@@ -85,13 +85,19 @@ export function Header() {
         </div>
       </div>
 
-      {/* Thin dark-green strip under utility bar */}
+      {/* Thin dark-green strip under utility bar (icon-only) */}
       <div className="hidden md:block bg-emerald-800 text-white text-sm">
         <div className="container-x flex items-center justify-between h-8">
-          <div className="flex items-center gap-6">
-            <a href="/" className="px-2 py-1 hover:underline">Home</a>
-            <a href="/about" className="px-2 py-1 hover:underline">About</a>
-            <a href="/accounts" className="px-2 py-1 hover:underline">Accounts</a>
+          <div className="flex items-center gap-4">
+            <a href="/" aria-label="Home" className="p-2 rounded hover:bg-emerald-700">
+              <Home className="h-4 w-4" />
+            </a>
+            <a href="/about" aria-label="About" className="p-2 rounded hover:bg-emerald-700">
+              <Info className="h-4 w-4" />
+            </a>
+            <a href="/accounts" aria-label="Accounts" className="p-2 rounded hover:bg-emerald-700">
+              <Users className="h-4 w-4" />
+            </a>
           </div>
           <div className="text-sm">Mon–Fri 8:30am–4pm</div>
         </div>
@@ -148,51 +154,72 @@ export function Header() {
             </Link>
           </div>
           <nav className="hidden lg:flex items-center gap-6 flex-wrap">
-          <NavItem to="/">Home</NavItem>
-          <NavItem to="/about">About</NavItem>
-          <NavItem to="/accounts">Accounts</NavItem>
-          <div className="group relative">
-            <button className="flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
-              Accounts <ChevronDown className="h-4 w-4" />
-            </button>
-            <div className="invisible absolute left-1/2 top-full z-50 w-72 -translate-x-1/2 pt-2 opacity-0 transition-all group-hover:visible group-hover:opacity-100">
-              <div className="rounded-2xl border bg-popover p-2 shadow-elegant">
-                {accountLinks.map((l) => (
-                  <Link
-                    key={l.to}
-                    to={l.to}
-                    className="block rounded-xl px-4 py-2.5 text-sm hover:bg-accent hover:text-accent-foreground"
-                  >
-                    {l.label}
-                  </Link>
-                ))}
+            {/* Primary links */}
+            <NavItem to="/">Home</NavItem>
+            <NavItem to="/about">About</NavItem>
+            <NavItem to="/accounts">Accounts</NavItem>
+
+            {/* Accounts dropdown (kept) */}
+            <div className="group relative">
+              <button className="flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
+                Accounts <ChevronDown className="h-4 w-4" />
+              </button>
+              <div className="invisible absolute left-1/2 top-full z-50 w-72 -translate-x-1/2 pt-2 opacity-0 transition-all group-hover:visible group-hover:opacity-100">
+                <div className="rounded-2xl border bg-popover p-2 shadow-elegant">
+                  {accountLinks.map((l) => (
+                    <Link
+                      key={l.to}
+                      to={l.to}
+                      className="block rounded-xl px-4 py-2.5 text-sm hover:bg-accent hover:text-accent-foreground"
+                    >
+                      {l.label}
+                    </Link>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-          <div className="group relative">
-            <button className="flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
-              Products <ChevronDown className="h-4 w-4" />
-            </button>
-            <div className="invisible absolute left-1/2 top-full z-50 w-72 -translate-x-1/2 pt-2 opacity-0 transition-all group-hover:visible group-hover:opacity-100">
-              <div className="rounded-2xl border bg-popover p-2 shadow-elegant">
-                {productLinks.map((l) => (
-                  <Link
-                    key={l.to}
-                    to={l.to}
-                    className="block rounded-xl px-4 py-2.5 text-sm hover:bg-accent hover:text-accent-foreground"
-                  >
-                    {l.label}
-                  </Link>
-                ))}
+
+            {/* Products dropdown (kept) */}
+            <div className="group relative">
+              <button className="flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
+                Products <ChevronDown className="h-4 w-4" />
+              </button>
+              <div className="invisible absolute left-1/2 top-full z-50 w-72 -translate-x-1/2 pt-2 opacity-0 transition-all group-hover:visible group-hover:opacity-100">
+                <div className="rounded-2xl border bg-popover p-2 shadow-elegant">
+                  {productLinks.map((l) => (
+                    <Link
+                      key={l.to}
+                      to={l.to}
+                      className="block rounded-xl px-4 py-2.5 text-sm hover:bg-accent hover:text-accent-foreground"
+                    >
+                      {l.label}
+                    </Link>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-          <NavItem to="/branches">Branches</NavItem>
-          <NavItem to="/news">News</NavItem>
-          <NavItem to="/careers">Careers</NavItem>
-          <NavItem to="/faqs">FAQs</NavItem>
-          <NavItem to="/contact">Contact</NavItem>
-          {showAdmin ? <NavItem to="/admin">Admin</NavItem> : null}
+
+            {/* Additional links hidden until xl; included in More menu on smaller widths */}
+            <NavItem to="/branches" className="hidden xl:inline-flex">Branches</NavItem>
+            <NavItem to="/news" className="hidden xl:inline-flex">News</NavItem>
+            <NavItem to="/careers" className="hidden xl:inline-flex">Careers</NavItem>
+            <NavItem to="/faqs" className="hidden xl:inline-flex">FAQs</NavItem>
+            <NavItem to="/contact" className="hidden xl:inline-flex">Contact</NavItem>
+
+            {/* More menu for lg..xl */}
+            <div className="relative xl:hidden">
+              <button className="flex items-center gap-2 rounded-full px-3 py-2 text-sm bg-transparent border" aria-haspopup="true">
+                More <ChevronDown className="h-4 w-4" />
+              </button>
+              <div className="absolute right-0 mt-2 w-44 rounded-lg border bg-popover shadow-elegant">
+                <Link to="/branches" className="block px-3 py-2 text-sm hover:bg-accent">Branches</Link>
+                <Link to="/news" className="block px-3 py-2 text-sm hover:bg-accent">News</Link>
+                <Link to="/careers" className="block px-3 py-2 text-sm hover:bg-accent">Careers</Link>
+                <Link to="/faqs" className="block px-3 py-2 text-sm hover:bg-accent">FAQs</Link>
+                <Link to="/contact" className="block px-3 py-2 text-sm hover:bg-accent">Contact</Link>
+              </div>
+            </div>
+            {showAdmin ? <NavItem to="/admin">Admin</NavItem> : null}
           </nav>
         </div>
         <div className="flex items-center gap-2">
@@ -301,11 +328,12 @@ export function Header() {
   );
 }
 
-function NavItem({ to, children }: { to: string; children: React.ReactNode }) {
+function NavItem({ to, children, className }: { to: string; children: React.ReactNode; className?: string }) {
+  const base = "rounded-full px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground";
   return (
     <Link
       to={to}
-      className="rounded-full px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+      className={`${base} ${className ?? ""}`}
       activeProps={{ className: "text-primary" }}
       activeOptions={{ exact: to === "/" }}
     >
