@@ -8,6 +8,7 @@ import logo from "@/routes/logo.svg.jpeg";
 const productLinks = [
   { to: "/savings", label: "Savings Accounts" },
   { to: "/current-accounts", label: "Current Accounts" },
+  { to: "/abofra-pa", label: "Abofra Pa Account" },
   { to: "/loans", label: "Loans" },
   { to: "/investments", label: "Investment Products" },
   { to: "/digital-banking", label: "Digital Banking" },
