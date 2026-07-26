@@ -17,12 +17,10 @@ const ADMIN_SESSION_KEY = "akrb-admin-session";
 
 // Read admin credentials from Vite env vars if provided for better security in deployments.
 // Fallback to the previous defaults for local development.
-const ADMIN_USERNAME = (typeof import !== "undefined" && (import.meta as any)?.env?.VITE_ADMIN_USER)
-  ? String((import.meta as any).env.VITE_ADMIN_USER)
-  : "admin";
-const ADMIN_PASSWORD = (typeof import !== "undefined" && (import.meta as any)?.env?.VITE_ADMIN_PASSWORD)
-  ? String((import.meta as any).env.VITE_ADMIN_PASSWORD)
-  : "admin123";
+const maybeImportMeta = (typeof import !== "undefined") ? (import.meta as any) : undefined;
+const maybeEnv = maybeImportMeta?.env as Record<string, string> | undefined;
+const ADMIN_USERNAME = maybeEnv?.VITE_ADMIN_USER ? String(maybeEnv.VITE_ADMIN_USER) : "admin";
+const ADMIN_PASSWORD = maybeEnv?.VITE_ADMIN_PASSWORD ? String(maybeEnv.VITE_ADMIN_PASSWORD) : "admin123";
 
 const isBrowser = typeof window !== "undefined";
 
@@ -104,8 +102,8 @@ export function loginAdmin(username: string, password: string) {
   const valid = username === ADMIN_USERNAME && password === ADMIN_PASSWORD;
   if (!valid) return false;
   const token = makeToken();
-  const ttl = (typeof (import.meta as any)?.env?.VITE_ADMIN_SESSION_TTL_MS === "string")
-    ? Number((import.meta as any).env.VITE_ADMIN_SESSION_TTL_MS) || DEFAULT_SESSION_TTL_MS
+  const ttl = typeof maybeEnv?.VITE_ADMIN_SESSION_TTL_MS === "string"
+    ? Number(maybeEnv.VITE_ADMIN_SESSION_TTL_MS) || DEFAULT_SESSION_TTL_MS
     : DEFAULT_SESSION_TTL_MS;
   writeAdminSession({ token, expiresAt: Date.now() + ttl });
   return true;
