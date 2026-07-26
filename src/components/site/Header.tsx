@@ -49,6 +49,10 @@ export function Header() {
     localStorage.setItem("akrb-theme", next ? "dark" : "light");
   };
 
+  const showAdmin =
+    typeof window !== "undefined" &&
+    (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || ((import.meta as any)?.env?.VITE_SHOW_ADMIN === "true"));
+
   return (
     <header
       className={`sticky top-0 z-50 w-full transition-all duration-300 ${
@@ -115,6 +119,7 @@ export function Header() {
           <NavItem to="/careers">Careers</NavItem>
           <NavItem to="/faqs">FAQs</NavItem>
           <NavItem to="/contact">Contact</NavItem>
+          {showAdmin ? <NavItem to="/admin">Admin</NavItem> : null}
         </nav>
 
         <div className="flex items-center gap-2">
