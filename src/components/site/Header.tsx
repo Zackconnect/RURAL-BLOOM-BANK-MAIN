@@ -14,6 +14,14 @@ const productLinks = [
   { to: "/digital-banking", label: "Digital Banking" },
 ] as const;
 
+const accountLinks = [
+  { to: "/current-accounts", label: "Current account" },
+  { to: "/susu-account", label: "Susu account" },
+  { to: "/savings", label: "Savings account" },
+  { to: "/afihyia-pa", label: "Afihyia pa account" },
+  { to: "/abofra-pa", label: "Abofra pa account" },
+] as const;
+
 const navLinks = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About Us" },
@@ -122,6 +130,24 @@ export function Header() {
           <NavItem to="/about">About</NavItem>
           <div className="group relative">
             <button className="flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
+              Accounts <ChevronDown className="h-4 w-4" />
+            </button>
+            <div className="invisible absolute left-1/2 top-full z-50 w-72 -translate-x-1/2 pt-2 opacity-0 transition-all group-hover:visible group-hover:opacity-100">
+              <div className="rounded-2xl border bg-popover p-2 shadow-elegant">
+                {accountLinks.map((l) => (
+                  <Link
+                    key={l.to}
+                    to={l.to}
+                    className="block rounded-xl px-4 py-2.5 text-sm hover:bg-accent hover:text-accent-foreground"
+                  >
+                    {l.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="group relative">
+            <button className="flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
               Products <ChevronDown className="h-4 w-4" />
             </button>
             <div className="invisible absolute left-1/2 top-full z-50 w-72 -translate-x-1/2 pt-2 opacity-0 transition-all group-hover:visible group-hover:opacity-100">
@@ -191,6 +217,21 @@ export function Header() {
                 {l.label}
               </Link>
             ))}
+            <div className="mt-2 border-t pt-2">
+              <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Accounts
+              </div>
+              {accountLinks.map((l) => (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  onClick={() => setOpen(false)}
+                  className="block rounded-lg px-3 py-2.5 text-sm hover:bg-accent"
+                >
+                  {l.label}
+                </Link>
+              ))}
+            </div>
             <div className="mt-2 border-t pt-2">
               <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 Products
