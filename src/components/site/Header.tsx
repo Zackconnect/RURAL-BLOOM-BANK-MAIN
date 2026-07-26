@@ -69,6 +69,22 @@ export function Header() {
         scrolled ? "glass shadow-soft" : "bg-background/80 backdrop-blur-sm"
       }`}
     >
+      {/* Top utility bar (pale green) */}
+      <div className="hidden md:block bg-emerald-50 text-emerald-800 text-sm">
+        <div className="container-x flex items-center justify-between py-2">
+          <div className="flex items-center gap-6">
+            <a href="/annual-reports" className="hover:underline">Annual Reports</a>
+            <a href="/public-notices" className="hover:underline">Public Notices</a>
+            <a href="/contact" className="hover:underline">Contact Us</a>
+          </div>
+          <div className="flex items-center gap-3">
+            <a href="#" aria-label="facebook" className="text-emerald-600 hover:text-emerald-800">f</a>
+            <a href="#" aria-label="twitter" className="text-emerald-600 hover:text-emerald-800">t</a>
+            <a href="#" aria-label="linkedin" className="text-emerald-600 hover:text-emerald-800">in</a>
+          </div>
+        </div>
+      </div>
+
       <div className="container-x flex h-16 items-center justify-between gap-4 md:h-20">
         <Link
           to="/"
@@ -109,7 +125,8 @@ export function Header() {
         </Link>
 
         {/* Left: main nav */}
-        <nav className="hidden lg:flex items-center gap-1 flex-wrap">
+        <div className="flex-1 flex justify-center">
+          <nav className="hidden lg:flex items-center gap-6 flex-wrap">
           <NavItem to="/">Home</NavItem>
           <NavItem to="/about">About</NavItem>
           <NavItem to="/accounts">Accounts</NavItem>
@@ -155,16 +172,7 @@ export function Header() {
           <NavItem to="/faqs">FAQs</NavItem>
           <NavItem to="/contact">Contact</NavItem>
           {showAdmin ? <NavItem to="/admin">Admin</NavItem> : null}
-        </nav>
-        {/* Contact info inside nav (desktop) */}
-        <div className="hidden lg:flex items-center gap-4 ml-4 text-sm text-muted-foreground">
-          <a href={`tel:${bank.phone}`} className="rounded-full px-3 py-2 text-sm hover:bg-accent">
-            📞 {bank.phone}
-          </a>
-          <a href={`mailto:${bank.email}`} className="rounded-full px-3 py-2 text-sm hover:bg-accent">
-            ✉ {bank.email}
-          </a>
-          <span className="rounded-full px-3 py-2 text-sm text-muted-foreground">Mon–Fri 8:30am–4pm</span>
+          </nav>
         </div>
         <div className="flex items-center gap-2">
           <button
