@@ -10,6 +10,8 @@ export type ContactSubmission = {
   response?: string;
 };
 
+import { notifyNewSubmission } from "@/lib/notify";
+
 const STORAGE_KEY = "akrb-contact-submissions";
 const ADMIN_SESSION_KEY = "akrb-admin-session";
 
@@ -46,6 +48,12 @@ export function saveContactSubmission(submission: ContactSubmission) {
   const submissions = readSubmissions();
   submissions.unshift(submission);
   writeSubmissions(submissions);
+  // send notifications (fire-and-forget)
+  try {
+    void notifyNewSubmission(submission);
+  } catch (err) {
+    console.error("notifyNewSubmission failed", err);
+  }
 }
 
 export function updateContactSubmission(
@@ -68,7 +76,7 @@ const DEFAULT_SESSION_TTL_MS = 8 * 60 * 60 * 1000; // 8 hours
 function makeToken() {
   if (isBrowser && window.crypto?.randomUUID) return window.crypto.randomUUID();
   return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-}
+import { notifyNewSubmission } from "@/lib/notify";
 
 function readAdminSession(): AdminSession | null {
   if (!isBrowser) return null;
