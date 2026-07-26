@@ -24,7 +24,7 @@ export const bank = {
 
 export const stats = [
   { value: 150000, suffix: "+", label: "Happy Customers" },
-  { value: 50, suffix: "+", label: "Branches Nationwide" },
+  { value: 6, suffix: "+", label: "Branches Nationwide" },
   { value: 3, suffix: "+", label: "Years of Service" },
   { value: 98, suffix: "%", label: "Customer Satisfaction" },
 ];
