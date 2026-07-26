@@ -65,7 +65,7 @@ export function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+      className={`sticky top-0 z-50 w-full transition-all duration-300 overflow-x-hidden ${
         scrolled ? "glass shadow-soft" : "bg-background/80 backdrop-blur-sm"
       }`}
     >
@@ -125,7 +125,7 @@ export function Header() {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden lg:flex items-center gap-1">
+        <nav className="hidden lg:flex items-center gap-1 flex-wrap">
           <NavItem to="/">Home</NavItem>
           <NavItem to="/about">About</NavItem>
           <NavItem to="/accounts">Accounts</NavItem>
