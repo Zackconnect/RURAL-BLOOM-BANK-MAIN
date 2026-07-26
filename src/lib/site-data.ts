@@ -3,7 +3,7 @@ import {
   Landmark, Home, Car, Tractor, HeartHandshake, Smartphone, Globe, CreditCard,
   QrCode, Hash, ShieldCheck, HeadphonesIcon, Zap, Award,
 } from "lucide-react";
-import kwameBoatengAvatar from "@/assets/kwame-boateng.jpg";
+import kwameBoatengAvatar from "@/assets/cocoa.jpg";
 
 export const bank = {
   name: "St. Margaret Co-operative Savings and Development Society.",
