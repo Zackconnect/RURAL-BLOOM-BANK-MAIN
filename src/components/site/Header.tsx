@@ -70,7 +70,7 @@ export function Header() {
       }`}
     >
       {/* Top utility bar (pale green) */}
-      <div className="hidden md:block bg-emerald-50 text-emerald-800 text-sm">
+      <div className="hidden md:block bg-[#eaf6ec] text-emerald-800 text-sm">
         <div className="container-x flex items-center justify-between py-2">
           <div className="flex items-center gap-6">
             <a href="/annual-reports" className="hover:underline">Annual Reports</a>
@@ -82,6 +82,18 @@ export function Header() {
             <a href="#" aria-label="twitter" className="text-emerald-600 hover:text-emerald-800">t</a>
             <a href="#" aria-label="linkedin" className="text-emerald-600 hover:text-emerald-800">in</a>
           </div>
+        </div>
+      </div>
+
+      {/* Thin dark-green strip under utility bar */}
+      <div className="hidden md:block bg-emerald-800 text-white text-sm">
+        <div className="container-x flex items-center justify-between h-8">
+          <div className="flex items-center gap-6">
+            <a href="/" className="px-2 py-1 hover:underline">Home</a>
+            <a href="/about" className="px-2 py-1 hover:underline">About</a>
+            <a href="/accounts" className="px-2 py-1 hover:underline">Accounts</a>
+          </div>
+          <div className="text-sm">Mon–Fri 8:30am–4pm</div>
         </div>
       </div>
 
@@ -124,8 +136,17 @@ export function Header() {
           </div>
         </Link>
 
-        {/* Left: main nav */}
-        <div className="flex-1 flex justify-center">
+        {/* Left: logo + nav (left-aligned) */}
+        <div className="flex items-center gap-6">
+          <div className="flex items-center shrink-0">
+            <Link to="/" className="flex items-center gap-3">
+              <img
+                src={logo}
+                alt="St. Margaret Co-operative logo"
+                className="h-12 w-12 rounded-xl border border-white/10 bg-white/10 object-contain"
+              />
+            </Link>
+          </div>
           <nav className="hidden lg:flex items-center gap-6 flex-wrap">
           <NavItem to="/">Home</NavItem>
           <NavItem to="/about">About</NavItem>
