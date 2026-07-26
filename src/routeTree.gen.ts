@@ -10,8 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AbofraPaRouteImport } from './routes/abofra-pa'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AfihyiaPaRouteImport } from './routes/afihyia-pa'
 import { Route as BranchesRouteImport } from './routes/branches'
 import { Route as CareersRouteImport } from './routes/careers'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -24,10 +27,16 @@ import { Route as NewsRouteImport } from './routes/news'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as SavingsRouteImport } from './routes/savings'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SusuAccountRouteImport } from './routes/susu-account'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AbofraPaRoute = AbofraPaRouteImport.update({
+  id: '/abofra-pa',
+  path: '/abofra-pa',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -35,9 +44,19 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AccountsRoute = AccountsRouteImport.update({
+  id: '/accounts',
+  path: '/accounts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AfihyiaPaRoute = AfihyiaPaRouteImport.update({
+  id: '/afihyia-pa',
+  path: '/afihyia-pa',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BranchesRoute = BranchesRouteImport.update({
@@ -100,11 +119,19 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SusuAccountRoute = SusuAccountRouteImport.update({
+  id: '/susu-account',
+  path: '/susu-account',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/abofra-pa': typeof AbofraPaRoute
   '/about': typeof AboutRoute
+  '/accounts': typeof AccountsRoute
   '/admin': typeof AdminRoute
+  '/afihyia-pa': typeof AfihyiaPaRoute
   '/branches': typeof BranchesRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
@@ -117,11 +144,15 @@ export interface FileRoutesByFullPath {
   '/products': typeof ProductsRoute
   '/savings': typeof SavingsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/susu-account': typeof SusuAccountRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/abofra-pa': typeof AbofraPaRoute
   '/about': typeof AboutRoute
+  '/accounts': typeof AccountsRoute
   '/admin': typeof AdminRoute
+  '/afihyia-pa': typeof AfihyiaPaRoute
   '/branches': typeof BranchesRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
@@ -134,12 +165,16 @@ export interface FileRoutesByTo {
   '/products': typeof ProductsRoute
   '/savings': typeof SavingsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/susu-account': typeof SusuAccountRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/abofra-pa': typeof AbofraPaRoute
   '/about': typeof AboutRoute
+  '/accounts': typeof AccountsRoute
   '/admin': typeof AdminRoute
+  '/afihyia-pa': typeof AfihyiaPaRoute
   '/branches': typeof BranchesRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
@@ -152,13 +187,17 @@ export interface FileRoutesById {
   '/products': typeof ProductsRoute
   '/savings': typeof SavingsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/susu-account': typeof SusuAccountRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/abofra-pa'
     | '/about'
+    | '/accounts'
     | '/admin'
+    | '/afihyia-pa'
     | '/branches'
     | '/careers'
     | '/contact'
@@ -171,11 +210,15 @@ export interface FileRouteTypes {
     | '/products'
     | '/savings'
     | '/sitemap.xml'
+    | '/susu-account'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/abofra-pa'
     | '/about'
+    | '/accounts'
     | '/admin'
+    | '/afihyia-pa'
     | '/branches'
     | '/careers'
     | '/contact'
@@ -188,11 +231,15 @@ export interface FileRouteTypes {
     | '/products'
     | '/savings'
     | '/sitemap.xml'
+    | '/susu-account'
   id:
     | '__root__'
     | '/'
+    | '/abofra-pa'
     | '/about'
+    | '/accounts'
     | '/admin'
+    | '/afihyia-pa'
     | '/branches'
     | '/careers'
     | '/contact'
@@ -205,12 +252,16 @@ export interface FileRouteTypes {
     | '/products'
     | '/savings'
     | '/sitemap.xml'
+    | '/susu-account'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AbofraPaRoute: typeof AbofraPaRoute
   AboutRoute: typeof AboutRoute
+  AccountsRoute: typeof AccountsRoute
   AdminRoute: typeof AdminRoute
+  AfihyiaPaRoute: typeof AfihyiaPaRoute
   BranchesRoute: typeof BranchesRoute
   CareersRoute: typeof CareersRoute
   ContactRoute: typeof ContactRoute
@@ -223,6 +274,7 @@ export interface RootRouteChildren {
   ProductsRoute: typeof ProductsRoute
   SavingsRoute: typeof SavingsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  SusuAccountRoute: typeof SusuAccountRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -234,6 +286,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/abofra-pa': {
+      id: '/abofra-pa'
+      path: '/abofra-pa'
+      fullPath: '/abofra-pa'
+      preLoaderRoute: typeof AbofraPaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -241,11 +300,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/accounts': {
+      id: '/accounts'
+      path: '/accounts'
+      fullPath: '/accounts'
+      preLoaderRoute: typeof AccountsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin': {
       id: '/admin'
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/afihyia-pa': {
+      id: '/afihyia-pa'
+      path: '/afihyia-pa'
+      fullPath: '/afihyia-pa'
+      preLoaderRoute: typeof AfihyiaPaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/branches': {
@@ -332,13 +405,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/susu-account': {
+      id: '/susu-account'
+      path: '/susu-account'
+      fullPath: '/susu-account'
+      preLoaderRoute: typeof SusuAccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AbofraPaRoute: AbofraPaRoute,
   AboutRoute: AboutRoute,
+  AccountsRoute: AccountsRoute,
   AdminRoute: AdminRoute,
+  AfihyiaPaRoute: AfihyiaPaRoute,
   BranchesRoute: BranchesRoute,
   CareersRoute: CareersRoute,
   ContactRoute: ContactRoute,
@@ -351,6 +434,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProductsRoute: ProductsRoute,
   SavingsRoute: SavingsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  SusuAccountRoute: SusuAccountRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
