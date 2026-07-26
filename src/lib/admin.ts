@@ -58,11 +58,49 @@ export function updateContactSubmission(
   return next;
 }
 
+type AdminSession = {
+  token: string;
+  expiresAt: number; // epoch ms
+};
+
+const DEFAULT_SESSION_TTL_MS = 8 * 60 * 60 * 1000; // 8 hours
+
+function makeToken() {
+  if (isBrowser && window.crypto?.randomUUID) return window.crypto.randomUUID();
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+function readAdminSession(): AdminSession | null {
+  if (!isBrowser) return null;
+  try {
+    const raw = window.localStorage.getItem(ADMIN_SESSION_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as AdminSession;
+    if (!parsed?.token || !parsed?.expiresAt) return null;
+    if (parsed.expiresAt < Date.now()) {
+      window.localStorage.removeItem(ADMIN_SESSION_KEY);
+      return null;
+    }
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+function writeAdminSession(session: AdminSession) {
+  if (!isBrowser) return;
+  window.localStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify(session));
+}
+
 export function loginAdmin(username: string, password: string) {
   if (!isBrowser) return false;
   const valid = username === ADMIN_USERNAME && password === ADMIN_PASSWORD;
   if (!valid) return false;
-  window.localStorage.setItem(ADMIN_SESSION_KEY, "true");
+  const token = makeToken();
+  const ttl = (typeof (import.meta as any)?.env?.VITE_ADMIN_SESSION_TTL_MS === "string")
+    ? Number((import.meta as any).env.VITE_ADMIN_SESSION_TTL_MS) || DEFAULT_SESSION_TTL_MS
+    : DEFAULT_SESSION_TTL_MS;
+  writeAdminSession({ token, expiresAt: Date.now() + ttl });
   return true;
 }
 
@@ -73,7 +111,7 @@ export function logoutAdmin() {
 
 export function isAdminLoggedIn() {
   if (!isBrowser) return false;
-  return window.localStorage.getItem(ADMIN_SESSION_KEY) === "true";
+  return readAdminSession() !== null;
 }
 
 export function createContactSubmissionId() {
