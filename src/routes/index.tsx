@@ -21,6 +21,12 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
+  const showAdminFromHome =
+    typeof window !== "undefined" &&
+    (window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1" ||
+      import.meta.env.VITE_SHOW_ADMIN === "true");
+
   return (
     <>
       {/* HERO */}
@@ -49,6 +55,11 @@ function Home() {
               <Button asChild size="lg" variant="outline" className="rounded-full bg-transparent border-primary-foreground/40 text-primary-foreground hover:bg-primary-foreground/10">
                 <Link to="/about">Learn More</Link>
               </Button>
+              {showAdminFromHome ? (
+                <Button asChild size="lg" variant="outline" className="rounded-full bg-transparent border-gold/40 text-gold hover:bg-gold/10">
+                  <Link to="/admin">Admin Portal</Link>
+                </Button>
+              ) : null}
             </div>
 
             <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4 max-w-2xl">
