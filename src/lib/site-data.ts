@@ -69,11 +69,11 @@ export const investments = [
 ];
 
 export const testimonials = [
-  { name: "Ama Serwaa", role: "SME Owner, Kumasi", avatar: "https://i.pravatar.cc/120?img=47", rating: 5, quote: "St. Margaret Co-operative Savings and Development Society. funded my expansion in under 10 days. The team truly understands small business." },
-  { name: "Kwame Boateng", role: "Cocoa Farmer, Ashanti", avatar: "https://i.pravatar.cc/120?img=12", rating: 5, quote: "Their agriculture loan and mobile banking changed my life. I now farm 40 acres." },
-  { name: "Efua Mensah", role: "Teacher, Cape Coast", avatar: "https://i.pravatar.cc/120?img=32", rating: 5, quote: "My salary account and children's savings are both here. Simple, honest, reliable." },
-  { name: "Yaw Owusu", role: "Trader, Tamale", avatar: "https://i.pravatar.cc/120?img=15", rating: 4, quote: "USSD banking works even in my village. That's what real financial inclusion looks like." },
-  { name: "Akosua Nyarko", role: "Nurse, Accra", avatar: "https://i.pravatar.cc/120?img=45", rating: 5, quote: "The mobile app is beautiful and fast. Transfers land instantly, every time." },
+  { name: "Ama Serwaa", role: "SME Owner, Kumasi", avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=120&h=120&fit=crop&q=80", rating: 5, quote: "St. Margaret Co-operative Savings and Development Society. funded my expansion in under 10 days. The team truly understands small business." },
+  { name: "Kwame Boateng", role: "Cocoa Farmer, Ashanti", avatar: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=120&h=120&fit=crop&q=80", rating: 5, quote: "Their agriculture loan and mobile banking changed my life. I now farm 40 acres." },
+  { name: "Efua Mensah", role: "Teacher, Cape Coast", avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=120&h=120&fit=crop&q=80", rating: 5, quote: "My salary account and children's savings are both here. Simple, honest, reliable." },
+  { name: "Yaw Owusu", role: "Trader, Tamale", avatar: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=120&h=120&fit=crop&q=80", rating: 4, quote: "USSD banking works even in my village. That's what real financial inclusion looks like." },
+  { name: "Akosua Nyarko", role: "Nurse, Accra", avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&h=120&fit=crop&q=80", rating: 5, quote: "The mobile app is beautiful and fast. Transfers land instantly, every time." },
 ];
 
 export const news = [

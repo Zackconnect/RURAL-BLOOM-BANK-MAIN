@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Menu, X, ChevronDown, Search, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { bank } from "@/lib/site-data";
-import logo from "@/assets/logo.svg";
+import logo from "@/routes/logo.svg.jpeg";
 
 const productLinks = [
   { to: "/savings", label: "Savings Accounts" },
@@ -73,7 +73,11 @@ export function Header() {
 
       <div className="container-x flex h-16 items-center justify-between gap-4 md:h-20">
         <Link to="/" className="flex items-center gap-3 shrink-0">
-          <img src={logo} alt="St. Margaret Co-operative logo" className="h-12 w-12 rounded-xl border border-white/10 bg-white/10 object-cover" />
+          <img
+            src={logo}
+            alt="St. Margaret Co-operative logo"
+            className="h-12 w-12 rounded-xl border border-white/10 bg-white/10 object-contain"
+          />
           <div className="leading-tight">
             <div className="text-base font-extrabold tracking-tight md:text-lg">
               {bank.name}
