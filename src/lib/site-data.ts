@@ -5,6 +5,8 @@ import {
 } from "lucide-react";
 import testimonialAvatar from "@/assets/cocoa.jpg";
 import yawOwusuAvatar from "@/assets/yaw-owusu.jpg";
+import akosuaAvatar from "@/assets/akosua-nyarko.jpg";
+import efuaAvatar from "@/assets/efua-mensah.jpg";
 
 export const bank = {
   name: "St. Margaret Co-operative Savings and Development Society.",
@@ -73,9 +75,9 @@ export const investments = [
 export const testimonials = [
   { name: "Ama Serwaa", role: "SME Owner, Kumasi", avatar: testimonialAvatar, rating: 5, quote: "St. Margaret Co-operative Savings and Development Society. funded my expansion in under 10 days. The team truly understands small business." },
   { name: "Kwame Boateng", role: "Cocoa Farmer, Ashanti", avatar: testimonialAvatar, rating: 5, quote: "Their agriculture loan and mobile banking changed my life. I now farm 40 acres." },
-  { name: "Efua Mensah", role: "Teacher, Cape Coast", avatar: testimonialAvatar, rating: 5, quote: "My salary account and children's savings are both here. Simple, honest, reliable." },
+  { name: "Efua Mensah", role: "Teacher, Cape Coast", avatar: efuaAvatar, rating: 5, quote: "My salary account and children's savings are both here. Simple, honest, reliable." },
   { name: "Yaw Owusu", role: "Trader, Tamale", avatar: yawOwusuAvatar, rating: 4, quote: "USSD banking works even in my village. That's what real financial inclusion looks like." },
-  { name: "Akosua Nyarko", role: "Nurse, Accra", avatar: yawOwusuAvatar, rating: 5, quote: "The mobile app is beautiful and fast. Transfers land instantly, every time." },
+  { name: "Akosua Nyarko", role: "Nurse, Accra", avatar: akosuaAvatar, rating: 5, quote: "The mobile app is beautiful and fast. Transfers land instantly, every time." },
 ];
 
 export const news = [
