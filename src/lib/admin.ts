@@ -75,6 +75,8 @@ function makeToken() {
   if (isBrowser && window.crypto?.randomUUID) return window.crypto.randomUUID();
   return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 
+}
+
 function readAdminSession(): AdminSession | null {
   if (!isBrowser) return null;
   try {
