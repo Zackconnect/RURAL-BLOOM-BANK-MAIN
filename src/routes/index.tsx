@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import heroImg from "@/assets/hero.jpg";
-import { ArrowRight, CheckCircle2, Star, Calendar, ChevronRight } from "lucide-react";
+import { ArrowRight, CheckCircle2, Star, Calendar, ChevronRight, Wallet, PiggyBank, TrendingUp, Baby } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
@@ -85,6 +85,7 @@ function Home() {
         <Tabs defaultValue="savings" className="mx-auto max-w-6xl">
           <TabsList className="mx-auto mb-8 flex h-auto w-full max-w-3xl flex-wrap justify-center gap-2 rounded-full bg-secondary p-1.5">
             {[
+              ["accounts", "Accounts"],
               ["savings", "Savings"],
               ["loans", "Loans"],
               ["invest", "Investments"],
@@ -102,6 +103,15 @@ function Home() {
 
           <TabsContent value="savings">
             <ProductGrid items={savings.slice(0, 6).map((p) => ({ icon: p.icon, title: p.name, desc: p.desc, meta: `${p.rate} • Min ${p.min}`, to: "/savings" }))} />
+          </TabsContent>
+          <TabsContent value="accounts">
+            <ProductGrid items={[
+              { icon: Wallet, title: 'Current account', desc: 'Fast transactional banking for individuals and businesses.', meta: 'Open now', to: '/current-accounts' },
+              { icon: PiggyBank, title: 'Susu account', desc: 'Community savings and rotating contributions.', meta: 'Group based', to: '/susu-account' },
+              { icon: PiggyBank, title: 'Savings account', desc: 'Regular, youth and children savings to grow your money.', meta: 'From GHS 5', to: '/savings' },
+              { icon: TrendingUp, title: 'Afihyia pa account', desc: 'Family savings plan with seasonal bonuses.', meta: 'Rewards', to: '/afihyia-pa' },
+              { icon: Baby, title: 'Abofra pa account', desc: 'Children and youth savings to build early saving habits.', meta: 'Youth focused', to: '/abofra-pa' },
+            ]} />
           </TabsContent>
           <TabsContent value="loans">
             <ProductGrid items={loans.slice(0, 6).map((p) => ({ icon: p.icon, title: p.name, desc: p.desc, meta: `Up to ${p.max} • ${p.rate}`, to: "/loans" }))} />
