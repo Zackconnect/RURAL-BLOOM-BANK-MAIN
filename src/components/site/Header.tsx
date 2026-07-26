@@ -156,6 +156,16 @@ export function Header() {
           <NavItem to="/contact">Contact</NavItem>
           {showAdmin ? <NavItem to="/admin">Admin</NavItem> : null}
         </nav>
+        {/* Contact info inside nav (desktop) */}
+        <div className="hidden lg:flex items-center gap-4 ml-4 text-sm text-muted-foreground">
+          <a href={`tel:${bank.phone}`} className="rounded-full px-3 py-2 text-sm hover:bg-accent">
+            📞 {bank.phone}
+          </a>
+          <a href={`mailto:${bank.email}`} className="rounded-full px-3 py-2 text-sm hover:bg-accent">
+            ✉ {bank.email}
+          </a>
+          <span className="rounded-full px-3 py-2 text-sm text-muted-foreground">Mon–Fri 8:30am–4pm</span>
+        </div>
         <div className="flex items-center gap-2">
           <button
             aria-label="Search"
@@ -239,6 +249,15 @@ export function Header() {
                 Open Account
               </Link>
             </Button>
+            <div className="mt-3 border-t pt-3 px-3">
+              <a href={`tel:${bank.phone}`} className="block rounded-lg px-3 py-2 text-sm hover:bg-accent">
+                📞 {bank.phone}
+              </a>
+              <a href={`mailto:${bank.email}`} className="block rounded-lg px-3 py-2 text-sm hover:bg-accent">
+                ✉ {bank.email}
+              </a>
+              <div className="mt-2 text-sm text-muted-foreground">Mon–Fri 8:30am–4pm</div>
+            </div>
             <button
               onClick={toggleDark}
               className="mt-2 flex w-full items-center justify-center gap-2 rounded-full border px-4 py-2 text-sm"
