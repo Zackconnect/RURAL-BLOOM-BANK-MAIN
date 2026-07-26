@@ -153,7 +153,14 @@ function Home() {
                 </div>
                 <p className="mt-4 text-sm leading-relaxed">"{t.quote}"</p>
                 <div className="mt-5 flex items-center gap-3">
-                  <img src={t.avatar} alt="" width={40} height={40} loading="lazy" className="h-10 w-10 rounded-full object-cover" />
+                  <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-slate-100 p-1 dark:bg-slate-800">
+                    <img
+                      src={t.avatar}
+                      alt={`${t.name} avatar`}
+                      loading="lazy"
+                      className="h-full w-auto max-w-full rounded-full object-contain"
+                    />
+                  </div>
                   <div>
                     <div className="text-sm font-semibold">{t.name}</div>
                     <div className="text-xs text-muted-foreground">{t.role}</div>
