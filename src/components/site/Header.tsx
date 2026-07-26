@@ -177,34 +177,8 @@ export function Header() {
               </Link>
             ))}
             <div className="mt-2 border-t pt-2">
-              <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Accounts
-              </div>
-              {accountLinks.map((l) => (
-                <Link
-                  key={l.to}
-                  to={l.to}
-                  onClick={() => setOpen(false)}
-                  className="block rounded-lg px-3 py-2.5 text-sm hover:bg-accent"
-                >
-                  {l.label}
-                </Link>
-              ))}
-            </div>
-            <div className="mt-2 border-t pt-2">
-              <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Products
-              </div>
-              {productLinks.map((l) => (
-                <Link
-                  key={l.to}
-                  to={l.to}
-                  onClick={() => setOpen(false)}
-                  className="block rounded-lg px-3 py-2.5 text-sm hover:bg-accent"
-                >
-                  {l.label}
-                </Link>
-              ))}
+              <Link to="/accounts" onClick={() => setOpen(false)} className="block rounded-lg px-3 py-3 text-sm font-medium hover:bg-accent">Accounts</Link>
+              <Link to="/products" onClick={() => setOpen(false)} className="mt-2 block rounded-lg px-3 py-3 text-sm font-medium hover:bg-accent">Products & Services</Link>
             </div>
             <Button
               asChild
