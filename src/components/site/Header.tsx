@@ -69,22 +69,6 @@ export function Header() {
         scrolled ? "glass shadow-soft" : "bg-background/80 backdrop-blur-sm"
       }`}
     >
-      {/* Top strip */}
-      <div className="hidden md:block gradient-primary text-primary-foreground text-xs">
-        <div className="container-x flex items-center justify-between py-2">
-          <div className="flex items-center gap-4 opacity-90">
-            <span>📞 {bank.phone}</span>
-            <span>✉ {bank.email}</span>
-          </div>
-          <div className="flex items-center gap-4 opacity-90">
-            <span>Mon–Fri 8:30am–4pm</span>
-            <span className="rounded-full bg-gold px-2 py-0.5 text-[10px] font-semibold text-gold-foreground">
-              24/7 Digital Banking
-            </span>
-          </div>
-        </div>
-      </div>
-
       <div className="container-x flex h-16 items-center justify-between gap-4 md:h-20">
         <Link
           to="/"
@@ -124,7 +108,7 @@ export function Header() {
           </div>
         </Link>
 
-        {/* Desktop nav */}
+        {/* Left: main nav */}
         <nav className="hidden lg:flex items-center gap-1 flex-wrap">
           <NavItem to="/">Home</NavItem>
           <NavItem to="/about">About</NavItem>
@@ -172,6 +156,19 @@ export function Header() {
           <NavItem to="/contact">Contact</NavItem>
           {showAdmin ? <NavItem to="/admin">Admin</NavItem> : null}
         </nav>
+        {/* Right: contact + actions */}
+        <div className="hidden md:flex items-center gap-6 mr-2 text-sm text-muted-foreground">
+          <div className="flex items-center gap-4 text-xs opacity-90">
+            <span className="whitespace-nowrap">📞 {bank.phone}</span>
+            <span className="whitespace-nowrap">✉ {bank.email}</span>
+          </div>
+          <div className="flex items-center gap-4 opacity-90">
+            <span className="whitespace-nowrap">Mon–Fri 8:30am–4pm</span>
+            <span className="rounded-full bg-gold px-2 py-0.5 text-[10px] font-semibold text-gold-foreground">
+              24/7 Digital Banking
+            </span>
+          </div>
+        </div>
 
         <div className="flex items-center gap-2">
           <button
