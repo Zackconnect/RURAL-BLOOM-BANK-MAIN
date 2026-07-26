@@ -76,7 +76,6 @@ const DEFAULT_SESSION_TTL_MS = 8 * 60 * 60 * 1000; // 8 hours
 function makeToken() {
   if (isBrowser && window.crypto?.randomUUID) return window.crypto.randomUUID();
   return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-import { notifyNewSubmission } from "@/lib/notify";
 
 function readAdminSession(): AdminSession | null {
   if (!isBrowser) return null;
