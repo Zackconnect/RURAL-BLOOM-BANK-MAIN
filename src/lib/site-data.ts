@@ -11,6 +11,8 @@ import efuaAvatar from "@/assets/efua-mensah.jpg";
 
 export const bank = {
   name: "St. Margaret Co-operative Savings and Development Society.",
+  shortName: "St. Margaret Co-operative",
+  subtitle: "Savings & Development Society.",
   short: "AKRB",
   tagline: "Banking Made Simple for Everyone",
   phone: "0200938636",

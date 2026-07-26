@@ -100,12 +100,12 @@ export function Header() {
               className="h-10 w-10 rounded-xl object-contain"
             />
           </Link>
-          <div className="hidden sm:flex flex-col text-center sm:text-left">
-            <div className="text-sm font-extrabold tracking-tight md:text-base">
-              {bank.name}
+          <div className="min-w-0 flex flex-col text-left">
+            <div className="truncate text-sm font-extrabold tracking-tight md:text-base">
+              {bank.shortName || bank.name}
             </div>
-            <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
-              Est. 2024
+            <div className="truncate text-[10px] uppercase tracking-widest text-muted-foreground">
+              {bank.subtitle || bank.tagline}
             </div>
           </div>
         </div>
