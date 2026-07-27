@@ -77,7 +77,7 @@ export const loans = [
 export const digital = [
   { icon: Globe, name: "Internet Banking", desc: "Full-featured web banking on any device." },
   { icon: Smartphone, name: "Mobile Banking", desc: "Native app for Android and iOS." },
-  { icon: Hash, name: "USSD Banking", desc: "Dial *714*555# — no internet required." },
+  { icon: Hash, name: "USSD Banking", desc: "Dial *889*905# for balance enquiry and quick banking services without internet." },
   { icon: Landmark, name: "ATM Services", desc: "500+ ATMs across the country." },
   { icon: CreditCard, name: "Visa Cards", desc: "Debit and prepaid Visa for global payments." },
   { icon: CreditCard, name: "MasterCard", desc: "MasterCard debit and credit options." },
@@ -88,6 +88,7 @@ export const digital = [
 export const investments = [
   { icon: Landmark, name: "Treasury Bills", rate: "27.5% p.a.", tenor: "91 / 182 / 364 days", desc: "Government-backed short-term investments." },
   { icon: TrendingUp, name: "Fixed Deposits", rate: "12.5% p.a.", tenor: "1 – 24 months", desc: "Predictable returns with flexible tenors." },
+  { icon: TrendingUp, name: "Shares", rate: "Market-based", tenor: "Flexible", desc: "Invest in local share opportunities to grow ownership and return potential." },
   { icon: Briefcase, name: "Corporate Investments", rate: "Custom", tenor: "3 – 60 months", desc: "Structured investment products for corporates." },
   { icon: HeartHandshake, name: "Retirement Savings", rate: "9.0% p.a.", tenor: "Long-term", desc: "Plan for a comfortable retirement." },
   { icon: Users, name: "Investment Advisory", rate: "—", tenor: "On-going", desc: "One-on-one guidance from our wealth team." },
@@ -120,7 +121,7 @@ export const faqs = [
   { q: "What is the minimum balance to open a savings account?", a: "As low as GHS 5 for Children Savings and GHS 20 for Regular Savings. See the Savings page for full details." },
   { q: "How long does a loan application take?", a: "Personal loans typically 48–72 hours after full documentation. Business and mortgage loans 5–10 working days." },
   { q: "Is my money safe with St. Margaret Co-operative Savings and Development Society.?", a: "Yes. We are licensed and supervised by the Bank of Ghana, with strong capital adequacy and rigorous risk controls." },
-  { q: "Do you offer mobile banking?", a: "Yes — via our mobile app, USSD *714*555# and full-featured internet banking." },
+  { q: "Do you offer mobile banking?", a: "Yes — via our mobile app, USSD *889*905# and full-featured internet banking." },
   { q: "How do I reset my internet banking password?", a: "Click 'Forgot Password' on the login page, or call our 24/7 contact center." },
   { q: "Can I bank in a foreign currency?", a: "Yes, we offer USD, EUR and GBP accounts at selected branches." },
   { q: "What are your working hours?", a: "Monday to Friday 8:30am–4:00pm and Saturday 9:00am–1:00pm at most branches." },

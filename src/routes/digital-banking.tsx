@@ -8,7 +8,7 @@ export const Route = createFileRoute("/digital-banking")({
   head: () => ({
     meta: [
       { title: "Digital Banking — St. Margaret Co-operative Savings and Development Society." },
-      { name: "description", content: "Mobile app, internet banking, USSD *714*555#, ATMs, Visa & MasterCard, QR payments — all in one place." },
+      { name: "description", content: "Mobile app, internet banking, USSD *889*905#, ATMs, Visa & MasterCard, QR payments — all in one place." },
       { property: "og:title", content: "Digital Banking — St. Margaret Co-operative Savings and Development Society." },
       { property: "og:description", content: "Bank from anywhere, on any device." },
     ],
@@ -38,7 +38,7 @@ function Digital() {
             </div>
             <div className="mt-6 rounded-2xl border bg-card p-4">
               <div className="text-xs uppercase tracking-widest text-muted-foreground">No smartphone? No problem.</div>
-              <div className="mt-1 font-mono text-lg font-extrabold text-primary">Dial *714*555#</div>
+              <div className="mt-1 font-mono text-lg font-extrabold text-primary">Dial *889*905#</div>
               <div className="text-xs text-muted-foreground">Check balance, transfer, buy airtime — no internet required.</div>
             </div>
           </div>
