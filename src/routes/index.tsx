@@ -1,12 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import heroImg from "@/assets/hero.jpg";
 import { ArrowRight, CheckCircle2, Star, Calendar, ChevronRight, Wallet, PiggyBank, TrendingUp, Baby, Download, Smartphone } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { Section } from "@/components/site/Section";
 import { AnimatedCounter } from "@/components/site/Stat";
 import { stats, whyUs, savings, loans, digital, investments, testimonials, news, bank } from "@/lib/site-data";
+import { getTestimonials } from "@/lib/admin";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -21,6 +23,16 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
+  const [testimonialItems, setTestimonialItems] = useState(() => {
+    const adminItems = getTestimonials();
+    return adminItems.length > 0 ? adminItems : testimonials;
+  });
+
+  useEffect(() => {
+    const adminItems = getTestimonials();
+    setTestimonialItems(adminItems.length > 0 ? adminItems : testimonials);
+  }, []);
+
   const showAdminFromHome =
     typeof window !== "undefined" &&
     (window.location.hostname === "localhost" ||
@@ -165,7 +177,7 @@ function Home() {
           <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-background to-transparent" />
           <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-background to-transparent" />
           <div className="flex w-max gap-6 animate-marquee">
-            {[...testimonials, ...testimonials].map((t, i) => (
+            {[...testimonialItems, ...testimonialItems].map((t, i) => (
               <Card key={i} className="w-[340px] shrink-0 rounded-3xl border p-6 shadow-card">
                 <div className="flex gap-1 text-gold">
                   {Array.from({ length: 5 }).map((_, k) => (

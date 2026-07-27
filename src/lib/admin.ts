@@ -126,6 +126,61 @@ export function createContactSubmissionId() {
   return window.crypto?.randomUUID?.() ?? `${Date.now()}`;
 }
 
+// Testimonial avatar management
+export type TestimonialItem = {
+  id: string;
+  name: string;
+  role: string;
+  quote: string;
+  avatar: string;
+  rating: number;
+  addedAt: string;
+};
+
+const TESTIMONIALS_STORAGE_KEY = "akrb-testimonials";
+
+function readTestimonials(): TestimonialItem[] {
+  if (!isBrowser) return [];
+  try {
+    return JSON.parse(window.localStorage.getItem(TESTIMONIALS_STORAGE_KEY) ?? "[]") as TestimonialItem[];
+  } catch {
+    return [];
+  }
+}
+
+function writeTestimonials(items: TestimonialItem[]) {
+  if (!isBrowser) return;
+  window.localStorage.setItem(TESTIMONIALS_STORAGE_KEY, JSON.stringify(items));
+}
+
+export function getTestimonials(): TestimonialItem[] {
+  return readTestimonials();
+}
+
+export function addTestimonialItem(item: Omit<TestimonialItem, "id" | "addedAt">): TestimonialItem {
+  const testimonials = readTestimonials();
+  const newItem: TestimonialItem = {
+    ...item,
+    id: window.crypto?.randomUUID?.() ?? `${Date.now()}`,
+    addedAt: new Date().toISOString(),
+  };
+  testimonials.push(newItem);
+  writeTestimonials(testimonials);
+  return newItem;
+}
+
+export function removeTestimonialItem(id: string) {
+  const testimonials = readTestimonials();
+  const filtered = testimonials.filter((item) => item.id !== id);
+  writeTestimonials(filtered);
+}
+
+export function updateTestimonialItem(id: string, updates: Partial<Omit<TestimonialItem, "id" | "addedAt">>) {
+  const testimonials = readTestimonials();
+  const updated = testimonials.map((item) => (item.id === id ? { ...item, ...updates } : item));
+  writeTestimonials(updated);
+}
+
 // Gallery Management
 export type GalleryItem = {
   id: string;

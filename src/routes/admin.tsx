@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { PageHeader, Section } from "@/components/site/Section";
-import { createContactSubmissionId, getContactSubmissions, isAdminLoggedIn, loginAdmin, logoutAdmin, updateContactSubmission, getGalleryItems, addGalleryItem, removeGalleryItem } from "@/lib/admin";
+import { getContactSubmissions, isAdminLoggedIn, loginAdmin, logoutAdmin, updateContactSubmission, getGalleryItems, addGalleryItem, removeGalleryItem, getTestimonials, addTestimonialItem, removeTestimonialItem } from "@/lib/admin";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
 
@@ -24,6 +24,7 @@ function Admin() {
   const [activeTab, setActiveTab] = useState<"contacts" | "gallery">("contacts");
   const [submissions, setSubmissions] = useState(() => getContactSubmissions());
   const [gallery, setGallery] = useState(() => getGalleryItems());
+  const [testimonials, setTestimonials] = useState(() => getTestimonials());
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [responseText, setResponseText] = useState("");
@@ -37,6 +38,16 @@ function Admin() {
   const [galleryImageError, setGalleryImageError] = useState("");
   const [isDragging, setIsDragging] = useState(false);
 
+  // Testimonial form states
+  const [testimonialName, setTestimonialName] = useState("");
+  const [testimonialRole, setTestimonialRole] = useState("");
+  const [testimonialQuote, setTestimonialQuote] = useState("");
+  const [testimonialRating, setTestimonialRating] = useState(5);
+  const [testimonialAvatarFile, setTestimonialAvatarFile] = useState<File | null>(null);
+  const [testimonialAvatarPreview, setTestimonialAvatarPreview] = useState("");
+  const [testimonialAvatarError, setTestimonialAvatarError] = useState("");
+  const [isTestimonialDragging, setIsTestimonialDragging] = useState(false);
+
   useEffect(() => {
     setLoggedIn(isAdminLoggedIn());
   }, []);
@@ -46,8 +57,11 @@ function Admin() {
       if (galleryImagePreview) {
         URL.revokeObjectURL(galleryImagePreview);
       }
+      if (testimonialAvatarPreview) {
+        URL.revokeObjectURL(testimonialAvatarPreview);
+      }
     };
-  }, [galleryImagePreview]);
+  }, [galleryImagePreview, testimonialAvatarPreview]);
 
   const activeSubmission = useMemo(
     () => submissions.find((item) => item.id === selectedId) ?? null,
@@ -169,6 +183,93 @@ function Admin() {
     removeGalleryItem(id);
     setGallery(getGalleryItems());
     toast.success("Photo removed from gallery.");
+  };
+
+  const handleAddTestimonial = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!testimonialName.trim() || !testimonialRole.trim() || !testimonialQuote.trim() || !testimonialAvatarFile) {
+      toast.error("Please fill all fields and upload an avatar.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const avatarBase64 = String(reader.result ?? "");
+      addTestimonialItem({
+        name: testimonialName,
+        role: testimonialRole,
+        quote: testimonialQuote,
+        rating: testimonialRating,
+        avatar: avatarBase64,
+      });
+      setTestimonials(getTestimonials());
+      setTestimonialName("");
+      setTestimonialRole("");
+      setTestimonialQuote("");
+      setTestimonialRating(5);
+      setTestimonialAvatarFile(null);
+      setTestimonialAvatarPreview("");
+      setTestimonialAvatarError("");
+      toast.success("Testimonial added successfully.");
+    };
+    reader.onerror = () => {
+      toast.error("Failed to read the avatar file. Please try again.");
+    };
+    reader.readAsDataURL(testimonialAvatarFile);
+  };
+
+  const handleTestimonialAvatarChange = (file: File | null) => {
+    if (!file) {
+      setTestimonialAvatarFile(null);
+      setTestimonialAvatarPreview("");
+      setTestimonialAvatarError("");
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      setTestimonialAvatarError("Please select a valid image file.");
+      setTestimonialAvatarFile(null);
+      setTestimonialAvatarPreview("");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setTestimonialAvatarError("Image file should be 5MB or smaller.");
+      setTestimonialAvatarFile(null);
+      setTestimonialAvatarPreview("");
+      return;
+    }
+
+    setTestimonialAvatarError("");
+    setTestimonialAvatarFile(file);
+    const previewUrl = URL.createObjectURL(file);
+    setTestimonialAvatarPreview(previewUrl);
+  };
+
+  const handleTestimonialDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsTestimonialDragging(true);
+  };
+
+  const handleTestimonialDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsTestimonialDragging(false);
+  };
+
+  const handleTestimonialDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsTestimonialDragging(false);
+    const file = event.dataTransfer.files?.[0] ?? null;
+    handleTestimonialAvatarChange(file);
+  };
+
+  const handleRemoveTestimonialItem = (id: string) => {
+    removeTestimonialItem(id);
+    setTestimonials(getTestimonials());
+    toast.success("Testimonial removed.");
   };
 
   if (!loggedIn) {
@@ -422,7 +523,126 @@ function Admin() {
               )}
             </div>
           </div>
+
+          <div className="mt-10 rounded-3xl border bg-card p-8 shadow-elegant">
+            <h3 className="mb-6 text-lg font-semibold">Manage Testimonial Avatars</h3>
+            <div className="grid gap-6 xl:grid-cols-2">
+              <div>
+                <form onSubmit={handleAddTestimonial} className="space-y-4">
+                  <div>
+                    <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Name</Label>
+                    <Input
+                      value={testimonialName}
+                      onChange={(e) => setTestimonialName(e.target.value)}
+                      placeholder="e.g., Ama Serwaa"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Role</Label>
+                    <Input
+                      value={testimonialRole}
+                      onChange={(e) => setTestimonialRole(e.target.value)}
+                      placeholder="e.g., SME Owner"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Rating</Label>
+                    <select
+                      value={testimonialRating}
+                      onChange={(e) => setTestimonialRating(Number(e.target.value))}
+                      className="w-full rounded-2xl border bg-background px-4 py-3 text-sm"
+                    >
+                      {[5, 4, 3, 2, 1].map((rating) => (
+                        <option key={rating} value={rating}>{rating} stars</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Quote</Label>
+                    <Textarea
+                      rows={4}
+                      value={testimonialQuote}
+                      onChange={(e) => setTestimonialQuote(e.target.value)}
+                      placeholder="Enter the testimonial quote"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Upload Avatar</Label>
+                    <div
+                      onDragOver={handleTestimonialDragOver}
+                      onDragLeave={handleTestimonialDragLeave}
+                      onDrop={handleTestimonialDrop}
+                      className={`group relative rounded-3xl border px-4 py-10 text-center transition-all ${
+                        isTestimonialDragging ? "border-primary bg-primary/10" : "border-input bg-card hover:border-primary/70"
+                      }`}
+                    >
+                      <div className="flex flex-col items-center justify-center gap-3">
+                        <div className="grid h-12 w-12 place-items-center rounded-full bg-primary/10 text-primary">
+                          <span className="text-xl">📸</span>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-primary">Drag & drop an avatar here</p>
+                          <p className="text-xs text-muted-foreground">or click to browse</p>
+                        </div>
+                      </div>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleTestimonialAvatarChange(e.target.files?.[0] ?? null)}
+                        className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                        required
+                      />
+                    </div>
+                    {testimonialAvatarError ? (
+                      <p className="mt-2 text-xs text-red-500">{testimonialAvatarError}</p>
+                    ) : null}
+                    {testimonialAvatarPreview ? (
+                      <div className="mt-3 overflow-hidden rounded-3xl border bg-muted/10">
+                        <img src={testimonialAvatarPreview} alt="Avatar preview" className="h-48 w-full object-cover" />
+                      </div>
+                    ) : null}
+                  </div>
+                  <Button type="submit" className="w-full rounded-full gradient-primary text-primary-foreground">
+                    Add Testimonial
+                  </Button>
+                </form>
+              </div>
+              <div>
+                <h4 className="mb-4 text-base font-semibold">Existing Testimonials</h4>
+                {testimonials.length === 0 ? (
+                  <div className="rounded-3xl border bg-card p-8 text-center text-sm text-muted-foreground">
+                    No testimonials added yet.
+                  </div>
+                ) : (
+                  <div className="space-y-3 max-h-[600px] overflow-y-auto">
+                    {testimonials.map((item) => (
+                      <div key={item.id} className="flex gap-3 rounded-2xl border bg-card p-4">
+                        <img src={item.avatar} alt={item.name} className="h-16 w-16 rounded-full object-cover" />
+                        <div className="flex-1 min-w-0">
+                          <div className="font-semibold text-sm">{item.name}</div>
+                          <div className="text-xs text-muted-foreground">{item.role}</div>
+                          <div className="mt-1 text-xs leading-relaxed text-muted-foreground">"{item.quote}"</div>
+                        </div>
+                        <button
+                          onClick={() => handleRemoveTestimonialItem(item.id)}
+                          className="self-center rounded-lg p-2 hover:bg-red-50 hover:text-red-600 transition-all"
+                          type="button"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         )}
+      </Section>
+    </>
       </Section>
     </>
   );
