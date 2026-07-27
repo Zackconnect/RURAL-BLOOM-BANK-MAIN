@@ -32,11 +32,22 @@ function Admin() {
   // Gallery form states
   const [galleryName, setGalleryName] = useState("");
   const [galleryRole, setGalleryRole] = useState("");
-  const [galleryImage, setGalleryImage] = useState("");
+  const [galleryImageFile, setGalleryImageFile] = useState<File | null>(null);
+  const [galleryImagePreview, setGalleryImagePreview] = useState("");
+  const [galleryImageError, setGalleryImageError] = useState("");
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     setLoggedIn(isAdminLoggedIn());
   }, []);
+
+  useEffect(() => {
+    return () => {
+      if (galleryImagePreview) {
+        URL.revokeObjectURL(galleryImagePreview);
+      }
+    };
+  }, [galleryImagePreview]);
 
   const activeSubmission = useMemo(
     () => submissions.find((item) => item.id === selectedId) ?? null,
@@ -79,20 +90,79 @@ function Admin() {
 
   const handleAddGalleryItem = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!galleryName.trim() || !galleryRole.trim() || !galleryImage.trim()) {
-      toast.error("Please fill all fields.");
+    if (!galleryName.trim() || !galleryRole.trim() || !galleryImageFile) {
+      toast.error("Please fill all fields and select a photo.");
       return;
     }
-    addGalleryItem({
-      name: galleryName,
-      role: galleryRole,
-      image: galleryImage,
-    });
-    setGallery(getGalleryItems());
-    setGalleryName("");
-    setGalleryRole("");
-    setGalleryImage("");
-    toast.success("Photo added to gallery!");
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const imageBase64 = String(reader.result ?? "");
+      addGalleryItem({
+        name: galleryName,
+        role: galleryRole,
+        image: imageBase64,
+      });
+      setGallery(getGalleryItems());
+      setGalleryName("");
+      setGalleryRole("");
+      setGalleryImageFile(null);
+      setGalleryImagePreview("");
+      setGalleryImageError("");
+      toast.success("Photo added to gallery!");
+    };
+    reader.onerror = () => {
+      toast.error("Failed to read the selected photo. Please try again.");
+    };
+    reader.readAsDataURL(galleryImageFile);
+  };
+
+  const handleGalleryImageChange = (file: File | null) => {
+    if (!file) {
+      setGalleryImageFile(null);
+      setGalleryImagePreview("");
+      setGalleryImageError("");
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      setGalleryImageError("Please select a valid image file.");
+      setGalleryImageFile(null);
+      setGalleryImagePreview("");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setGalleryImageError("Image file should be 5MB or smaller.");
+      setGalleryImageFile(null);
+      setGalleryImagePreview("");
+      return;
+    }
+
+    setGalleryImageError("");
+    setGalleryImageFile(file);
+    const previewUrl = URL.createObjectURL(file);
+    setGalleryImagePreview(previewUrl);
+  };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(false);
+    const file = event.dataTransfer.files?.[0] ?? null;
+    handleGalleryImageChange(file);
   };
 
   const handleRemoveGalleryItem = (id: string) => {
@@ -277,14 +347,40 @@ function Admin() {
                     />
                   </div>
                   <div>
-                    <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Image URL</Label>
-                    <Textarea
-                      value={galleryImage}
-                      onChange={(e) => setGalleryImage(e.target.value)}
-                      placeholder="Paste image URL here..."
-                      rows={3}
-                      required
-                    />
+                    <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Upload Photo</Label>
+                    <div
+                      onDragOver={handleDragOver}
+                      onDragLeave={handleDragLeave}
+                      onDrop={handleDrop}
+                      className={`group relative rounded-3xl border px-4 py-10 text-center transition-all ${
+                        isDragging ? "border-primary bg-primary/10" : "border-input bg-card hover:border-primary/70"
+                      }`}
+                    >
+                      <div className="flex flex-col items-center justify-center gap-3">
+                        <div className="grid h-12 w-12 place-items-center rounded-full bg-primary/10 text-primary">
+                          <span className="text-xl">📤</span>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-primary">Drag & drop a photo here</p>
+                          <p className="text-xs text-muted-foreground">or click to browse</p>
+                        </div>
+                      </div>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleGalleryImageChange(e.target.files?.[0] ?? null)}
+                        className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                        required
+                      />
+                    </div>
+                    {galleryImageError ? (
+                      <p className="mt-2 text-xs text-red-500">{galleryImageError}</p>
+                    ) : null}
+                    {galleryImagePreview ? (
+                      <div className="mt-3 overflow-hidden rounded-3xl border bg-muted/10">
+                        <img src={galleryImagePreview} alt="Preview" className="h-48 w-full object-cover" />
+                      </div>
+                    ) : null}
                   </div>
                   <Button type="submit" className="w-full rounded-full gradient-primary text-primary-foreground">
                     Add to Gallery
