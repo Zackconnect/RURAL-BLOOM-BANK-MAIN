@@ -38,6 +38,24 @@ export const whyUs = [
   { icon: Zap, title: "Innovative Digital Banking", desc: "Mobile, USSD and internet banking that work — even on low bandwidth." },
 ];
 
+export const missionVisionValues = {
+  mission: {
+    title: "Our Mission",
+    desc: "To provide affordable financial services and improve the socio-economic well-being of our members through savings mobilization, responsible lending, and community development initiatives.",
+    icon: HeartHandshake,
+  },
+  vision: {
+    title: "Our Vision",
+    desc: "To be a leading cooperative institution in Ashanti Region promoting financial inclusion, empowerment, and sustainable development.",
+    icon: Award,
+  },
+  values: {
+    title: "Our Core Values",
+    desc: "Integrity, Accountability, Service, Teamwork, Innovation, and Member-Centric.",
+    icon: TrendingUp,
+  },
+};
+
 export const savings = [
   { icon: PiggyBank, name: "Regular Savings", rate: "3.5% p.a.", min: "GHS 20", features: ["Free monthly statement", "No hidden fees", "ATM card included"], desc: "A flexible everyday savings account for individuals." },
   { icon: GraduationCap, name: "Youth Savings", rate: "4.0% p.a.", min: "GHS 10", features: ["Ages 13–24", "Free financial literacy", "Bonus at 18"], desc: "Grow with us — designed for students and young adults." },
