@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import heroImg from "@/assets/hero.jpg";
-import { ArrowRight, CheckCircle2, Star, Calendar, ChevronRight, Wallet, PiggyBank, TrendingUp, Baby } from "lucide-react";
+import { ArrowRight, CheckCircle2, Star, Calendar, ChevronRight, Wallet, PiggyBank, TrendingUp, Baby, Download, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
@@ -219,6 +219,53 @@ function Home() {
           ))}
         </div>
       </Section>
+
+      {/* MOBILE APP DOWNLOAD */}
+      <section className="py-16 md:py-24">
+        <div className="container-x">
+          <div className="relative overflow-hidden rounded-4xl gradient-primary p-8 text-primary-foreground shadow-elegant md:p-12">
+            <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gold/20 blur-3xl" />
+            <div className="absolute -left-16 -bottom-16 h-48 w-48 rounded-full bg-primary-foreground/10 blur-3xl" />
+            <div className="relative grid gap-8 md:grid-cols-2 md:items-center">
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="grid h-12 w-12 place-items-center rounded-2xl bg-gold text-gold-foreground">
+                    <Smartphone className="h-6 w-6" />
+                  </div>
+                  <div className="text-sm font-semibold uppercase tracking-widest">Mobile Banking</div>
+                </div>
+                <h3 className="text-3xl font-extrabold md:text-4xl">Bank on the go with our mobile app</h3>
+                <p className="mt-3 opacity-90">Transfer money, check balances, apply for loans—all from your pocket. Fast, secure, and available 24/7.</p>
+                <div className="mt-6 flex flex-wrap gap-2 text-sm opacity-85">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 flex-shrink-0" />
+                    <span>Real-time notifications</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 flex-shrink-0" />
+                    <span>Bank securely</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 flex-shrink-0" />
+                    <span>Offline access</span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col gap-3">
+                <a
+                  href="/app.apk"
+                  download
+                  className="inline-flex items-center justify-center gap-3 rounded-full gradient-gold text-gold-foreground font-semibold py-3 px-6 shadow-elegant hover:opacity-95 transition-all"
+                >
+                  <Download className="h-5 w-5" />
+                  <span>Download for Android</span>
+                </a>
+                <p className="text-xs text-primary-foreground/70 text-center">APK file • v1.0 • Compatible with Android 8.0+</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* CTA */}
       <section className="pb-24">
