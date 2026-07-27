@@ -105,7 +105,7 @@ export function Header() {
           </Link>
           <div className="min-w-0 flex flex-col justify-center text-left">
             <div className="truncate text-sm font-extrabold leading-tight tracking-tight text-white md:text-sm lg:text-base">
-              {bank.shortName || bank.name}
+              {bank.name}
             </div>
             <div className="truncate text-[10px] uppercase tracking-widest text-gold-foreground opacity-90 md:text-[11px] lg:text-[12px]">
               {bank.subtitle || bank.tagline}

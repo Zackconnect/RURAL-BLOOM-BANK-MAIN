@@ -424,7 +424,8 @@ function Admin() {
 
         {/* Gallery Management Tab */}
         {activeTab === "gallery" && (
-          <div className="flex flex-col gap-6 xl:flex-row xl:items-start">
+          <>
+            <div className="flex flex-col gap-6 xl:flex-row xl:items-start">
             <div className="w-full xl:w-1/2">
               <div className="rounded-3xl border bg-card p-8 shadow-elegant">
                 <h3 className="mb-6 text-lg font-semibold">Add Team Member Photo</h3>
@@ -640,9 +641,7 @@ function Admin() {
               </div>
             </div>
           </div>
-        )}
-      </Section>
-    </>
+        </>)}
       </Section>
     </>
   );
