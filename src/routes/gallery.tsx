@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader, Section } from "@/components/site/Section";
-import { gallery } from "@/lib/site-data";
-import { useState } from "react";
+import { getGalleryItems } from "@/lib/admin";
+import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 
 export const Route = createFileRoute("/gallery")({
@@ -17,7 +17,30 @@ export const Route = createFileRoute("/gallery")({
 });
 
 function Gallery() {
+  const [gallery, setGallery] = useState(() => getGalleryItems());
   const [selectedIdx, setSelectedIdx] = useState(-1);
+
+  useEffect(() => {
+    // Reload gallery when component mounts
+    setGallery(getGalleryItems());
+  }, []);
+
+  if (gallery.length === 0) {
+    return (
+      <>
+        <PageHeader
+          eyebrow="Our Team"
+          title="Meet the team behind your trust"
+          desc="Our team photos will be displayed here soon."
+        />
+        <Section>
+          <div className="rounded-2xl border border-dashed border-muted-foreground p-12 text-center">
+            <p className="text-muted-foreground">No team photos added yet. Check back soon!</p>
+          </div>
+        </Section>
+      </>
+    );
+  }
 
   return (
     <>
@@ -31,7 +54,7 @@ function Gallery() {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {gallery.map((member, idx) => (
             <div
-              key={idx}
+              key={member.id}
               className="group cursor-pointer overflow-hidden rounded-3xl shadow-card transition-all hover:-translate-y-1 hover:shadow-elegant"
               onClick={() => setSelectedIdx(idx)}
             >
@@ -54,7 +77,7 @@ function Gallery() {
       </Section>
 
       {/* Image Modal */}
-      {selectedIdx >= 0 && (
+      {selectedIdx >= 0 && gallery[selectedIdx] && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
           onClick={() => setSelectedIdx(-1)}
