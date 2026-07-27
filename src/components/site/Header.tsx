@@ -66,11 +66,13 @@ export function Header() {
   return (
     <header
       className={`sticky top-0 z-50 w-full transition-all duration-300 overflow-x-hidden ${
-        scrolled ? "glass shadow-soft" : "bg-background/80 backdrop-blur-sm"
+        scrolled
+          ? "glass shadow-soft"
+          : "bg-gradient-to-r from-primary-dark via-primary to-gold/30 text-primary-foreground"
       }`}
     >
-      <div className="container-x flex h-16 items-center justify-between gap-4 md:h-20">
-        <div className="flex items-center gap-3">
+      <div className="container-x flex h-16 items-center justify-between gap-2 md:h-20 md:gap-4">
+        <div className="flex items-center gap-3 min-w-0 max-w-[260px]">
           <Link
             to="/"
             className="flex shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/10 p-2"
@@ -100,56 +102,43 @@ export function Header() {
               className="h-10 w-10 rounded-xl object-contain"
             />
           </Link>
-          <div className="min-w-0 flex flex-col text-left">
-            <div className="truncate text-sm font-extrabold tracking-tight md:text-base">
+          <div className="min-w-0 flex flex-col justify-center text-left">
+            <div className="truncate text-sm font-extrabold leading-tight tracking-tight text-white md:text-sm lg:text-base">
               {bank.shortName || bank.name}
             </div>
-            <div className="truncate text-[10px] uppercase tracking-widest text-muted-foreground">
+            <div className="truncate text-[10px] uppercase tracking-widest text-gold-foreground opacity-90 md:text-[11px] lg:text-[12px]">
               {bank.subtitle || bank.tagline}
             </div>
           </div>
         </div>
 
-        <div className="hidden lg:flex flex-1 justify-center">
-          <nav className="flex items-center gap-3 flex-wrap justify-center">
-            <NavItem to="/">Home</NavItem>
-            <NavItem to="/about">About</NavItem>
-            <NavItem to="/accounts">Accounts</NavItem>
-            <NavItem to="/products">Products</NavItem>
-            <NavItem to="/branches">Branches</NavItem>
-            <NavItem to="/news">News</NavItem>
-            <NavItem to="/careers">Careers</NavItem>
-            <NavItem to="/faqs">FAQs</NavItem>
-            <NavItem to="/contact">Contact</NavItem>
-            {showAdmin ? <NavItem to="/admin">Admin</NavItem> : null}
-          </nav>
-        </div>
+        <div className="flex-1" />
 
         <div className="flex items-center gap-2">
             <button
             aria-label="Search"
-            className="hidden md:grid h-10 w-10 place-items-center rounded-full text-foreground/70 hover:bg-accent"
+            className="hidden sm:grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white/80 hover:bg-white/20"
           >
             <Search className="h-4 w-4" />
           </button>
           <button
             aria-label="Toggle theme"
             onClick={toggleDark}
-            className="hidden md:grid h-10 w-10 place-items-center rounded-full text-foreground/70 hover:bg-accent"
+            className="hidden sm:grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white/80 hover:bg-white/20"
           >
             {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
           <Button
             asChild
             size="lg"
-            className="hidden md:inline-flex rounded-full gradient-primary text-primary-foreground shadow-elegant hover:opacity-95 hover:shadow-lg transition-all"
+            className="hidden sm:inline-flex rounded-full gradient-primary text-primary-foreground shadow-elegant hover:opacity-95 hover:shadow-lg transition-all sm:px-4 sm:py-2 md:px-5 md:py-2"
           >
             <Link to="/contact">Open Account</Link>
           </Button>
           <button
             aria-label="Menu"
             onClick={() => setOpen((v) => !v)}
-            className="grid h-10 w-10 place-items-center rounded-full border lg:hidden"
+            className="grid h-10 w-10 place-items-center rounded-full border"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -158,8 +147,8 @@ export function Header() {
 
       {/* Mobile nav */}
       {open && (
-        <div className="lg:hidden border-t bg-background animate-fade-in">
-          <div className="container-x flex flex-col py-4">
+        <div className="border-t bg-primary/95 animate-fade-in">
+          <div className="container-x flex flex-col py-4 text-primary-foreground">
             {navLinks.map((l) => (
               <Link
                 key={l.to}
@@ -209,7 +198,7 @@ function NavItem({ to, children }: { to: string; children: React.ReactNode }) {
   return (
     <Link
       to={to}
-      className="rounded-full px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+      className="rounded-full px-3 py-1.5 text-xs font-medium transition-colors hover:bg-accent hover:text-accent-foreground md:px-4 md:py-2 md:text-sm"
       activeProps={{ className: "text-primary" }}
       activeOptions={{ exact: to === "/" }}
     >
