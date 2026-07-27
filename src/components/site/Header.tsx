@@ -25,6 +25,7 @@ const accountLinks = [
 const navLinks = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About Us" },
+  { to: "/gallery", label: "Gallery" },
   { to: "/branches", label: "Branches" },
   { to: "/news", label: "News" },
   { to: "/careers", label: "Careers" },

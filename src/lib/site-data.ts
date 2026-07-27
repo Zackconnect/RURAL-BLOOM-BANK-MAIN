@@ -134,3 +134,15 @@ export const careers = [
   { title: "Compliance Officer", location: "Accra", type: "Full-time", desc: "Own AML/KYC operations and regulatory reporting." },
   { title: "Customer Service Representative", location: "Multiple", type: "Full-time", desc: "Deliver exceptional service across phone, chat and branch channels." },
 ];
+
+export const gallery = [
+  { name: "Kwaku Mensah", role: "Executive Director", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop" },
+  { name: "Ama Ofori", role: "Head of Operations", image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&h=500&fit=crop" },
+  { name: "Kofi Asante", role: "Finance Manager", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&h=500&fit=crop" },
+  { name: "Esi Boateng", role: "Customer Relations Officer", image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=500&h=500&fit=crop" },
+  { name: "Kwesi Osei", role: "Credit Officer", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop" },
+  { name: "Abena Kuma", role: "Digital Banking Specialist", image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&h=500&fit=crop" },
+  { name: "Yaw Oppong", role: "Loan Officer", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&h=500&fit=crop" },
+  { name: "Nadia Owusu", role: "Compliance Officer", image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=500&h=500&fit=crop" },
+  { name: "Marcus Adjei", role: "IT Manager", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop" },
+];

@@ -21,6 +21,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CurrentAccountsRouteImport } from './routes/current-accounts'
 import { Route as DigitalBankingRouteImport } from './routes/digital-banking'
 import { Route as FaqsRouteImport } from './routes/faqs'
+import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as InvestmentsRouteImport } from './routes/investments'
 import { Route as LoansRouteImport } from './routes/loans'
 import { Route as NewsRouteImport } from './routes/news'
@@ -89,6 +90,11 @@ const FaqsRoute = FaqsRouteImport.update({
   path: '/faqs',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GalleryRoute = GalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InvestmentsRoute = InvestmentsRouteImport.update({
   id: '/investments',
   path: '/investments',
@@ -138,6 +144,7 @@ export interface FileRoutesByFullPath {
   '/current-accounts': typeof CurrentAccountsRoute
   '/digital-banking': typeof DigitalBankingRoute
   '/faqs': typeof FaqsRoute
+  '/gallery': typeof GalleryRoute
   '/investments': typeof InvestmentsRoute
   '/loans': typeof LoansRoute
   '/news': typeof NewsRoute
@@ -159,6 +166,7 @@ export interface FileRoutesByTo {
   '/current-accounts': typeof CurrentAccountsRoute
   '/digital-banking': typeof DigitalBankingRoute
   '/faqs': typeof FaqsRoute
+  '/gallery': typeof GalleryRoute
   '/investments': typeof InvestmentsRoute
   '/loans': typeof LoansRoute
   '/news': typeof NewsRoute
@@ -181,6 +189,7 @@ export interface FileRoutesById {
   '/current-accounts': typeof CurrentAccountsRoute
   '/digital-banking': typeof DigitalBankingRoute
   '/faqs': typeof FaqsRoute
+  '/gallery': typeof GalleryRoute
   '/investments': typeof InvestmentsRoute
   '/loans': typeof LoansRoute
   '/news': typeof NewsRoute
@@ -204,6 +213,7 @@ export interface FileRouteTypes {
     | '/current-accounts'
     | '/digital-banking'
     | '/faqs'
+    | '/gallery'
     | '/investments'
     | '/loans'
     | '/news'
@@ -225,6 +235,7 @@ export interface FileRouteTypes {
     | '/current-accounts'
     | '/digital-banking'
     | '/faqs'
+    | '/gallery'
     | '/investments'
     | '/loans'
     | '/news'
@@ -246,6 +257,7 @@ export interface FileRouteTypes {
     | '/current-accounts'
     | '/digital-banking'
     | '/faqs'
+    | '/gallery'
     | '/investments'
     | '/loans'
     | '/news'
@@ -268,6 +280,7 @@ export interface RootRouteChildren {
   CurrentAccountsRoute: typeof CurrentAccountsRoute
   DigitalBankingRoute: typeof DigitalBankingRoute
   FaqsRoute: typeof FaqsRoute
+  GalleryRoute: typeof GalleryRoute
   InvestmentsRoute: typeof InvestmentsRoute
   LoansRoute: typeof LoansRoute
   NewsRoute: typeof NewsRoute
@@ -363,6 +376,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FaqsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/gallery': {
+      id: '/gallery'
+      path: '/gallery'
+      fullPath: '/gallery'
+      preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/investments': {
       id: '/investments'
       path: '/investments'
@@ -428,6 +448,7 @@ const rootRouteChildren: RootRouteChildren = {
   CurrentAccountsRoute: CurrentAccountsRoute,
   DigitalBankingRoute: DigitalBankingRoute,
   FaqsRoute: FaqsRoute,
+  GalleryRoute: GalleryRoute,
   InvestmentsRoute: InvestmentsRoute,
   LoansRoute: LoansRoute,
   NewsRoute: NewsRoute,
