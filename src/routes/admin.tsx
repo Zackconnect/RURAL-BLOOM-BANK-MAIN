@@ -21,7 +21,7 @@ export const Route = createFileRoute("/admin")({
 
 function Admin() {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [activeTab, setActiveTab] = useState<"contacts" | "gallery">("contacts");
+  const [activeTab, setActiveTab] = useState<"contacts" | "gallery" | "testimonials">("contacts");
   const [submissions, setSubmissions] = useState(() => getContactSubmissions());
   const [gallery, setGallery] = useState(() => getGalleryItems());
   const [testimonials, setTestimonials] = useState(() => getTestimonials());
@@ -304,8 +304,8 @@ function Admin() {
     <>
       <PageHeader eyebrow="Admin" title="Admin Dashboard" desc="Manage customer requests and gallery photos." />
       <Section>
-        <div className="mb-6 flex items-center justify-between gap-3">
-          <div className="flex gap-2">
+<div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setActiveTab("contacts")}
               className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
@@ -325,6 +325,16 @@ function Admin() {
               }`}
             >
               Gallery Management
+            </button>
+            <button
+              onClick={() => setActiveTab("testimonials")}
+              className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
+                activeTab === "testimonials"
+                  ? "gradient-primary text-primary-foreground shadow-elegant"
+                  : "border bg-card hover:border-primary"
+              }`}
+            >
+              Testimonials
             </button>
           </div>
           <Button variant="outline" onClick={handleLogout} className="rounded-full">
@@ -524,124 +534,126 @@ function Admin() {
               )}
             </div>
           </div>
+        )}
 
-          <div className="mt-10 rounded-3xl border bg-card p-8 shadow-elegant">
-            <h3 className="mb-6 text-lg font-semibold">Manage Testimonial Avatars</h3>
-            <div className="grid gap-6 xl:grid-cols-2">
-              <div>
-                <form onSubmit={handleAddTestimonial} className="space-y-4">
-                  <div>
-                    <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Name</Label>
-                    <Input
-                      value={testimonialName}
-                      onChange={(e) => setTestimonialName(e.target.value)}
-                      placeholder="e.g., Ama Serwaa"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Role</Label>
-                    <Input
-                      value={testimonialRole}
-                      onChange={(e) => setTestimonialRole(e.target.value)}
-                      placeholder="e.g., SME Owner"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Rating</Label>
-                    <select
-                      value={testimonialRating}
-                      onChange={(e) => setTestimonialRating(Number(e.target.value))}
-                      className="w-full rounded-2xl border bg-background px-4 py-3 text-sm"
-                    >
-                      {[5, 4, 3, 2, 1].map((rating) => (
-                        <option key={rating} value={rating}>{rating} stars</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Quote</Label>
-                    <Textarea
-                      rows={4}
-                      value={testimonialQuote}
-                      onChange={(e) => setTestimonialQuote(e.target.value)}
-                      placeholder="Enter the testimonial quote"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Upload Avatar</Label>
-                    <div
-                      onDragOver={handleTestimonialDragOver}
-                      onDragLeave={handleTestimonialDragLeave}
-                      onDrop={handleTestimonialDrop}
-                      className={`group relative rounded-3xl border px-4 py-10 text-center transition-all ${
-                        isTestimonialDragging ? "border-primary bg-primary/10" : "border-input bg-card hover:border-primary/70"
-                      }`}
-                    >
-                      <div className="flex flex-col items-center justify-center gap-3">
-                        <div className="grid h-12 w-12 place-items-center rounded-full bg-primary/10 text-primary">
-                          <span className="text-xl">📸</span>
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold text-primary">Drag & drop an avatar here</p>
-                          <p className="text-xs text-muted-foreground">or click to browse</p>
-                        </div>
-                      </div>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => handleTestimonialAvatarChange(e.target.files?.[0] ?? null)}
-                        className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-                        required
-                      />
-                    </div>
-                    {testimonialAvatarError ? (
-                      <p className="mt-2 text-xs text-red-500">{testimonialAvatarError}</p>
-                    ) : null}
-                    {testimonialAvatarPreview ? (
-                      <div className="mt-3 overflow-hidden rounded-3xl border bg-muted/10">
-                        <img src={testimonialAvatarPreview} alt="Avatar preview" className="h-48 w-full object-cover" />
-                      </div>
-                    ) : null}
-                  </div>
-                  <Button type="submit" className="w-full rounded-full gradient-primary text-primary-foreground">
-                    Add Testimonial
-                  </Button>
-                </form>
-              </div>
-              <div>
-                <h4 className="mb-4 text-base font-semibold">Existing Testimonials</h4>
-                {testimonials.length === 0 ? (
-                  <div className="rounded-3xl border bg-card p-8 text-center text-sm text-muted-foreground">
-                    No testimonials added yet.
-                  </div>
-                ) : (
-                  <div className="space-y-3 max-h-[600px] overflow-y-auto">
-                    {testimonials.map((item) => (
-                      <div key={item.id} className="flex gap-3 rounded-2xl border bg-card p-4">
-                        <img src={item.avatar} alt={item.name} className="h-16 w-16 rounded-full object-cover" />
-                        <div className="flex-1 min-w-0">
-                          <div className="font-semibold text-sm">{item.name}</div>
-                          <div className="text-xs text-muted-foreground">{item.role}</div>
-                          <div className="mt-1 text-xs leading-relaxed text-muted-foreground">"{item.quote}"</div>
-                        </div>
-                        <button
-                          onClick={() => handleRemoveTestimonialItem(item.id)}
-                          className="self-center rounded-lg p-2 hover:bg-red-50 hover:text-red-600 transition-all"
-                          type="button"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
+        {/* Testimonials Tab */}
+        {activeTab === "testimonials" && (
+          <div className="grid gap-6 xl:grid-cols-2">
+            <div className="rounded-3xl border bg-card p-8 shadow-elegant">
+              <h3 className="mb-6 text-lg font-semibold">Add Testimonial</h3>
+              <form onSubmit={handleAddTestimonial} className="space-y-4">
+                <div>
+                  <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Name</Label>
+                  <Input
+                    value={testimonialName}
+                    onChange={(e) => setTestimonialName(e.target.value)}
+                    placeholder="e.g., Ama Serwaa"
+                    required
+                  />
+                </div>
+                <div>
+                  <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Role</Label>
+                  <Input
+                    value={testimonialRole}
+                    onChange={(e) => setTestimonialRole(e.target.value)}
+                    placeholder="e.g., SME Owner"
+                    required
+                  />
+                </div>
+                <div>
+                  <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Rating</Label>
+                  <select
+                    value={testimonialRating}
+                    onChange={(e) => setTestimonialRating(Number(e.target.value))}
+                    className="w-full rounded-2xl border bg-background px-4 py-3 text-sm"
+                  >
+                    {[5, 4, 3, 2, 1].map((rating) => (
+                      <option key={rating} value={rating}>{rating} stars</option>
                     ))}
+                  </select>
+                </div>
+                <div>
+                  <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Quote</Label>
+                  <Textarea
+                    rows={4}
+                    value={testimonialQuote}
+                    onChange={(e) => setTestimonialQuote(e.target.value)}
+                    placeholder="Enter the testimonial quote"
+                    required
+                  />
+                </div>
+                <div>
+                  <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Upload Avatar</Label>
+                  <div
+                    onDragOver={handleTestimonialDragOver}
+                    onDragLeave={handleTestimonialDragLeave}
+                    onDrop={handleTestimonialDrop}
+                    className={`group relative rounded-3xl border px-4 py-10 text-center transition-all ${
+                      isTestimonialDragging ? "border-primary bg-primary/10" : "border-input bg-card hover:border-primary/70"
+                    }`}
+                  >
+                    <div className="flex flex-col items-center justify-center gap-3">
+                      <div className="grid h-12 w-12 place-items-center rounded-full bg-primary/10 text-primary">
+                        <span className="text-xl">📸</span>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-primary">Drag & drop an avatar here</p>
+                        <p className="text-xs text-muted-foreground">or click to browse</p>
+                      </div>
+                    </div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleTestimonialAvatarChange(e.target.files?.[0] ?? null)}
+                      className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                      required
+                    />
                   </div>
-                )}
-              </div>
+                  {testimonialAvatarError ? (
+                    <p className="mt-2 text-xs text-red-500">{testimonialAvatarError}</p>
+                  ) : null}
+                  {testimonialAvatarPreview ? (
+                    <div className="mt-3 overflow-hidden rounded-3xl border bg-muted/10">
+                      <img src={testimonialAvatarPreview} alt="Avatar preview" className="h-48 w-full object-cover" />
+                    </div>
+                  ) : null}
+                </div>
+                <Button type="submit" className="w-full rounded-full gradient-primary text-primary-foreground">
+                  Add Testimonial
+                </Button>
+              </form>
+            </div>
+
+            <div className="rounded-3xl border bg-card p-8 shadow-elegant">
+              <h3 className="mb-6 text-lg font-semibold">Existing Testimonials ({testimonials.length})</h3>
+              {testimonials.length === 0 ? (
+                <div className="rounded-3xl border bg-card p-8 text-center text-sm text-muted-foreground">
+                  No testimonials added yet.
+                </div>
+              ) : (
+                <div className="space-y-3 max-h-[600px] overflow-y-auto">
+                  {testimonials.map((item) => (
+                    <div key={item.id} className="flex gap-3 rounded-2xl border bg-card p-4">
+                      <img src={item.avatar} alt={item.name} className="h-16 w-16 rounded-full object-cover" />
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-sm">{item.name}</div>
+                        <div className="text-xs text-muted-foreground">{item.role}</div>
+                        <div className="mt-1 text-xs leading-relaxed text-muted-foreground">"{item.quote}"</div>
+                      </div>
+                      <button
+                        onClick={() => handleRemoveTestimonialItem(item.id)}
+                        className="self-center rounded-lg p-2 hover:bg-red-50 hover:text-red-600 transition-all"
+                        type="button"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
-        </>)}
+        )}
       </Section>
     </>
   );
