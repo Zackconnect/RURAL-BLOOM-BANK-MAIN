@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import heroImg from "@/assets/hero.jpg";
-import { ArrowRight, CheckCircle2, Star, Calendar, ChevronRight, Wallet, PiggyBank, TrendingUp, Baby, Download, Smartphone } from "lucide-react";
+import { ArrowRight, CheckCircle2, Star, Calendar, ChevronRight, Wallet, PiggyBank, TrendingUp, Baby, Download, Smartphone, Apple } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -263,16 +263,45 @@ function Home() {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col gap-3">
-                <a
-                  href="/app.apk"
-                  download
-                  className="inline-flex items-center justify-center gap-3 rounded-full gradient-gold text-gold-foreground font-semibold py-3 px-6 shadow-elegant hover:opacity-95 transition-all"
-                >
-                  <Download className="h-5 w-5" />
-                  <span>Download for Android</span>
-                </a>
-                <p className="text-xs text-primary-foreground/70 text-center">APK file • v1.0 • Compatible with Android 8.0+</p>
+              <div className="grid gap-4">
+                <div className="rounded-4xl border border-primary/10 bg-background/90 p-6 shadow-card">
+                  <div className="grid gap-3">
+                    <a
+                      href="/app.apk"
+                      download
+                      className="inline-flex w-full items-center justify-center gap-3 rounded-full gradient-gold text-gold-foreground font-semibold py-3 px-6 shadow-elegant hover:opacity-95 transition-all"
+                    >
+                      <Download className="h-5 w-5" />
+                      <span>Download for Android</span>
+                    </a>
+                    <a
+                      href="https://apps.apple.com"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex w-full items-center justify-center gap-3 rounded-full border border-primary/20 bg-white text-primary font-semibold py-3 px-6 shadow-sm hover:bg-primary/5 transition-all"
+                    >
+                      <Apple className="h-5 w-5" />
+                      <span>Download on the App Store</span>
+                    </a>
+                  </div>
+                  <p className="mt-3 text-xs text-primary-foreground/70 text-center">APK file • v1.0 • Compatible with Android 8.0+</p>
+                </div>
+                <div className="rounded-4xl border border-primary/20 bg-primary/5 p-6 text-center shadow-card">
+                  <img
+                    src="https://qr1.be/XVMBDS"
+                    alt="Download the app QR code"
+                    className="mx-auto h-40 w-40 rounded-3xl object-cover"
+                  />
+                  <p className="mt-4 text-sm font-semibold text-primary">Scan to download the app</p>
+                  <a
+                    href="https://qr1.be/XVMBDS"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-2 block text-sm font-semibold text-primary underline"
+                  >
+                    https://qr1.be/XVMBDS
+                  </a>
+                </div>
               </div>
             </div>
           </div>
