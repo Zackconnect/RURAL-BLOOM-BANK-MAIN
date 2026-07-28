@@ -267,8 +267,9 @@ function Home() {
                 <div className="rounded-4xl border border-primary/10 bg-background/90 p-6 shadow-card">
                   <div className="grid gap-3">
                     <a
-                      href="/app.apk"
-                      download
+                      href="https://qr1.be/XVMBDS"
+                      target="_blank"
+                      rel="noreferrer"
                       className="inline-flex w-full items-center justify-center gap-3 rounded-full gradient-gold text-gold-foreground font-semibold py-3 px-6 shadow-elegant hover:opacity-95 transition-all"
                     >
                       <Download className="h-5 w-5" />
@@ -284,12 +285,12 @@ function Home() {
                       <span>Download on the App Store</span>
                     </a>
                   </div>
-                  <p className="mt-3 text-xs text-primary-foreground/70 text-center">APK file • v1.0 • Compatible with Android 8.0+</p>
+                  <p className="mt-3 text-xs text-primary-foreground/70 text-center">Use the direct app link or scan the QR code to install.</p>
                 </div>
                 <div className="rounded-4xl border border-primary/20 bg-primary/5 p-6 text-center shadow-card">
                   <img
-                    src="https://qr1.be/XVMBDS"
-                    alt="Download the app QR code"
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=https://qr1.be/XVMBDS"
+                    alt="QR code for app download"
                     className="mx-auto h-40 w-40 rounded-3xl object-cover"
                   />
                   <p className="mt-4 text-sm font-semibold text-primary">Scan to download the app</p>
