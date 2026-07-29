@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { PageHeader, Section } from "@/components/site/Section";
-import { getContactSubmissions, isAdminLoggedIn, loginAdmin, logoutAdmin, updateContactSubmission, getGalleryItems, addGalleryItem, removeGalleryItem, getTestimonials, addTestimonialItem, removeTestimonialItem, getBranchItems, addBranchItem, updateBranchItem, removeBranchItem } from "@/lib/admin";
+import { getContactSubmissions, isAdminLoggedIn, loginAdmin, logoutAdmin, updateContactSubmission, getGalleryItems, addGalleryItem, removeGalleryItem, getTestimonials, addTestimonialItem, removeTestimonialItem, getBranchItems, addBranchItem, updateBranchItem, removeBranchItem, setBranchItems } from "@/lib/admin";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
 
@@ -41,6 +41,8 @@ function Admin() {
   const [branchImagePreview, setBranchImagePreview] = useState("");
   const [branchImageError, setBranchImageError] = useState("");
   const [editingBranchId, setEditingBranchId] = useState<string | null>(null);
+  const [bulkJson, setBulkJson] = useState("");
+  const [branchImageUrl, setBranchImageUrl] = useState("");
 
   // Gallery form states
   const [galleryName, setGalleryName] = useState("");
@@ -219,6 +221,13 @@ function Admin() {
       return;
     }
 
+    // prefer image URL if provided
+    if (branchImageUrl.trim()) {
+      finishAdd(branchImageUrl.trim());
+      setBranchImageUrl("");
+      return;
+    }
+
     finishAdd("");
   };
 
@@ -226,6 +235,27 @@ function Admin() {
     removeBranchItem(id);
     setBranches(getBranchItems());
     toast.success("Branch removed.");
+  };
+
+  const handleImportBulk = () => {
+    try {
+      const parsed = JSON.parse(bulkJson) as any[];
+      const mapped = parsed.map((p) => ({
+        id: p.id ?? (Math.random().toString(36).slice(2, 10)),
+        name: p.name ?? "Unnamed",
+        region: p.region ?? "",
+        address: p.address ?? "",
+        phone: p.phone ?? "",
+        hours: p.hours ?? "",
+        image: p.image ?? "",
+        addedAt: new Date().toISOString(),
+      }));
+      setBranchItems(mapped);
+      setBranches(getBranchItems());
+      toast.success("Imported branches.");
+    } catch (err) {
+      toast.error("Invalid JSON for import.");
+    }
   };
 
   const handleStartEditBranch = (id: string) => {
@@ -791,7 +821,11 @@ function Admin() {
                   </div>
                   <div>
                     <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Upload Photo</Label>
-                    <input type="file" accept="image/*" onChange={(e) => { setBranchImageFile(e.target.files?.[0] ?? null); if (e.target.files?.[0]) setBranchImagePreview(URL.createObjectURL(e.target.files[0])); }} />
+                    <div className="grid gap-2">
+                      <input type="file" accept="image/*" onChange={(e) => { setBranchImageFile(e.target.files?.[0] ?? null); if (e.target.files?.[0]) setBranchImagePreview(URL.createObjectURL(e.target.files[0])); }} />
+                      <div className="text-xs text-muted-foreground">Or provide an image URL</div>
+                      <Input value={branchImageUrl} onChange={(e) => setBranchImageUrl(e.target.value)} placeholder="https://... or data:image/..." />
+                    </div>
                     {branchImagePreview ? <div className="mt-3 overflow-hidden rounded-3xl border bg-muted/10"><img src={branchImagePreview} alt="Preview" className="h-48 w-full object-cover" /></div> : null}
                   </div>
                   <div className="flex gap-2">
@@ -805,6 +839,13 @@ function Admin() {
                     )}
                   </div>
                 </form>
+              </div>
+              <div className="rounded-3xl border bg-card p-8 shadow-elegant mt-4">
+                <h3 className="mb-4 text-lg font-semibold">Bulk import branches (JSON)</h3>
+                <Textarea rows={8} value={bulkJson} onChange={(e) => setBulkJson(e.target.value)} placeholder='[ { "name": "Head Office", "region": "Ashanti", "address": "...", "phone": "...", "image": "https://..." } ]' />
+                <div className="mt-4 flex justify-end">
+                  <Button onClick={handleImportBulk} className="rounded-full">Import JSON</Button>
+                </div>
               </div>
             </div>
           </div>

@@ -153,6 +153,12 @@ function writeBranches(branches: BranchItem[]) {
   window.localStorage.setItem(BRANCHES_STORAGE_KEY, JSON.stringify(branches));
 }
 
+// Replace the current branches list (used for reorder / bulk import)
+export function setBranchItems(branches: BranchItem[]) {
+  if (!isBrowser) return;
+  writeBranches(branches.map((b) => ({ ...b })));
+}
+
 export function getBranchItems(): BranchItem[] {
   const branches = readBranches();
   if (branches.length > 0) return branches;
