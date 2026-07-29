@@ -177,16 +177,17 @@ export function addBranchItem(item: Omit<BranchItem, "id" | "addedAt">): BranchI
 }
 
 export function updateBranchItem(id: string, updates: Partial<Omit<BranchItem, "id" | "addedAt">>) {
-  const branches = readBranches();
+  const branches = getBranchItems();
   const next = branches.map((branch) => (branch.id === id ? { ...branch, ...updates } : branch));
-  writeBranches(next);
+  // Ensure we write plain BranchItem[] to storage (drop any getters)
+  writeBranches(next.map((b) => ({ ...b })));
   return next;
 }
 
 export function removeBranchItem(id: string) {
-  const branches = readBranches();
+  const branches = getBranchItems();
   const filtered = branches.filter((branch) => branch.id !== id);
-  writeBranches(filtered);
+  writeBranches(filtered.map((b) => ({ ...b })));
   return filtered;
 }
 
