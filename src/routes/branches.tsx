@@ -25,6 +25,8 @@ function Branches() {
   const [selectedId, setSelectedId] = useState<string | null>(items[0]?.id ?? null);
   const [isEditing, setIsEditing] = useState(false);
   const [draft, setDraft] = useState<any>(null);
+  const [inlineEditId, setInlineEditId] = useState<string | null>(null);
+  const [inlineDraft, setInlineDraft] = useState<any>(null);
     const filtered = items.filter(
       (b) =>
         b.name.toLowerCase().includes(q.toLowerCase()) ||
@@ -93,6 +95,63 @@ function Branches() {
                   <li className="flex items-start gap-2"><Phone className="mt-0.5 h-4 w-4 text-primary" /> {b.phone}</li>
                   <li className="flex items-start gap-2"><Clock className="mt-0.5 h-4 w-4 text-primary" /> {b.hours}</li>
                 </ul>
+
+                {selectedId === b.id && (
+                  <div className="mt-4 rounded-lg border bg-background p-4">
+                    <div className="flex items-start gap-4">
+                      <div className="h-24 w-36 overflow-hidden rounded-md bg-muted">
+                        {b.image ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={b.image} alt={b.name} className="h-full w-full object-cover" />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+                            <ImageIcon />
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <div className="mb-2 text-sm text-muted-foreground">Preview</div>
+                        <div className="flex gap-2">
+                          <Button size="sm" onClick={() => { setSelectedId(b.id); setIsEditing(false); /* focus right panel */ }}>
+                            More information
+                          </Button>
+                          {isAdminLoggedIn() && (
+                            <Button size="sm" variant="ghost" onClick={() => { setInlineEditId(b.id); setInlineDraft({ ...b }); }}>
+                              <Pencil className="h-4 w-4" /> Edit
+                            </Button>
+                          )}
+                        </div>
+
+                        {inlineEditId === b.id && inlineDraft && (
+                          <div className="mt-3 space-y-2">
+                            <Input value={inlineDraft.name} onChange={(e) => setInlineDraft({ ...inlineDraft, name: e.target.value })} placeholder="Branch name" />
+                            <Input value={inlineDraft.address} onChange={(e) => setInlineDraft({ ...inlineDraft, address: e.target.value })} placeholder="Address" />
+                            <Input value={inlineDraft.phone} onChange={(e) => setInlineDraft({ ...inlineDraft, phone: e.target.value })} placeholder="Phone" />
+                            <Input value={inlineDraft.hours} onChange={(e) => setInlineDraft({ ...inlineDraft, hours: e.target.value })} placeholder="Hours" />
+                            <Input value={inlineDraft.image} onChange={(e) => setInlineDraft({ ...inlineDraft, image: e.target.value })} placeholder="Image URL" />
+                            <div className="flex gap-2">
+                              <Button onClick={() => {
+                                updateBranchItem(b.id, {
+                                  name: inlineDraft.name,
+                                  address: inlineDraft.address,
+                                  phone: inlineDraft.phone,
+                                  hours: inlineDraft.hours,
+                                  region: inlineDraft.region ?? b.region,
+                                  image: inlineDraft.image,
+                                });
+                                const next = getBranchItems();
+                                setItems(next);
+                                setInlineEditId(null);
+                                setInlineDraft(null);
+                              }}>Save</Button>
+                              <Button variant="ghost" onClick={() => { setInlineEditId(null); setInlineDraft(null); }}>Cancel</Button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
