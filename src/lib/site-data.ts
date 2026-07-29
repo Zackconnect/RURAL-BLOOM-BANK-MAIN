@@ -102,11 +102,51 @@ export const news = [
 ];
 
 export const branches = [
-  { name: "Head Office, Mfensi - Kumasi", address: "P.O. BOX PM 99, Mfensi - Kumasi", phone: "0200938636", hours: "Mon–Fri 8:30am–4pm • Sat 9am–1pm", region: "Ashanti" },
-  { name: "Central Market Branch", address: "Central Market, Kumasi", phone: "0200938636", hours: "Mon–Fri 8:30am–4pm", region: "Ashanti" },
-  { name: "Bokankye Branch", address: "Bokankye, Kumasi", phone: "0200938636", hours: "Mon–Fri 8:30am–4pm", region: "Ashanti" },
-  { name: "Asuoso Branch", address: "Asuoso, Kumasi", phone: "0200938636", hours: "Mon–Fri 8:30am–4pm", region: "Ashanti" },
-  { name: "Adugyama Branch", address: "Adugyama, Kumasi", phone: "0200938636", hours: "Mon–Fri 8:30am–4pm", region: "Ashanti" },
+  {
+    id: "head-office-mfensi",
+    name: "Head Office, Mfensi - Kumasi",
+    address: "P.O. BOX PM 99, Mfensi - Kumasi",
+    phone: "0200938636",
+    hours: "Mon–Fri 8:30am–4pm • Sat 9am–1pm",
+    region: "Ashanti",
+    image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=80",
+  },
+  {
+    id: "central-market-branch",
+    name: "Central Market Branch",
+    address: "Central Market, Kumasi",
+    phone: "0200938636",
+    hours: "Mon–Fri 8:30am–4pm",
+    region: "Ashanti",
+    image: "https://images.unsplash.com/photo-1533622597524-a121cfd140ce?auto=format&fit=crop&w=1400&q=80",
+  },
+  {
+    id: "bokankye-branch",
+    name: "Bokankye Branch",
+    address: "Bokankye, Kumasi",
+    phone: "0200938636",
+    hours: "Mon–Fri 8:30am–4pm",
+    region: "Ashanti",
+    image: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1400&q=80",
+  },
+  {
+    id: "asuoso-branch",
+    name: "Asuoso Branch",
+    address: "Asuoso, Kumasi",
+    phone: "0200938636",
+    hours: "Mon–Fri 8:30am–4pm",
+    region: "Ashanti",
+    image: "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1400&q=80",
+  },
+  {
+    id: "adugyama-branch",
+    name: "Adugyama Branch",
+    address: "Adugyama, Kumasi",
+    phone: "0200938636",
+    hours: "Mon–Fri 8:30am–4pm",
+    region: "Ashanti",
+    image: "https://images.unsplash.com/photo-1470123808288-7b20e5515c5a?auto=format&fit=crop&w=1400&q=80",
+  },
 ];
 
 export const faqs = [

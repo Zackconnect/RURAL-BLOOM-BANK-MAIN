@@ -11,9 +11,11 @@ export type ContactSubmission = {
 };
 
 import { notifyNewSubmission } from "@/lib/notify";
+import { branches as defaultBranches } from "@/lib/site-data";
 
 const STORAGE_KEY = "akrb-contact-submissions";
 const ADMIN_SESSION_KEY = "akrb-admin-session";
+const BRANCHES_STORAGE_KEY = "akrb-branches";
 
 // Read admin credentials from Vite env vars if provided for better security in deployments.
 // Fallback to the previous defaults for local development.
@@ -124,6 +126,68 @@ export function isAdminLoggedIn() {
 export function createContactSubmissionId() {
   if (!isBrowser) return `${Date.now()}`;
   return window.crypto?.randomUUID?.() ?? `${Date.now()}`;
+}
+
+export type BranchItem = {
+  id: string;
+  name: string;
+  address: string;
+  phone: string;
+  hours: string;
+  region: string;
+  image: string;
+  addedAt: string;
+};
+
+function readBranches(): BranchItem[] {
+  if (!isBrowser) return [];
+  try {
+    return JSON.parse(window.localStorage.getItem(BRANCHES_STORAGE_KEY) ?? "[]") as BranchItem[];
+  } catch {
+    return [];
+  }
+}
+
+function writeBranches(branches: BranchItem[]) {
+  if (!isBrowser) return;
+  window.localStorage.setItem(BRANCHES_STORAGE_KEY, JSON.stringify(branches));
+}
+
+export function getBranchItems(): BranchItem[] {
+  const branches = readBranches();
+  if (branches.length > 0) return branches;
+  return defaultBranches.map((branch) => ({
+    ...branch,
+    id: branch.id ?? `${branch.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}`,
+    image: branch.image ?? "",
+    addedAt: new Date().toISOString(),
+  }));
+}
+
+export function addBranchItem(item: Omit<BranchItem, "id" | "addedAt">): BranchItem {
+  const branches = readBranches();
+  const newBranch: BranchItem = {
+    ...item,
+    id: window.crypto?.randomUUID?.() ?? `${Date.now()}`,
+    addedAt: new Date().toISOString(),
+  };
+  branches.push(newBranch);
+  writeBranches(branches);
+  return newBranch;
+}
+
+export function updateBranchItem(id: string, updates: Partial<Omit<BranchItem, "id" | "addedAt">>) {
+  const branches = readBranches();
+  const next = branches.map((branch) => (branch.id === id ? { ...branch, ...updates } : branch));
+  writeBranches(next);
+  return next;
+}
+
+export function removeBranchItem(id: string) {
+  const branches = readBranches();
+  const filtered = branches.filter((branch) => branch.id !== id);
+  writeBranches(filtered);
+  return filtered;
 }
 
 // Testimonial avatar management

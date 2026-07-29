@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageHeader, Section } from "@/components/site/Section";
-import { branches } from "@/lib/site-data";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Phone, MapPin, Clock, Search, Navigation } from "lucide-react";
-import { useState } from "react";
+import { Label } from "@/components/ui/label";
+import { PageHeader, Section } from "@/components/site/Section";
+import { getBranchItems, isAdminLoggedIn, updateBranchItem } from "@/lib/admin";
+import { Phone, MapPin, Clock, Search, ImageIcon, Pencil, Navigation } from "lucide-react";
 
 export const Route = createFileRoute("/branches")({
   head: () => ({
@@ -20,12 +21,16 @@ export const Route = createFileRoute("/branches")({
 
 function Branches() {
   const [q, setQ] = useState("");
-  const filtered = branches.filter(
-    (b) =>
-      b.name.toLowerCase().includes(q.toLowerCase()) ||
-      b.region.toLowerCase().includes(q.toLowerCase()) ||
-      b.address.toLowerCase().includes(q.toLowerCase()),
-  );
+  const [items, setItems] = useState(() => getBranchItems());
+  const [selectedId, setSelectedId] = useState<string | null>(items[0]?.id ?? null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [draft, setDraft] = useState<any>(null);
+    const filtered = items.filter(
+      (b) =>
+        b.name.toLowerCase().includes(q.toLowerCase()) ||
+        b.region.toLowerCase().includes(q.toLowerCase()) ||
+        b.address.toLowerCase().includes(q.toLowerCase()),
+    );
 
   return (
     <>
@@ -42,22 +47,46 @@ function Branches() {
             />
           </div>
           <div className="text-sm text-muted-foreground">
-            Showing <span className="font-semibold text-foreground">{filtered.length}</span> of {branches.length}
+            Showing <span className="font-semibold text-foreground">{filtered.length}</span> of {items.length}
           </div>
         </div>
 
         <div className="grid gap-8 lg:grid-cols-[1fr,1.2fr]">
           <div className="grid gap-4">
             {filtered.map((b) => (
-              <div key={b.name} className="rounded-3xl border bg-card p-6 shadow-card transition-all hover:-translate-y-0.5 hover:shadow-elegant">
+                <div key={b.id} className="rounded-3xl border bg-card p-6 shadow-card transition-all hover:-translate-y-0.5 hover:shadow-elegant">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <h3 className="text-lg font-bold">{b.name}</h3>
                     <div className="mt-0.5 text-xs font-semibold uppercase tracking-widest text-primary">{b.region}</div>
                   </div>
-                  <Button size="sm" variant="outline" className="shrink-0 rounded-full">
-                    <Navigation className="mr-1 h-3.5 w-3.5" /> Directions
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="shrink-0 rounded-full"
+                      onClick={() => {
+                        setSelectedId(b.id);
+                        setIsEditing(false);
+                        setDraft(null);
+                      }}
+                    >
+                      <Navigation className="mr-1 h-3.5 w-3.5" /> Directions
+                    </Button>
+                    {isAdminLoggedIn() && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => {
+                          setSelectedId(b.id);
+                          setIsEditing(true);
+                          setDraft({ ...b });
+                        }}
+                      >
+                        <Pencil className="h-3.5 w-3.5 text-muted-foreground" />
+                      </Button>
+                    )}
+                  </div>
                 </div>
                 <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 text-primary" /> {b.address}</li>
@@ -67,16 +96,98 @@ function Branches() {
               </div>
             ))}
           </div>
-          <div className="sticky top-24 h-[600px] overflow-hidden rounded-3xl border shadow-elegant">
-            <iframe
-              title="St. Margaret Co-operative Savings and Development Society. Map"
-              src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d508086.6033259466!2d-0.4368!3d5.6037!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sgh!4v1700000000000"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
+          <div className="sticky top-24 h-[600px] overflow-hidden rounded-3xl border shadow-elegant bg-card p-4">
+            {items && selectedId ? (
+              (() => {
+                const s = items.find((it) => it.id === selectedId) ?? items[0];
+                if (!s) return <div className="p-6">No branch selected</div>;
+                return (
+                  <div className="h-full overflow-auto p-4">
+                    <div className="mb-4 h-40 w-full overflow-hidden rounded-lg bg-muted">
+                      {s.image ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={s.image} alt={s.name} className="h-full w-full object-cover" />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+                          <ImageIcon />
+                        </div>
+                      )}
+                    </div>
+                    {!isEditing && (
+                      <div>
+                        <h3 className="text-lg font-bold">{s.name}</h3>
+                        <div className="mt-1 text-sm text-muted-foreground">{s.region}</div>
+                        <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+                          <li className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 text-primary" /> {s.address}</li>
+                          <li className="flex items-start gap-2"><Phone className="mt-0.5 h-4 w-4 text-primary" /> {s.phone}</li>
+                          <li className="flex items-start gap-2"><Clock className="mt-0.5 h-4 w-4 text-primary" /> {s.hours}</li>
+                        </ul>
+                        {isAdminLoggedIn() && (
+                          <div className="mt-4">
+                            <Button onClick={() => { setIsEditing(true); setDraft({ ...s }); }}>
+                              <Pencil className="mr-2 h-4 w-4" /> Edit branch
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {isEditing && draft && (
+                      <div className="mt-4 space-y-3">
+                        <div>
+                          <Label>Name</Label>
+                          <Input value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} />
+                        </div>
+                        <div>
+                          <Label>Region</Label>
+                          <Input value={draft.region} onChange={(e) => setDraft({ ...draft, region: e.target.value })} />
+                        </div>
+                        <div>
+                          <Label>Address</Label>
+                          <Input value={draft.address} onChange={(e) => setDraft({ ...draft, address: e.target.value })} />
+                        </div>
+                        <div>
+                          <Label>Phone</Label>
+                          <Input value={draft.phone} onChange={(e) => setDraft({ ...draft, phone: e.target.value })} />
+                        </div>
+                        <div>
+                          <Label>Hours</Label>
+                          <Input value={draft.hours} onChange={(e) => setDraft({ ...draft, hours: e.target.value })} />
+                        </div>
+                        <div>
+                          <Label>Image URL</Label>
+                          <Input value={draft.image} onChange={(e) => setDraft({ ...draft, image: e.target.value })} />
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            onClick={() => {
+                              updateBranchItem(s.id, {
+                                name: draft.name,
+                                address: draft.address,
+                                phone: draft.phone,
+                                hours: draft.hours,
+                                region: draft.region,
+                                image: draft.image,
+                              });
+                              const next = getBranchItems();
+                              setItems(next);
+                              setIsEditing(false);
+                            }}
+                          >
+                            Save
+                          </Button>
+                          <Button variant="ghost" onClick={() => { setIsEditing(false); setDraft(null); }}>
+                            Cancel
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })()
+            ) : (
+              <div className="p-6">No branches available</div>
+            )}
           </div>
         </div>
       </Section>
