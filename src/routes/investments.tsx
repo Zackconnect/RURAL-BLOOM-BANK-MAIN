@@ -8,7 +8,7 @@ export const Route = createFileRoute("/investments")({
   head: () => ({
     meta: [
       { title: "Investments — St. Margaret Co-operative Savings and Development Society." },
-      { name: "description", content: "Treasury bills, fixed deposits, shares, corporate investments and retirement savings with expert advisory." },
+      { name: "description", content: "Fixed deposits, shares, corporate investments and retirement savings with expert advisory." },
       { property: "og:title", content: "Investment Products — St. Margaret Co-operative Savings and Development Society." },
       { property: "og:description", content: "Grow your wealth with confidence." },
     ],

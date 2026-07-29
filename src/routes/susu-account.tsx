@@ -16,12 +16,12 @@ export const Route = createFileRoute("/susu-account")({
 function Susu() {
   return (
     <>
-      <PageHeader eyebrow="Susu" title="Susu Account" desc="Community-driven saving and lending for groups and rotating contributions." />
+      <PageHeader eyebrow="Susu" title="Susu Account" desc="Community-driven saving and lending for groups and rotating contributions. All Susu accounts are free to join." />
       <Section>
         <div className="grid gap-8 md:grid-cols-2 md:items-center">
           <div className="rounded-3xl bg-card p-8">
             <h2 className="text-2xl font-extrabold">Group savings made simple</h2>
-            <p className="mt-3 text-muted-foreground">Join or create a Susu group and access small loans, rotating payouts and group support.</p>
+            <p className="mt-3 text-muted-foreground">Join or create a Susu group and access small loans, rotating payouts and group support — with no Susu entrance fee.</p>
             <ul className="mt-4 space-y-2 text-sm">
               <li>Susu group membership and verification</li>
               <li>Small short-term loans for members</li>

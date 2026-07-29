@@ -8,7 +8,7 @@ export const Route = createFileRoute("/digital-banking")({
   head: () => ({
     meta: [
       { title: "Digital Banking — St. Margaret Co-operative Savings and Development Society." },
-      { name: "description", content: "Mobile app, internet banking, USSD *889*905#, ATMs, Visa & MasterCard, QR payments — all in one place." },
+      { name: "description", content: "Mobile banking and USSD *889*905# that work on any phone, with fast transfers and bill pay." },
       { property: "og:title", content: "Digital Banking — St. Margaret Co-operative Savings and Development Society." },
       { property: "og:description", content: "Bank from anywhere, on any device." },
     ],

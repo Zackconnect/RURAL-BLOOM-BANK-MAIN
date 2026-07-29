@@ -35,7 +35,7 @@ export const whyUs = [
   { icon: ShieldCheck, title: "Trusted Banking", desc: "Fully licensed and regulated. Deposits secured by rigorous risk controls." },
   { icon: Landmark, title: "Secure Transactions", desc: "Bank-grade encryption and 24/7 fraud monitoring on every transfer." },
   { icon: HeadphonesIcon, title: "Fast Customer Support", desc: "Dedicated relationship officers and multi-channel support in your language." },
-  { icon: Zap, title: "Innovative Digital Banking", desc: "Mobile, USSD and internet banking that work — even on low bandwidth." },
+  { icon: Zap, title: "Innovative Digital Banking", desc: "Mobile and USSD banking that work — even on low bandwidth." },
 ];
 
 export const missionVisionValues = {
@@ -57,12 +57,12 @@ export const missionVisionValues = {
 };
 
 export const savings = [
-  { icon: PiggyBank, name: "Regular Savings", rate: "3.5% p.a.", min: "GHS 20", features: ["Free monthly statement", "No hidden fees", "ATM card included"], desc: "A flexible everyday savings account for individuals." },
-  { icon: GraduationCap, name: "Youth Savings", rate: "4.0% p.a.", min: "GHS 10", features: ["Ages 13–24", "Free financial literacy", "Bonus at 18"], desc: "Grow with us — designed for students and young adults." },
-  { icon: Baby, name: "Children Savings", rate: "4.5% p.a.", min: "GHS 5", features: ["Parent-managed", "Education bonus", "Birthday gifts"], desc: "Start early. Build a future for your children." },
-  { icon: Wallet, name: "Salary Account", rate: "3.0% p.a.", min: "GHS 0", features: ["Same-day salary credit", "Overdraft up to 40%", "Free debit card"], desc: "For working professionals with a regular income." },
-  { icon: TrendingUp, name: "Fixed Deposit", rate: "12.5% p.a.", min: "GHS 500", features: ["1–24 month tenors", "Auto-rollover", "Loan against deposit"], desc: "Lock in higher returns with our fixed deposit." },
-  { icon: Briefcase, name: "Business Savings", rate: "5.5% p.a.", min: "GHS 200", features: ["Multi-signatory", "Payroll support", "Cash pickup"], desc: "Purpose-built for SMEs and cooperatives." },
+  { icon: PiggyBank, name: "Regular Savings", rate: "3.5% p.a.", min: "GHS 20", fee: "GHS 20", features: ["Free monthly statement", "ATM card included", "Entrance fee applied"], desc: "A flexible everyday savings account for individuals." },
+  { icon: GraduationCap, name: "Youth Savings", rate: "4.0% p.a.", min: "GHS 10", fee: "GHS 20", features: ["Ages 13–24", "Free financial literacy", "Bonus at 18"], desc: "Grow with us — designed for students and young adults." },
+  { icon: Baby, name: "Children Savings", rate: "4.5% p.a.", min: "GHS 5", fee: "GHS 20", features: ["Parent-managed", "Education bonus", "Birthday gifts"], desc: "Start early. Build a future for your children." },
+  { icon: Wallet, name: "Salary Account", rate: "3.0% p.a.", min: "GHS 0", fee: "GHS 20", features: ["Same-day salary credit", "Overdraft up to 40%", "Free debit card"], desc: "For working professionals with a regular income." },
+  { icon: TrendingUp, name: "Fixed Deposit", rate: "12.5% p.a.", min: "GHS 500", fee: "GHS 20", features: ["1–24 month tenors", "Auto-rollover", "Loan against deposit"], desc: "Lock in higher returns with our fixed deposit." },
+  { icon: Briefcase, name: "Business Savings", rate: "5.5% p.a.", min: "GHS 200", fee: "GHS 20", features: ["Multi-signatory", "Payroll support", "Cash pickup"], desc: "Purpose-built for SMEs and cooperatives." },
 ];
 
 export const loans = [
@@ -75,18 +75,11 @@ export const loans = [
 ];
 
 export const digital = [
-  { icon: Globe, name: "Internet Banking", desc: "Full-featured web banking on any device." },
   { icon: Smartphone, name: "Mobile Banking", desc: "Native app for Android and iOS." },
   { icon: Hash, name: "USSD Banking", desc: "Dial *889*905# for balance enquiry and quick banking services without internet." },
-  { icon: Landmark, name: "ATM Services", desc: "500+ ATMs across the country." },
-  { icon: CreditCard, name: "Visa Cards", desc: "Debit and prepaid Visa for global payments." },
-  { icon: CreditCard, name: "MasterCard", desc: "MasterCard debit and credit options." },
-  { icon: QrCode, name: "QR Payments", desc: "Scan-to-pay at thousands of merchants." },
-  { icon: Award, name: "Rewards", desc: "Earn points on every card transaction." },
 ];
 
 export const investments = [
-  { icon: Landmark, name: "Treasury Bills", rate: "27.5% p.a.", tenor: "91 / 182 / 364 days", desc: "Government-backed short-term investments." },
   { icon: TrendingUp, name: "Fixed Deposits", rate: "12.5% p.a.", tenor: "1 – 24 months", desc: "Predictable returns with flexible tenors." },
   { icon: TrendingUp, name: "Shares", rate: "Market-based", tenor: "Flexible", desc: "Invest in local share opportunities to grow ownership and return potential." },
   { icon: Briefcase, name: "Corporate Investments", rate: "Custom", tenor: "3 – 60 months", desc: "Structured investment products for corporates." },
@@ -121,8 +114,8 @@ export const faqs = [
   { q: "What is the minimum balance to open a savings account?", a: "As low as GHS 5 for Children Savings and GHS 20 for Regular Savings. See the Savings page for full details." },
   { q: "How long does a loan application take?", a: "Personal loans typically 48–72 hours after full documentation. Business and mortgage loans 5–10 working days." },
   { q: "Is my money safe with St. Margaret Co-operative Savings and Development Society.?", a: "Yes. We are licensed and supervised by the Bank of Ghana, with strong capital adequacy and rigorous risk controls." },
-  { q: "Do you offer mobile banking?", a: "Yes — via our mobile app, USSD *889*905# and full-featured internet banking." },
-  { q: "How do I reset my internet banking password?", a: "Click 'Forgot Password' on the login page, or call our 24/7 contact center." },
+  { q: "Do you offer mobile banking?", a: "Yes — via our mobile app and USSD *889*905#. No internet banking is provided." },
+  { q: "How do I access USSD banking?", a: "Dial *889*905# from any phone to check balance, transfer funds and buy airtime." },
   { q: "Can I bank in a foreign currency?", a: "Yes, we offer USD, EUR and GBP accounts at selected branches." },
   { q: "What are your working hours?", a: "Monday to Friday 8:30am–4:00pm and Saturday 9:00am–1:00pm at most branches." },
 ];
