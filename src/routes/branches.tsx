@@ -27,6 +27,7 @@ function Branches() {
   const [draft, setDraft] = useState<any>(null);
   const [inlineEditId, setInlineEditId] = useState<string | null>(null);
   const [inlineDraft, setInlineDraft] = useState<any>(null);
+  const [expandedIds, setExpandedIds] = useState<string[]>([]);
     const filtered = items.filter(
       (b) =>
         b.name.toLowerCase().includes(q.toLowerCase()) ||
@@ -68,6 +69,9 @@ function Branches() {
                       variant="outline"
                       className="shrink-0 rounded-full"
                       onClick={() => {
+                        // toggle expansion for this branch card
+                        setExpandedIds((prev) => (prev.includes(b.id) ? prev.filter((id) => id !== b.id) : [...prev, b.id]));
+                        // focus right detail panel
                         setSelectedId(b.id);
                         setIsEditing(false);
                         setDraft(null);
@@ -96,7 +100,7 @@ function Branches() {
                   <li className="flex items-start gap-2"><Clock className="mt-0.5 h-4 w-4 text-primary" /> {b.hours}</li>
                 </ul>
 
-                {selectedId === b.id && (
+                {expandedIds.includes(b.id) && (
                   <div className="mt-4 rounded-lg border bg-background p-4">
                     <div className="flex items-start gap-4">
                       <div className="h-24 w-36 overflow-hidden rounded-md bg-muted">
