@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PageHeader, Section } from "@/components/site/Section";
 import { getBranchItems, isAdminLoggedIn, updateBranchItem } from "@/lib/admin";
+import { toast } from "sonner";
 import { Phone, MapPin, Clock, Search, ImageIcon, Pencil, Navigation } from "lucide-react";
 
 export const Route = createFileRoute("/branches")({
@@ -173,20 +174,20 @@ function Branches() {
                             <Input value={inlineDraft.image} onChange={(e) => setInlineDraft({ ...inlineDraft, image: e.target.value })} placeholder="Image URL" />
                             <div className="flex gap-2">
                               <Button onClick={() => {
-                                if (!isAdminLoggedIn()) return;
-                                updateBranchItem(b.id, {
-                                  name: inlineDraft.name,
-                                  address: inlineDraft.address,
-                                  phone: inlineDraft.phone,
-                                  hours: inlineDraft.hours,
-                                  region: inlineDraft.region ?? b.region,
-                                  image: inlineDraft.image,
-                                });
-                                const next = getBranchItems();
-                                setItems(next);
-                                setInlineEditId(null);
-                                setInlineDraft(null);
-                              }}>Save</Button>
+                                    if (!isAdminLoggedIn()) { toast.error("Sign in as admin to save changes."); return; }
+                                    updateBranchItem(b.id, {
+                                      name: inlineDraft.name,
+                                      address: inlineDraft.address,
+                                      phone: inlineDraft.phone,
+                                      hours: inlineDraft.hours,
+                                      region: inlineDraft.region ?? b.region,
+                                      image: inlineDraft.image,
+                                    });
+                                    const next = getBranchItems();
+                                    setItems(next);
+                                    setInlineEditId(null);
+                                    setInlineDraft(null);
+                                  }}>Save</Button>
                               <Button variant="ghost" onClick={() => { setInlineEditId(null); setInlineDraft(null); }}>Cancel</Button>
                             </div>
                           </div>
@@ -263,7 +264,7 @@ function Branches() {
                         <div className="flex gap-2">
                           <Button
                             onClick={() => {
-                              if (!isAdminLoggedIn()) return;
+                              if (!isAdminLoggedIn()) { toast.error("Sign in as admin to save changes."); return; }
                               updateBranchItem(s.id, {
                                 name: draft.name,
                                 address: draft.address,
