@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { PageHeader, Section } from "@/components/site/Section";
-import { getContactSubmissions, isAdminLoggedIn, loginAdmin, logoutAdmin, updateContactSubmission, getGalleryItems, addGalleryItem, removeGalleryItem, getTestimonials, addTestimonialItem, removeTestimonialItem, getBranchItems, addBranchItem, updateBranchItem, removeBranchItem, setBranchItems } from "@/lib/admin";
+import { getContactSubmissions, isAdminLoggedIn, loginAdmin, logoutAdmin, updateContactSubmission, getGalleryItems, addGalleryItem, removeGalleryItem, getTestimonials, addTestimonialItem, removeTestimonialItem, getBranchItems, addBranchItem, updateBranchItem, removeBranchItem } from "@/lib/admin";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
 
@@ -41,7 +41,8 @@ function Admin() {
   const [branchImagePreview, setBranchImagePreview] = useState("");
   const [branchImageError, setBranchImageError] = useState("");
   const [editingBranchId, setEditingBranchId] = useState<string | null>(null);
-  const [bulkJson, setBulkJson] = useState("");
+  const [isBranchDragging, setIsBranchDragging] = useState(false);
+  const [isBulkGalleryDragging, setIsBulkGalleryDragging] = useState(false);
   const [branchImageUrl, setBranchImageUrl] = useState("");
 
   // Gallery form states
@@ -206,12 +207,12 @@ function Admin() {
       return;
     }
 
-    const finishAdd = (imageValue: string) => {
-      addBranchItem({ name: branchName, region: branchRegion, address: branchAddress, phone: branchPhone, hours: branchHours, image: imageValue });
-      setBranches(getBranchItems());
-      setBranchName(""); setBranchRegion(""); setBranchAddress(""); setBranchPhone(""); setBranchHours(""); setBranchImageFile(null); setBranchImagePreview("");
-      toast.success("Branch added.");
-    };
+      const finishAdd = (imageValue: string) => {
+        addBranchItem({ name: branchName, region: branchRegion, address: branchAddress, phone: branchPhone, hours: branchHours, image: imageValue });
+        setBranches(getBranchItems());
+        setBranchName(""); setBranchRegion(""); setBranchAddress(""); setBranchPhone(""); setBranchHours(""); setBranchImageFile(null); setBranchImagePreview("");
+        toast.success("Branch added.");
+      };
 
     if (branchImageFile) {
       const reader = new FileReader();
@@ -237,24 +238,55 @@ function Admin() {
     toast.success("Branch removed.");
   };
 
-  const handleImportBulk = () => {
+  // Bulk import images as new branches
+  const handleBulkBranchDrop = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    const toAdd = Array.from(files);
     try {
-      const parsed = JSON.parse(bulkJson) as any[];
-      const mapped = parsed.map((p) => ({
-        id: p.id ?? (Math.random().toString(36).slice(2, 10)),
-        name: p.name ?? "Unnamed",
-        region: p.region ?? "",
-        address: p.address ?? "",
-        phone: p.phone ?? "",
-        hours: p.hours ?? "",
-        image: p.image ?? "",
-        addedAt: new Date().toISOString(),
-      }));
-      setBranchItems(mapped);
+      await Promise.all(
+        toAdd.map(async (file) => {
+          if (!file.type.startsWith("image/")) return;
+          const base64 = await new Promise<string>((res, rej) => {
+            const r = new FileReader();
+            r.onload = () => res(String(r.result ?? ""));
+            r.onerror = rej;
+            r.readAsDataURL(file);
+          });
+          const name = file.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ");
+          addBranchItem({ name: name, region: "", address: "", phone: "", hours: "", image: base64 });
+        }),
+      );
       setBranches(getBranchItems());
-      toast.success("Imported branches.");
+      toast.success("Imported images as branches.");
     } catch (err) {
-      toast.error("Invalid JSON for import.");
+      console.error(err);
+      toast.error("Failed to import images.");
+    }
+  };
+
+  // Bulk add images to gallery
+  const handleBulkAddGallery = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    const toAdd = Array.from(files);
+    try {
+      await Promise.all(
+        toAdd.map(async (file) => {
+          if (!file.type.startsWith("image/")) return;
+          const base64 = await new Promise<string>((res, rej) => {
+            const r = new FileReader();
+            r.onload = () => res(String(r.result ?? ""));
+            r.onerror = rej;
+            r.readAsDataURL(file);
+          });
+          const name = file.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ");
+          addGalleryItem({ name: name, role: "", image: base64 });
+        }),
+      );
+      setGallery(getGalleryItems());
+      toast.success("Added images to gallery.");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to add gallery images.");
     }
   };
 
@@ -611,6 +643,26 @@ function Admin() {
                   </Button>
                 </form>
               </div>
+
+              <div className="w-full xl:w-1/2 mt-6">
+                <div className="rounded-3xl border bg-card p-8 shadow-elegant">
+                  <h3 className="mb-4 text-lg font-semibold">Bulk add to gallery (drop images)</h3>
+                  <div
+                    onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); setIsBulkGalleryDragging(true); }}
+                    onDragLeave={(e) => { e.preventDefault(); e.stopPropagation(); setIsBulkGalleryDragging(false); }}
+                    onDrop={(e) => { e.preventDefault(); e.stopPropagation(); setIsBulkGalleryDragging(false); handleBulkAddGallery(e.dataTransfer.files); }}
+                    className={`group relative rounded-3xl border px-4 py-10 text-center transition-all ${isBulkGalleryDragging ? "border-primary bg-primary/10" : "border-input bg-card hover:border-primary/70"}`}
+                  >
+                    <div className="flex flex-col items-center justify-center gap-3">
+                      <div className="grid h-12 w-12 place-items-center rounded-full bg-primary/10 text-primary">📁</div>
+                      <div>
+                        <p className="text-sm font-semibold text-primary">Drop multiple photos here to add to gallery</p>
+                        <p className="text-xs text-muted-foreground">Each file will become a gallery item (name from filename).</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className="w-full xl:w-1/2">
@@ -821,11 +873,30 @@ function Admin() {
                   </div>
                   <div>
                     <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Upload Photo</Label>
-                    <div className="grid gap-2">
-                      <input type="file" accept="image/*" onChange={(e) => { setBranchImageFile(e.target.files?.[0] ?? null); if (e.target.files?.[0]) setBranchImagePreview(URL.createObjectURL(e.target.files[0])); }} />
-                      <div className="text-xs text-muted-foreground">Or provide an image URL</div>
-                      <Input value={branchImageUrl} onChange={(e) => setBranchImageUrl(e.target.value)} placeholder="https://... or data:image/..." />
+                    <div
+                      onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); setIsBranchDragging(true); }}
+                      onDragLeave={(e) => { e.preventDefault(); e.stopPropagation(); setIsBranchDragging(false); }}
+                      onDrop={(e) => { e.preventDefault(); e.stopPropagation(); setIsBranchDragging(false); const file = e.dataTransfer.files?.[0] ?? null; if (file) { setBranchImageFile(file); setBranchImagePreview(URL.createObjectURL(file)); } }}
+                      className={`group relative rounded-3xl border px-4 py-6 text-center transition-all ${isBranchDragging ? "border-primary bg-primary/10" : "border-input bg-card hover:border-primary/70"}`}
+                    >
+                      <div className="flex flex-col items-center justify-center gap-3">
+                        <div className="grid h-12 w-12 place-items-center rounded-full bg-primary/10 text-primary">
+                          <span className="text-xl">📤</span>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-primary">Drag & drop a photo here</p>
+                          <p className="text-xs text-muted-foreground">or click to browse</p>
+                        </div>
+                      </div>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => { setBranchImageFile(e.target.files?.[0] ?? null); if (e.target.files?.[0]) setBranchImagePreview(URL.createObjectURL(e.target.files[0])); }}
+                        className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                      />
                     </div>
+                    <div className="mt-2 text-xs text-muted-foreground">Or provide an image URL</div>
+                    <Input value={branchImageUrl} onChange={(e) => setBranchImageUrl(e.target.value)} placeholder="https://... or data:image/..." />
                     {branchImagePreview ? <div className="mt-3 overflow-hidden rounded-3xl border bg-muted/10"><img src={branchImagePreview} alt="Preview" className="h-48 w-full object-cover" /></div> : null}
                   </div>
                   <div className="flex gap-2">
@@ -841,10 +912,20 @@ function Admin() {
                 </form>
               </div>
               <div className="rounded-3xl border bg-card p-8 shadow-elegant mt-4">
-                <h3 className="mb-4 text-lg font-semibold">Bulk import branches (JSON)</h3>
-                <Textarea rows={8} value={bulkJson} onChange={(e) => setBulkJson(e.target.value)} placeholder='[ { "name": "Head Office", "region": "Ashanti", "address": "...", "phone": "...", "image": "https://..." } ]' />
-                <div className="mt-4 flex justify-end">
-                  <Button onClick={handleImportBulk} className="rounded-full">Import JSON</Button>
+                <h3 className="mb-4 text-lg font-semibold">Bulk import branches (drop images)</h3>
+                <div
+                  onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); setIsBranchDragging(true); }}
+                  onDragLeave={(e) => { e.preventDefault(); e.stopPropagation(); setIsBranchDragging(false); }}
+                  onDrop={(e) => { e.preventDefault(); e.stopPropagation(); setIsBranchDragging(false); handleBulkBranchDrop(e.dataTransfer.files); }}
+                  className={`group relative rounded-3xl border px-4 py-10 text-center transition-all ${isBranchDragging ? "border-primary bg-primary/10" : "border-input bg-card hover:border-primary/70"}`}
+                >
+                  <div className="flex flex-col items-center justify-center gap-3">
+                    <div className="grid h-12 w-12 place-items-center rounded-full bg-primary/10 text-primary">📤</div>
+                    <div>
+                      <p className="text-sm font-semibold text-primary">Drop multiple images here to create branch entries</p>
+                      <p className="text-xs text-muted-foreground">Name will be derived from filename; edit details after import.</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
