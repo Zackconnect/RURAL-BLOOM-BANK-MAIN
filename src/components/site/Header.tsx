@@ -66,19 +66,32 @@ export function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full transition-all duration-300 overflow-x-hidden ${
+      className={`sticky top-0 z-50 w-full transition-all duration-300 ${
         scrolled
-          ? "glass shadow-soft"
-          : "bg-gradient-to-r from-primary-dark via-primary to-gold/30 text-primary-foreground"
+          ? "bg-white/95 shadow-soft backdrop-blur"
+          : "bg-white/95"
       }`}
     >
-      <div className="container-x flex h-16 items-center justify-between gap-2 md:h-20 md:gap-4">
-        <div className="flex items-center gap-3 min-w-0 max-w-[260px]">
+      <div className="border-b border-slate-200/80 bg-white/95 text-slate-600">
+        <div className="container-x flex h-10 items-center justify-between text-xs uppercase tracking-[0.18em] text-slate-500">
+          <div className="flex items-center gap-4">
+            <a href="/" className="hover:text-primary">Annual Reports</a>
+            <a href="/" className="hover:text-primary">Public Notices</a>
+            <a href="/contact" className="hover:text-primary">Contact Us</a>
+          </div>
+          <div className="flex items-center gap-3">
+            <a href="https://facebook.com" target="_blank" rel="noreferrer" className="text-slate-500 hover:text-primary">F</a>
+            <a href="https://twitter.com" target="_blank" rel="noreferrer" className="text-slate-500 hover:text-primary">T</a>
+            <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="text-slate-500 hover:text-primary">L</a>
+          </div>
+        </div>
+      </div>
+      <div className="container-x flex h-20 items-center justify-between gap-4 md:h-24">
+        <div className="flex items-center gap-4 min-w-0">
           <Link
             to="/"
-            className="flex shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/10 p-2"
+            className="flex shrink-0 items-center justify-center rounded-full border border-slate-200 bg-slate-50 p-2"
             onClick={(e) => {
-              // Triple-click secret: three quick clicks on the logo navigates to /admin
               const ref = logoClickRef.current;
               ref.count += 1;
               if (ref.timer) window.clearTimeout(ref.timer);
@@ -104,42 +117,50 @@ export function Header() {
             />
           </Link>
           <div className="min-w-0 flex flex-col justify-center text-left">
-            <div className="truncate text-sm font-extrabold leading-tight tracking-tight text-white md:text-sm lg:text-base">
+            <div className="truncate text-sm font-extrabold leading-tight tracking-tight text-slate-900 md:text-base lg:text-lg">
               {bank.name}
             </div>
-            <div className="truncate text-[10px] uppercase tracking-widest text-gold-foreground opacity-90 md:text-[11px] lg:text-[12px]">
+            <div className="truncate text-[10px] uppercase tracking-widest text-slate-500 opacity-90 md:text-[11px] lg:text-[12px]">
               {bank.subtitle || bank.tagline}
             </div>
           </div>
         </div>
 
-        <div className="flex-1" />
+        <div className="hidden flex-1 items-center justify-center md:flex">
+          <div className="flex items-center gap-6 text-sm font-medium text-slate-700">
+            <NavItem to="/">Home</NavItem>
+            <NavItem to="/about">About Us</NavItem>
+            <NavItem to="/branches">Branches</NavItem>
+            <NavItem to="/news">News</NavItem>
+            <NavItem to="/contact">Contact</NavItem>
+          </div>
+        </div>
 
-        <div className="flex items-center gap-2">
-            <button
+        <div className="flex items-center gap-3">
+          <button
             aria-label="Search"
-            className="hidden sm:grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white/80 hover:bg-white/20"
+            className="hidden h-10 w-10 place-items-center rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 md:grid"
           >
             <Search className="h-4 w-4" />
           </button>
           <button
             aria-label="Toggle theme"
             onClick={toggleDark}
-            className="hidden sm:grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white/80 hover:bg-white/20"
+            className="hidden h-10 w-10 place-items-center rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 md:grid"
           >
             {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
           <Button
             asChild
             size="lg"
-            className="hidden sm:inline-flex rounded-full gradient-primary text-primary-foreground shadow-elegant hover:opacity-95 hover:shadow-lg transition-all sm:px-4 sm:py-2 md:px-5 md:py-2"
+            className="hidden rounded-full bg-gradient-to-r from-primary to-primary-dark text-white shadow-elegant transition-all hover:opacity-95 md:inline-flex"
           >
             <Link to="/contact">Open Account</Link>
           </Button>
           <button
             aria-label="Menu"
             onClick={() => setOpen((v) => !v)}
-            className="grid h-10 w-10 place-items-center rounded-full border"
+            className="grid h-10 w-10 place-items-center rounded-full border md:hidden"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
