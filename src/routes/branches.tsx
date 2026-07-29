@@ -104,6 +104,26 @@ function Branches() {
                       </Button>
                     )}
                   </div>
+                  {/* thumbnail under actions - clickable to open details */}
+                  <div className="mt-3">
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => { setSelectedId(b.id); setIsEditing(false); setDraft(null); }}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { setSelectedId(b.id); setIsEditing(false); setDraft(null); } }}
+                      className="inline-block h-20 w-28 overflow-hidden rounded-md bg-muted cursor-pointer"
+                      aria-label={`Open details for ${b.name}`}
+                    >
+                      {b.image ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={b.image} alt={b.name} className="h-full w-full object-cover" />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+                          <ImageIcon />
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
                 <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 text-primary" /> {b.address}</li>
@@ -114,7 +134,14 @@ function Branches() {
                 {expandedIds.includes(b.id) && (
                   <div className="mt-4 rounded-lg border bg-background p-4">
                     <div className="flex items-start gap-4">
-                      <div className="h-24 w-36 overflow-hidden rounded-md bg-muted">
+                      <div
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => { setSelectedId(b.id); setIsEditing(false); setDraft(null); }}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { setSelectedId(b.id); setIsEditing(false); setDraft(null); } }}
+                        className="h-24 w-36 overflow-hidden rounded-md bg-muted cursor-pointer"
+                        aria-label={`Open details for ${b.name}`}
+                      >
                         {b.image ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img src={b.image} alt={b.name} className="h-full w-full object-cover" />
