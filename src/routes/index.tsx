@@ -94,11 +94,10 @@ function Home() {
         title="Everything you need in one bank"
         desc="Personal, business and digital banking products — designed around real Ghanaian lives."
       >
-        <Tabs defaultValue="savings" className="mx-auto max-w-6xl">
+        <Tabs defaultValue="accounts" className="mx-auto max-w-6xl">
           <TabsList className="mx-auto mb-8 flex h-auto w-full max-w-3xl flex-wrap justify-center gap-2 rounded-full bg-secondary p-1.5">
             {[
               ["accounts", "Accounts"],
-              ["savings", "Savings"],
               ["loans", "Loans"],
               ["invest", "Investments"],
               ["digital", "Digital"],
@@ -113,9 +112,6 @@ function Home() {
             ))}
           </TabsList>
 
-          <TabsContent value="savings">
-            <ProductGrid items={savings.slice(0, 6).map((p) => ({ icon: p.icon, title: p.name, desc: p.desc, meta: `${p.rate} • Min ${p.min}`, to: "/savings" }))} />
-          </TabsContent>
           <TabsContent value="accounts">
             <ProductGrid items={[
               { icon: Wallet, title: 'Current account', desc: 'Fast transactional banking for individuals and businesses.', meta: 'Open now', to: '/current-accounts' },
