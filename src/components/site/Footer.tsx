@@ -1,29 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
 import { Facebook, Twitter, Instagram, Linkedin, Youtube, Mail, Phone, MapPin, Send, Landmark } from "lucide-react";
-import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { addNewsletterSubscriber } from "@/lib/admin";
 import { bank } from "@/lib/site-data";
 
 export function Footer() {
-  const [email, setEmail] = useState("");
-
-  const handleSubscribe = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const trimmed = email.trim();
-    if (!trimmed || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
-      toast.error("Please enter a valid email address.");
-      return;
-    }
-
-    addNewsletterSubscriber(trimmed);
-    toast.success("Thanks! You have been subscribed to our newsletter.");
-    setEmail("");
-  };
-
   return (
     <footer className="mt-24 gradient-primary text-primary-foreground">
       <div className="container-x grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-4">
@@ -102,16 +83,20 @@ export function Footer() {
           <p className="mt-4 text-sm opacity-90">
             Financial tips and product news, straight to your inbox.
           </p>
-          <form onSubmit={handleSubscribe} className="mt-4 flex overflow-hidden rounded-full bg-primary-foreground/10 backdrop-blur">
+          <form
+            onSubmit={(e) => e.preventDefault()}
+            className="mt-4 flex overflow-hidden rounded-full bg-primary-foreground/10 backdrop-blur"
+          >
             <Input
               type="email"
               required
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
               placeholder="Your email"
               className="flex-1 border-0 bg-transparent text-primary-foreground placeholder:text-primary-foreground/60 focus-visible:ring-0"
             />
-            <Button type="submit" className="rounded-none gradient-gold text-gold-foreground hover:opacity-95">
+            <Button
+              type="submit"
+              className="rounded-none gradient-gold text-gold-foreground hover:opacity-95"
+            >
               <Send className="h-4 w-4" />
             </Button>
           </form>

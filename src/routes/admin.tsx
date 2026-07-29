@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { PageHeader, Section } from "@/components/site/Section";
-import { getContactSubmissions, getNewsletterSubscribers, isAdminLoggedIn, loginAdmin, logoutAdmin, updateContactSubmission, getGalleryItems, addGalleryItem, removeGalleryItem, getTestimonials, addTestimonialItem, removeTestimonialItem } from "@/lib/admin";
+import { getContactSubmissions, isAdminLoggedIn, loginAdmin, logoutAdmin, updateContactSubmission, getGalleryItems, addGalleryItem, removeGalleryItem, getTestimonials, addTestimonialItem, removeTestimonialItem } from "@/lib/admin";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
 
@@ -21,11 +21,10 @@ export const Route = createFileRoute("/admin")({
 
 function Admin() {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [activeTab, setActiveTab] = useState<"contacts" | "gallery" | "testimonials" | "newsletter">("contacts");
+  const [activeTab, setActiveTab] = useState<"contacts" | "gallery" | "testimonials">("contacts");
   const [submissions, setSubmissions] = useState(() => getContactSubmissions());
   const [gallery, setGallery] = useState(() => getGalleryItems());
   const [testimonials, setTestimonials] = useState(() => getTestimonials());
-  const [subscribers, setSubscribers] = useState(() => getNewsletterSubscribers());
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [responseText, setResponseText] = useState("");
@@ -51,17 +50,6 @@ function Admin() {
 
   useEffect(() => {
     setLoggedIn(isAdminLoggedIn());
-  }, []);
-
-  useEffect(() => {
-    const handleNewsletterUpdated = () => {
-      setSubscribers(getNewsletterSubscribers());
-    };
-
-    window.addEventListener("akrb-newsletter-updated", handleNewsletterUpdated);
-    return () => {
-      window.removeEventListener("akrb-newsletter-updated", handleNewsletterUpdated);
-    };
   }, []);
 
   useEffect(() => {
@@ -339,16 +327,6 @@ function Admin() {
               Gallery Management
             </button>
             <button
-              onClick={() => setActiveTab("newsletter")}
-              className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
-                activeTab === "newsletter"
-                  ? "gradient-primary text-primary-foreground shadow-elegant"
-                  : "border bg-card hover:border-primary"
-              }`}
-            >
-              Newsletter Subscribers
-            </button>
-            <button
               onClick={() => setActiveTab("testimonials")}
               className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
                 activeTab === "testimonials"
@@ -557,29 +535,6 @@ function Admin() {
             </div>
           </div>
         </>
-        )}
-
-        {/* Newsletter Subscribers Tab */}
-        {activeTab === "newsletter" && (
-          <div className="space-y-6">
-            <div className="rounded-3xl border bg-card p-8 shadow-elegant">
-              <h3 className="mb-6 text-lg font-semibold">Newsletter Subscribers ({subscribers.length})</h3>
-              {subscribers.length === 0 ? (
-                <div className="rounded-3xl border bg-card p-8 text-center text-sm text-muted-foreground">
-                  No newsletter subscribers yet.
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {subscribers.map((subscriber) => (
-                    <div key={subscriber.id} className="rounded-3xl border p-4 text-sm">
-                      <div className="font-semibold text-primary">{subscriber.email}</div>
-                      <div className="text-xs text-muted-foreground">Subscribed {new Date(subscriber.subscribedAt).toLocaleString()}</div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
         )}
 
         {/* Testimonials Tab */}

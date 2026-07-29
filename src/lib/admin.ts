@@ -10,16 +10,9 @@ export type ContactSubmission = {
   response?: string;
 };
 
-export type NewsletterSubscriber = {
-  id: string;
-  email: string;
-  subscribedAt: string;
-};
-
 import { notifyNewSubmission } from "@/lib/notify";
 
 const STORAGE_KEY = "akrb-contact-submissions";
-const NEWSLETTER_STORAGE_KEY = "akrb-newsletter-subscribers";
 const ADMIN_SESSION_KEY = "akrb-admin-session";
 
 // Read admin credentials from Vite env vars if provided for better security in deployments.
@@ -45,21 +38,6 @@ function writeSubmissions(submissions: ContactSubmission[]) {
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(submissions));
 }
 
-function readNewsletterSubscribers(): NewsletterSubscriber[] {
-  if (!isBrowser) return [];
-  try {
-    return JSON.parse(window.localStorage.getItem(NEWSLETTER_STORAGE_KEY) ?? "[]") as NewsletterSubscriber[];
-  } catch {
-    return [];
-  }
-}
-
-function writeNewsletterSubscribers(subscribers: NewsletterSubscriber[]) {
-  if (!isBrowser) return;
-  window.localStorage.setItem(NEWSLETTER_STORAGE_KEY, JSON.stringify(subscribers));
-  window.dispatchEvent(new CustomEvent("akrb-newsletter-updated"));
-}
-
 export function getContactSubmissions(): ContactSubmission[] {
   return readSubmissions();
 }
@@ -74,22 +52,6 @@ export function saveContactSubmission(submission: ContactSubmission) {
   } catch (err) {
     console.error("notifyNewSubmission failed", err);
   }
-}
-
-export function getNewsletterSubscribers(): NewsletterSubscriber[] {
-  return readNewsletterSubscribers();
-}
-
-export function addNewsletterSubscriber(email: string): NewsletterSubscriber {
-  const subscribers = readNewsletterSubscribers();
-  const subscriber: NewsletterSubscriber = {
-    id: window.crypto?.randomUUID?.() ?? `${Date.now()}`,
-    email,
-    subscribedAt: new Date().toISOString(),
-  };
-  subscribers.unshift(subscriber);
-  writeNewsletterSubscribers(subscribers);
-  return subscriber;
 }
 
 export function updateContactSubmission(
