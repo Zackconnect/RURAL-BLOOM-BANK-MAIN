@@ -23,11 +23,14 @@ const accountLinks = [
 ] as const;
 
 const navLinks = [
-  { to: "/products", label: "Products & Services" },
+  { to: "/", label: "Home" },
   { to: "/about", label: "About Us" },
-  { to: "/branches", label: "MRB Branches" },
-  { to: "/news", label: "Resources" },
-  { to: "/contact", label: "Account Opening" },
+  { to: "/gallery", label: "Gallery" },
+  { to: "/branches", label: "Branches" },
+  { to: "/news", label: "News" },
+  { to: "/careers", label: "Careers" },
+  { to: "/faqs", label: "FAQs" },
+  { to: "/contact", label: "Contact" },
 ] as const;
 
 export function Header() {
@@ -125,11 +128,11 @@ export function Header() {
 
         <div className="hidden flex-1 items-center justify-center md:flex">
           <div className="flex items-center gap-6 text-sm font-medium text-slate-700">
-            <NavItem to="/products">Products & Services</NavItem>
+            <NavItem to="/">Home</NavItem>
             <NavItem to="/about">About Us</NavItem>
-            <NavItem to="/branches">MRB Branches</NavItem>
-            <NavItem to="/news">Resources</NavItem>
-            <NavItem to="/contact">Account Opening</NavItem>
+            <NavItem to="/branches">Branches</NavItem>
+            <NavItem to="/news">News</NavItem>
+            <NavItem to="/contact">Contact</NavItem>
           </div>
         </div>
 
