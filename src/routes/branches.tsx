@@ -28,6 +28,17 @@ function Branches() {
   const [inlineEditId, setInlineEditId] = useState<string | null>(null);
   const [inlineDraft, setInlineDraft] = useState<any>(null);
   const [expandedIds, setExpandedIds] = useState<string[]>([]);
+
+  // Refresh items if branches are updated in another tab/admin action (localStorage)
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === "akrb-branches") {
+        setItems(getBranchItems());
+      }
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
     const filtered = items.filter(
       (b) =>
         b.name.toLowerCase().includes(q.toLowerCase()) ||
