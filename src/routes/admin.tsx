@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { PageHeader, Section } from "@/components/site/Section";
-import { getContactSubmissions, isAdminLoggedIn, loginAdmin, logoutAdmin, updateContactSubmission, getGalleryItems, addGalleryItem, removeGalleryItem, getTestimonials, addTestimonialItem, removeTestimonialItem } from "@/lib/admin";
+import { getContactSubmissions, isAdminLoggedIn, loginAdmin, logoutAdmin, updateContactSubmission, getGalleryItems, addGalleryItem, removeGalleryItem, getTestimonials, addTestimonialItem, removeTestimonialItem, getBranchItems, addBranchItem, updateBranchItem, removeBranchItem } from "@/lib/admin";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
 
@@ -21,14 +21,26 @@ export const Route = createFileRoute("/admin")({
 
 function Admin() {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [activeTab, setActiveTab] = useState<"contacts" | "gallery" | "testimonials">("contacts");
+  const [activeTab, setActiveTab] = useState<"contacts" | "gallery" | "testimonials" | "branches">("contacts");
   const [submissions, setSubmissions] = useState(() => getContactSubmissions());
   const [gallery, setGallery] = useState(() => getGalleryItems());
   const [testimonials, setTestimonials] = useState(() => getTestimonials());
+  const [branches, setBranches] = useState(() => getBranchItems());
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [responseText, setResponseText] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  // Branch form states
+  const [branchName, setBranchName] = useState("");
+  const [branchRegion, setBranchRegion] = useState("");
+  const [branchAddress, setBranchAddress] = useState("");
+  const [branchPhone, setBranchPhone] = useState("");
+  const [branchHours, setBranchHours] = useState("");
+  const [branchImageFile, setBranchImageFile] = useState<File | null>(null);
+  const [branchImagePreview, setBranchImagePreview] = useState("");
+  const [branchImageError, setBranchImageError] = useState("");
+  const [editingBranchId, setEditingBranchId] = useState<string | null>(null);
 
   // Gallery form states
   const [galleryName, setGalleryName] = useState("");
@@ -185,6 +197,66 @@ function Admin() {
     toast.success("Photo removed from gallery.");
   };
 
+  const handleAddBranch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!branchName.trim() || !branchRegion.trim() || !branchAddress.trim()) {
+      toast.error("Please fill the branch name, region and address.");
+      return;
+    }
+
+    const finishAdd = (imageValue: string) => {
+      addBranchItem({ name: branchName, region: branchRegion, address: branchAddress, phone: branchPhone, hours: branchHours, image: imageValue });
+      setBranches(getBranchItems());
+      setBranchName(""); setBranchRegion(""); setBranchAddress(""); setBranchPhone(""); setBranchHours(""); setBranchImageFile(null); setBranchImagePreview("");
+      toast.success("Branch added.");
+    };
+
+    if (branchImageFile) {
+      const reader = new FileReader();
+      reader.onload = () => finishAdd(String(reader.result ?? ""));
+      reader.onerror = () => toast.error("Failed to read image file.");
+      reader.readAsDataURL(branchImageFile);
+      return;
+    }
+
+    finishAdd("");
+  };
+
+  const handleRemoveBranch = (id: string) => {
+    removeBranchItem(id);
+    setBranches(getBranchItems());
+    toast.success("Branch removed.");
+  };
+
+  const handleStartEditBranch = (id: string) => {
+    const b = getBranchItems().find((x) => x.id === id);
+    if (!b) return;
+    setEditingBranchId(id);
+    setBranchName(b.name); setBranchRegion(b.region); setBranchAddress(b.address); setBranchPhone(b.phone); setBranchHours(b.hours); setBranchImagePreview(b.image ?? "");
+  };
+
+  const handleSaveEditBranch = () => {
+    if (!editingBranchId) return;
+    if (!isAdminLoggedIn()) { toast.error("You must be signed in as admin."); return; }
+    const finishUpdate = (imageValue: string) => {
+      updateBranchItem(editingBranchId, { name: branchName, region: branchRegion, address: branchAddress, phone: branchPhone, hours: branchHours, image: imageValue });
+      setBranches(getBranchItems());
+      setEditingBranchId(null);
+      setBranchName(""); setBranchRegion(""); setBranchAddress(""); setBranchPhone(""); setBranchHours(""); setBranchImagePreview("");
+      toast.success("Branch updated.");
+    };
+
+    if (branchImageFile) {
+      const reader = new FileReader();
+      reader.onload = () => finishUpdate(String(reader.result ?? ""));
+      reader.onerror = () => toast.error("Failed to read image file.");
+      reader.readAsDataURL(branchImageFile);
+      return;
+    }
+
+    finishUpdate(branchImagePreview);
+  };
+
   const handleAddTestimonial = (e: React.FormEvent) => {
     e.preventDefault();
     if (!testimonialName.trim() || !testimonialRole.trim() || !testimonialQuote.trim() || !testimonialAvatarFile) {
@@ -315,6 +387,16 @@ function Admin() {
               }`}
             >
               Contact Requests
+            </button>
+            <button
+              onClick={() => setActiveTab("branches")}
+              className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
+                activeTab === "branches"
+                  ? "gradient-primary text-primary-foreground shadow-elegant"
+                  : "border bg-card hover:border-primary"
+              }`}
+            >
+              Branches
             </button>
             <button
               onClick={() => setActiveTab("gallery")}
@@ -652,6 +734,78 @@ function Admin() {
                   ))}
                 </div>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* Branches Tab */}
+        {activeTab === "branches" && (
+          <div className="flex flex-col gap-6 xl:flex-row xl:items-start">
+            <div className="w-full xl:w-1/2">
+              <h2 className="mb-4 text-xl font-semibold">Branches</h2>
+              {branches.length === 0 ? (
+                <div className="rounded-3xl border bg-card p-8 text-center text-sm text-muted-foreground">No branches defined.</div>
+              ) : (
+                <div className="space-y-3 max-h-[600px] overflow-y-auto">
+                  {branches.map((b) => (
+                    <div key={b.id} className="flex gap-3 rounded-2xl border bg-card p-4">
+                      <img src={b.image || "https://via.placeholder.com/80"} alt={b.name} className="h-16 w-16 rounded-lg object-cover" />
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-sm">{b.name}</div>
+                        <div className="text-xs text-muted-foreground">{b.region} • {b.address}</div>
+                        <div className="text-xs text-muted-foreground">{b.phone}</div>
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <Button onClick={() => handleStartEditBranch(b.id)} variant="ghost">Edit</Button>
+                        <Button onClick={() => handleRemoveBranch(b.id)} variant="destructive">Remove</Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="w-full xl:w-1/2">
+              <div className="rounded-3xl border bg-card p-8 shadow-elegant">
+                <h3 className="mb-6 text-lg font-semibold">{editingBranchId ? "Edit Branch" : "Add Branch"}</h3>
+                <form onSubmit={handleAddBranch} className="space-y-4">
+                  <div>
+                    <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Name</Label>
+                    <Input value={branchName} onChange={(e) => setBranchName(e.target.value)} placeholder="Branch name" required />
+                  </div>
+                  <div>
+                    <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Region</Label>
+                    <Input value={branchRegion} onChange={(e) => setBranchRegion(e.target.value)} placeholder="Region" required />
+                  </div>
+                  <div>
+                    <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Address</Label>
+                    <Input value={branchAddress} onChange={(e) => setBranchAddress(e.target.value)} placeholder="Address" required />
+                  </div>
+                  <div>
+                    <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Phone</Label>
+                    <Input value={branchPhone} onChange={(e) => setBranchPhone(e.target.value)} placeholder="Phone" />
+                  </div>
+                  <div>
+                    <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Hours</Label>
+                    <Input value={branchHours} onChange={(e) => setBranchHours(e.target.value)} placeholder="Hours" />
+                  </div>
+                  <div>
+                    <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Upload Photo</Label>
+                    <input type="file" accept="image/*" onChange={(e) => { setBranchImageFile(e.target.files?.[0] ?? null); if (e.target.files?.[0]) setBranchImagePreview(URL.createObjectURL(e.target.files[0])); }} />
+                    {branchImagePreview ? <div className="mt-3 overflow-hidden rounded-3xl border bg-muted/10"><img src={branchImagePreview} alt="Preview" className="h-48 w-full object-cover" /></div> : null}
+                  </div>
+                  <div className="flex gap-2">
+                    {editingBranchId ? (
+                      <>
+                        <Button type="button" onClick={handleSaveEditBranch}>Save changes</Button>
+                        <Button type="button" variant="ghost" onClick={() => { setEditingBranchId(null); setBranchName(""); setBranchRegion(""); setBranchAddress(""); setBranchPhone(""); setBranchHours(""); setBranchImagePreview(""); }}>Cancel</Button>
+                      </>
+                    ) : (
+                      <Button type="submit" className="rounded-full gradient-primary text-primary-foreground">Add Branch</Button>
+                    )}
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         )}
