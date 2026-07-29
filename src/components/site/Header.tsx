@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState, useRef } from "react";
-import { Menu, X, ChevronDown, Search, Moon, Sun } from "lucide-react";
+import { Menu, X, Search, Moon, Sun, Facebook, Twitter, Linkedin, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { bank } from "@/lib/site-data";
 import logo from "@/routes/logo.svg.jpeg";
@@ -69,62 +69,45 @@ export function Header() {
           : "bg-white/95"
       }`}
     >
-      <div className="border-b border-slate-200/80 bg-white/95 text-slate-600">
-        <div className="container-x flex h-10 items-center justify-between text-xs uppercase tracking-[0.18em] text-slate-500">
-          <div className="flex items-center gap-4">
-            <a href="/" className="hover:text-primary">Annual Reports</a>
-            <a href="/" className="hover:text-primary">Public Notices</a>
-            <a href="/contact" className="hover:text-primary">Contact Us</a>
+      <div className="border-b border-slate-200/80 bg-[#eff6ee] text-slate-700">
+        <div className="container-x flex h-11 items-center justify-between gap-4 text-xs uppercase tracking-[0.2em] text-slate-700">
+          <div className="flex items-center gap-6">
+            <a href="/" className="transition hover:text-primary">Annual Reports</a>
+            <a href="/" className="transition hover:text-primary">Public Notices</a>
+            <a href="/contact" className="transition hover:text-primary">Contact Us</a>
           </div>
-          <div className="flex items-center gap-3">
-            <a href="https://facebook.com" target="_blank" rel="noreferrer" className="text-slate-500 hover:text-primary">F</a>
-            <a href="https://twitter.com" target="_blank" rel="noreferrer" className="text-slate-500 hover:text-primary">T</a>
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="text-slate-500 hover:text-primary">L</a>
+          <div className="flex items-center gap-4 text-slate-700">
+            <Facebook className="h-4 w-4 cursor-pointer transition hover:text-primary" />
+            <Twitter className="h-4 w-4 cursor-pointer transition hover:text-primary" />
+            <Linkedin className="h-4 w-4 cursor-pointer transition hover:text-primary" />
+            <Youtube className="h-4 w-4 cursor-pointer transition hover:text-primary" />
           </div>
         </div>
       </div>
-      <div className="container-x flex h-20 items-center justify-between gap-4 md:h-24">
+      <div className="container-x flex h-24 items-center justify-between gap-4">
         <div className="flex items-center gap-4 min-w-0">
           <Link
             to="/"
-            className="flex shrink-0 items-center justify-center rounded-full border border-slate-200 bg-slate-50 p-2"
-            onClick={(e) => {
-              const ref = logoClickRef.current;
-              ref.count += 1;
-              if (ref.timer) window.clearTimeout(ref.timer);
-              ref.timer = window.setTimeout(() => {
-                ref.count = 0;
-                ref.timer = 0;
-              }, 700);
-              if (ref.count >= 3) {
-                ref.count = 0;
-                if (ref.timer) {
-                  window.clearTimeout(ref.timer);
-                  ref.timer = 0;
-                }
-                e.preventDefault();
-                window.location.href = "/admin";
-              }
-            }}
+            className="flex shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white p-2"
           >
             <img
               src={logo}
               alt="St. Margaret Co-operative logo"
-              className="h-10 w-10 rounded-xl object-contain"
+              className="h-12 w-12 rounded-xl object-contain"
             />
           </Link>
           <div className="min-w-0 flex flex-col justify-center text-left">
-            <div className="truncate text-sm font-extrabold leading-tight tracking-tight text-slate-900 md:text-base lg:text-lg">
+            <div className="truncate text-base font-black tracking-tight text-slate-900 md:text-lg">
               {bank.name}
             </div>
-            <div className="truncate text-[10px] uppercase tracking-widest text-slate-500 opacity-90 md:text-[11px] lg:text-[12px]">
+            <div className="truncate text-[11px] uppercase tracking-[0.25em] text-slate-500 opacity-90 md:text-xs">
               {bank.subtitle || bank.tagline}
             </div>
           </div>
         </div>
 
         <div className="hidden flex-1 items-center justify-center md:flex">
-          <div className="flex items-center gap-6 text-sm font-medium text-slate-700">
+          <div className="flex items-center gap-10 text-sm font-semibold uppercase tracking-[0.08em] text-slate-900">
             <NavItem to="/products">Products & Services</NavItem>
             <NavItem to="/about">About Us</NavItem>
             <NavItem to="/branches">MRB Branches</NavItem>
@@ -134,25 +117,12 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-3">
-          <button
-            aria-label="Search"
-            className="hidden h-10 w-10 place-items-center rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 md:grid"
-          >
-            <Search className="h-4 w-4" />
-          </button>
-          <button
-            aria-label="Toggle theme"
-            onClick={toggleDark}
-            className="hidden h-10 w-10 place-items-center rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 md:grid"
-          >
-            {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-          </button>
           <Button
             asChild
             size="lg"
-            className="hidden rounded-full bg-gradient-to-r from-primary to-primary-dark text-white shadow-elegant transition-all hover:opacity-95 md:inline-flex"
+            className="hidden rounded-full border border-slate-200 bg-[#eef7ed] px-6 py-3 text-sm font-semibold uppercase text-slate-900 shadow-sm transition hover:bg-[#daf0d5] md:inline-flex"
           >
-            <Link to="/contact">Open Account</Link>
+            <Link to="/contact">Get in Touch</Link>
           </Button>
           <button
             aria-label="Menu"
