@@ -69,22 +69,22 @@ export function Header() {
           : "bg-white/95"
       }`}
     >
-      <div className="border-b border-slate-200/80 bg-[#eff6ee] text-slate-700">
+      <div className="border-b border-slate-200/90 bg-[#ecf6e9] text-slate-700">
         <div className="container-x flex h-11 items-center justify-between gap-4 text-xs uppercase tracking-[0.2em] text-slate-700">
           <div className="flex items-center gap-6">
-            <a href="/" className="transition hover:text-primary">Annual Reports</a>
-            <a href="/" className="transition hover:text-primary">Public Notices</a>
+            <a href="/news" className="transition hover:text-primary">Annual Reports</a>
+            <a href="/news" className="transition hover:text-primary">Public Notices</a>
             <a href="/contact" className="transition hover:text-primary">Contact Us</a>
           </div>
           <div className="flex items-center gap-4 text-slate-700">
-            <Facebook className="h-4 w-4 cursor-pointer transition hover:text-primary" />
-            <Twitter className="h-4 w-4 cursor-pointer transition hover:text-primary" />
-            <Linkedin className="h-4 w-4 cursor-pointer transition hover:text-primary" />
-            <Youtube className="h-4 w-4 cursor-pointer transition hover:text-primary" />
+            <a href="https://facebook.com" target="_blank" rel="noreferrer" className="transition hover:text-primary"><Facebook className="h-4 w-4" /></a>
+            <a href="https://twitter.com" target="_blank" rel="noreferrer" className="transition hover:text-primary"><Twitter className="h-4 w-4" /></a>
+            <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="transition hover:text-primary"><Linkedin className="h-4 w-4" /></a>
+            <a href="https://youtube.com" target="_blank" rel="noreferrer" className="transition hover:text-primary"><Youtube className="h-4 w-4" /></a>
           </div>
         </div>
       </div>
-      <div className="container-x flex h-24 items-center justify-between gap-4">
+      <div className="container-x flex h-24 items-center justify-between gap-6">
         <div className="flex items-center gap-4 min-w-0">
           <Link
             to="/"
@@ -92,8 +92,8 @@ export function Header() {
           >
             <img
               src={logo}
-              alt="St. Margaret Co-operative logo"
-              className="h-12 w-12 rounded-xl object-contain"
+              alt="Mumuadu Rural Bank logo"
+              className="h-14 w-14 rounded-xl object-contain"
             />
           </Link>
           <div className="min-w-0 flex flex-col justify-center text-left">
@@ -107,7 +107,7 @@ export function Header() {
         </div>
 
         <div className="hidden flex-1 items-center justify-center md:flex">
-          <div className="flex items-center gap-10 text-sm font-semibold uppercase tracking-[0.08em] text-slate-900">
+          <div className="flex items-center gap-12 text-sm font-semibold uppercase tracking-[0.12em] text-slate-900">
             <NavItem to="/products">Products & Services</NavItem>
             <NavItem to="/about">About Us</NavItem>
             <NavItem to="/branches">MRB Branches</NavItem>
@@ -120,7 +120,7 @@ export function Header() {
           <Button
             asChild
             size="lg"
-            className="hidden rounded-full border border-slate-200 bg-[#eef7ed] px-6 py-3 text-sm font-semibold uppercase text-slate-900 shadow-sm transition hover:bg-[#daf0d5] md:inline-flex"
+            className="hidden rounded-full bg-gradient-to-r from-[#d7c03a] via-[#a2c342] to-[#1f8a3d] px-7 py-3 text-sm font-semibold uppercase text-white shadow-elegant transition hover:opacity-95 md:inline-flex"
           >
             <Link to="/contact">Get in Touch</Link>
           </Button>
