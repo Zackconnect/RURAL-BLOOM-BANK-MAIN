@@ -91,19 +91,6 @@ function Branches() {
                     >
                       <Navigation className="mr-1 h-3.5 w-3.5" /> Directions
                     </Button>
-                    {isAdminLoggedIn() && (
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => {
-                          setSelectedId(b.id);
-                          setIsEditing(true);
-                          setDraft({ ...b });
-                        }}
-                      >
-                        <Pencil className="h-3.5 w-3.5 text-muted-foreground" />
-                      </Button>
-                    )}
                   </div>
                   {/* thumbnail under actions - clickable to open details */}
                   <div className="mt-3">
