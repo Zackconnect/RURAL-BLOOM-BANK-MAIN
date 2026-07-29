@@ -47,21 +47,20 @@ function Home() {
           <img src={heroImg} alt="" className="h-full w-full object-cover" width={1600} height={1100} />
           <div className="absolute inset-0 bg-gradient-to-r from-primary-dark/95 via-primary-dark/80 to-primary/40" />
         </div>
-        <div className="container-x relative min-h-[calc(100vh-5rem)] py-20 md:py-28 text-primary-foreground">
-          <div className="mx-auto flex h-full max-w-5xl flex-col justify-center gap-8">
-            <div className="max-w-3xl">
-              <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-primary-foreground/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest backdrop-blur">
-                <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-                Trusted since 2024
-              </div>
-              <h1 className="text-4xl font-extrabold leading-tight tracking-tight md:text-6xl lg:text-7xl">
-                Welcome to <span className="text-gradient-gold">{bank.name}</span>
-              </h1>
-              <p className="mt-5 text-lg opacity-90 md:text-xl">
-                From the farm to the city — grow your money, fund your dreams and bank on your terms with {bank.name}.
-              </p>
+        <div className="container-x relative py-20 md:py-32 text-primary-foreground">
+          <div className="max-w-2xl">
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-primary-foreground/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest backdrop-blur">
+              <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+              Trusted since 2024
             </div>
-            <div className="flex flex-wrap gap-4">
+            <h1 className="text-4xl font-extrabold leading-tight tracking-tight md:text-6xl lg:text-7xl">
+              Welcome to <span className="text-gradient-gold">{bank.name}</span>
+            </h1>
+            <p className="mt-5 max-w-xl text-lg opacity-90 md:text-xl">
+              From the farm to the city — grow your money, fund your dreams and bank
+              on your terms with {bank.name}.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild size="lg" className="rounded-full gradient-gold text-gold-foreground shadow-elegant hover:opacity-95">
                 <Link to="/contact">Open an Account <ArrowRight className="ml-1 h-4 w-4" /></Link>
               </Button>
@@ -74,7 +73,8 @@ function Home() {
                 </Button>
               ) : null}
             </div>
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+
+            <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4 max-w-2xl">
               {stats.map((s) => (
                 <div key={s.label} className="rounded-2xl bg-primary-foreground/10 p-4 backdrop-blur">
                   <div className="text-2xl font-extrabold md:text-3xl text-gold">
