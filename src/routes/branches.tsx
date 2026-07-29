@@ -135,6 +135,7 @@ function Branches() {
                             <Input value={inlineDraft.image} onChange={(e) => setInlineDraft({ ...inlineDraft, image: e.target.value })} placeholder="Image URL" />
                             <div className="flex gap-2">
                               <Button onClick={() => {
+                                if (!isAdminLoggedIn()) return;
                                 updateBranchItem(b.id, {
                                   name: inlineDraft.name,
                                   address: inlineDraft.address,
@@ -224,6 +225,7 @@ function Branches() {
                         <div className="flex gap-2">
                           <Button
                             onClick={() => {
+                              if (!isAdminLoggedIn()) return;
                               updateBranchItem(s.id, {
                                 name: draft.name,
                                 address: draft.address,
