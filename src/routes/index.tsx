@@ -176,7 +176,7 @@ function Home() {
         <div className="relative overflow-hidden">
           <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-background to-transparent" />
           <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-background to-transparent" />
-          <div className="flex w-max gap-6 animate-marquee">
+          <div className="flex min-w-full gap-6 animate-marquee">
             {[...testimonialItems, ...testimonialItems].map((t, i) => (
               <Card key={i} className="w-[340px] shrink-0 rounded-3xl border p-6 shadow-card">
                 <div className="flex gap-1 text-gold">
