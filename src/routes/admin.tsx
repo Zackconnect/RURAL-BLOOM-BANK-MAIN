@@ -788,9 +788,6 @@ function Admin() {
                   <Button type="submit" className="w-full rounded-full gradient-primary text-primary-foreground">
                     Add to Gallery
                   </Button>
-                  <div className="mt-4">
-                    <p className="text-sm text-muted-foreground">Gallery publishes automatically when deployed with <code>VITE_PUBLISH_SECRET</code> configured.</p>
-                  </div>
                 </form>
               </div>
 
