@@ -313,8 +313,15 @@ function Admin() {
         body: JSON.stringify({ gallery: items }),
       });
       if (!resp.ok) {
-        const t = await resp.text().catch(() => '');
-        console.warn('publish failed', t);
+        let bodyText = '';
+        try {
+          const j = await resp.json();
+          bodyText = j && (j.error || j.details || JSON.stringify(j));
+        } catch (e) {
+          bodyText = await resp.text().catch(() => '');
+        }
+        console.warn('publish failed', bodyText);
+        toast.error(`Publish failed: ${bodyText || resp.statusText}`);
         return;
       }
       toast.success('Published gallery to repo (visible to all).');
