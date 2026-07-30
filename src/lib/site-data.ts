@@ -110,6 +110,12 @@ export const branches = [
     hours: "Mon–Fri 8:30am–4pm • Sat 9am–1pm",
     region: "Ashanti",
     image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=80",
+    details: "Our head office in Mfensi offers full-service banking, corporate account support, loans, deposits, and mobile banking assistance for both individuals and businesses.",
+    gallery: [
+      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1515861758680-ba00f7b4c742?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?auto=format&fit=crop&w=1200&q=80",
+    ],
   },
   {
     id: "central-market-branch",
@@ -119,6 +125,12 @@ export const branches = [
     hours: "Mon–Fri 8:30am–4pm",
     region: "Ashanti",
     image: "https://images.unsplash.com/photo-1533622597524-a121cfd140ce?auto=format&fit=crop&w=1400&q=80",
+    details: "Located inside Central Market, this branch is designed for quick deposits, withdrawals, and local trader support with fast teller service.",
+    gallery: [
+      "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80",
+    ],
   },
   {
     id: "bokankye-branch",
@@ -128,6 +140,12 @@ export const branches = [
     hours: "Mon–Fri 8:30am–4pm",
     region: "Ashanti",
     image: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1400&q=80",
+    details: "Bokankye branch focuses on retail customers and community savings, with fast account opening and access to ATM and mobile top-up services.",
+    gallery: [
+      "https://images.unsplash.com/photo-1485217988980-11786ced9454?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1470123808288-7b20e5515c5a?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1496284045406-d43f4d1f8f3a?auto=format&fit=crop&w=1200&q=80",
+    ],
   },
   {
     id: "asuoso-branch",
@@ -137,6 +155,12 @@ export const branches = [
     hours: "Mon–Fri 8:30am–4pm",
     region: "Ashanti",
     image: "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1400&q=80",
+    details: "The Asuoso branch is a community-focused location offering savings plans, loan applications, and personalized customer care for nearby families.",
+    gallery: [
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=1200&q=80",
+    ],
   },
   {
     id: "adugyama-branch",
@@ -146,6 +170,12 @@ export const branches = [
     hours: "Mon–Fri 8:30am–4pm",
     region: "Ashanti",
     image: "https://images.unsplash.com/photo-1470123808288-7b20e5515c5a?auto=format&fit=crop&w=1400&q=80",
+    details: "Adugyama branch serves rural customers with essential banking services, loan support, and USSD/mobile banking registration assistance.",
+    gallery: [
+      "https://images.unsplash.com/photo-1472437774355-71ab6752b434?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1200&q=80",
+    ],
   },
 ];
 

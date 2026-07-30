@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,7 +8,7 @@ import { getBranchItems, isAdminLoggedIn, updateBranchItem } from "@/lib/admin";
 import { toast } from "sonner";
 import { Phone, MapPin, Clock, Search, ImageIcon, Pencil, Navigation } from "lucide-react";
 
-export const Route = createFileRoute("/branches")({
+export const Route = createFileRoute("/branches/")({
   head: () => ({
       meta: [
       { title: "Branch Locator — St. Margaret Co-operative Savings and Development Society." },
@@ -29,6 +29,15 @@ function Branches() {
   const [inlineEditId, setInlineEditId] = useState<string | null>(null);
   const [inlineDraft, setInlineDraft] = useState<any>(null);
   const [expandedIds, setExpandedIds] = useState<string[]>([]);
+
+  const getGoogleMapsUrl = (query: string) =>
+    `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+
+  const getGoogleMapsDirectionUrl = (query: string) =>
+    `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(query)}`;
+
+  const getEmbeddedMapUrl = (query: string) =>
+    `https://maps.google.com/maps?q=${encodeURIComponent(query)}&output=embed`;
 
   // Refresh items if branches are updated in another tab/admin action (localStorage)
   useEffect(() => {
@@ -76,22 +85,25 @@ function Branches() {
                     <div className="mt-0.5 text-xs font-semibold uppercase tracking-widest text-primary">{b.region}</div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="shrink-0 rounded-full"
-                      onClick={() => {
-                        // toggle expansion for this branch card
-                        setExpandedIds((prev) => (prev.includes(b.id) ? prev.filter((id) => id !== b.id) : [...prev, b.id]));
-                        // focus right detail panel
-                        setSelectedId(b.id);
-                        setIsEditing(false);
-                        setDraft(null);
-                      }}
-                    >
-                      <Navigation className="mr-1 h-3.5 w-3.5" /> Directions
+                    <div className="flex flex-col gap-2">
+                    <Button size="sm" variant="outline" className="shrink-0 rounded-full" asChild>
+                      <a href={getGoogleMapsDirectionUrl(b.address)} target="_blank" rel="noreferrer">
+                        <Navigation className="mr-1 h-3.5 w-3.5" /> Directions
+                      </a>
                     </Button>
+                    <a
+                      href={getGoogleMapsUrl(b.address)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center justify-center rounded-full border border-primary px-3 py-2 text-sm font-semibold text-primary transition hover:bg-primary/10"
+                    >
+                      Open in Google Maps
+                    </a>
                   </div>
+                  <Button size="sm" variant="secondary" asChild className="shrink-0 rounded-full">
+                    <Link to={`/branches/${b.id}`}>More information</Link>
+                  </Button>
+                </div>
                   {/* thumbnail under actions - clickable to open details */}
                   <div className="mt-3">
                     <div
@@ -121,31 +133,56 @@ function Branches() {
 
                 {expandedIds.includes(b.id) && (
                   <div className="mt-4 rounded-lg border bg-background p-4">
-                    <div className="flex items-start gap-4">
-                      <div
-                        role="button"
-                        tabIndex={0}
-                        onClick={() => { setSelectedId(b.id); setIsEditing(false); setDraft(null); }}
-                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { setSelectedId(b.id); setIsEditing(false); setDraft(null); } }}
-                        className="h-24 w-36 overflow-hidden rounded-md bg-muted cursor-pointer"
-                        aria-label={`Open details for ${b.name}`}
-                      >
-                        {b.image ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img src={b.image} alt={b.name} className="h-full w-full object-cover" />
-                        ) : (
-                          <div className="flex h-full w-full items-center justify-center text-muted-foreground">
-                            <ImageIcon />
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex-1">
-                        <div className="mb-2 text-sm text-muted-foreground">Preview</div>
-                        <div className="flex gap-2">
-                          <Button size="sm" onClick={() => { setSelectedId(b.id); setIsEditing(false); /* focus right panel */ }}>
-                            More information
-                          </Button>
+                    <div className="space-y-4">
+                      <div className="flex items-start gap-4">
+                        <div
+                          role="button"
+                          tabIndex={0}
+                          onClick={() => { setSelectedId(b.id); setIsEditing(false); setDraft(null); }}
+                          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { setSelectedId(b.id); setIsEditing(false); setDraft(null); } }}
+                          className="h-24 w-36 overflow-hidden rounded-md bg-muted cursor-pointer"
+                          aria-label={`Open details for ${b.name}`}
+                        >
+                          {b.image ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={b.image} alt={b.name} className="h-full w-full object-cover" />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+                              <ImageIcon />
+                            </div>
+                          )}
                         </div>
+                        <div className="flex-1">
+                          <div className="mb-2 text-sm text-muted-foreground">Preview</div>
+                          <div className="flex flex-wrap gap-2">
+                            <Button size="sm" asChild>
+                              <Link to={`/branches/${b.id}`}>More information</Link>
+                            </Button>
+                            <Button size="sm" variant="outline" asChild>
+                              <a href={getGoogleMapsDirectionUrl(b.address)} target="_blank" rel="noreferrer">
+                                Get directions
+                              </a>
+                            </Button>
+                            <a
+                              href={getGoogleMapsUrl(b.address)}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center justify-center rounded-full border border-primary px-3 py-2 text-sm font-semibold text-primary transition hover:bg-primary/10"
+                            >
+                              Open in Google Maps
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="overflow-hidden rounded-3xl border bg-muted">
+                        <iframe
+                          title={`Map for ${b.name}`}
+                          src={getEmbeddedMapUrl(b.address)}
+                          className="h-48 w-full"
+                          loading="lazy"
+                          referrerPolicy="no-referrer-when-downgrade"
+                        />
                       </div>
                     </div>
                   </div>

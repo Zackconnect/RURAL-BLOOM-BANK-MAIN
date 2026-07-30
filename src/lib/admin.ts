@@ -136,6 +136,9 @@ export type BranchItem = {
   hours: string;
   region: string;
   image: string;
+  details?: string;
+  gallery?: string[];
+  mapQuery?: string;
   addedAt: string;
 };
 
