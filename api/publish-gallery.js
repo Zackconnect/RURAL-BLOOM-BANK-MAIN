@@ -1,13 +1,13 @@
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const publishSecret = process.env.PUBLISH_SECRET;
-  const githubToken = process.env.GITHUB_TOKEN;
+  const publishSecret = process.env.PUBLISH_SECRET || process.env.VITE_PUBLISH_SECRET;
+  const githubToken = process.env.GITHUB_TOKEN || process.env.VITE_GITHUB_TOKEN;
   if (!publishSecret || !githubToken) {
     return res.status(500).json({ error: 'Server not configured' });
   }
 
-  const incomingSecret = req.headers['x-publish-secret'] || req.headers['x-publish-secret'.toLowerCase()];
+  const incomingSecret = req.headers['x-publish-secret'];
   if (!incomingSecret || incomingSecret !== publishSecret) {
     return res.status(401).json({ error: 'Invalid publish secret' });
   }
