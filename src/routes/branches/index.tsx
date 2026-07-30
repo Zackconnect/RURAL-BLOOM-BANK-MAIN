@@ -91,14 +91,6 @@ function Branches() {
                         <Navigation className="mr-1 h-3.5 w-3.5" /> Directions
                       </a>
                     </Button>
-                    <a
-                      href={getGoogleMapsUrl(b.address)}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center justify-center rounded-full border border-primary px-3 py-2 text-sm font-semibold text-primary transition hover:bg-primary/10"
-                    >
-                      Open in Google Maps
-                    </a>
                   </div>
                   <Button size="sm" variant="secondary" asChild className="shrink-0 rounded-full">
                     <Link to={`/branches/${b.id}`}>More information</Link>
@@ -163,14 +155,6 @@ function Branches() {
                                 Get directions
                               </a>
                             </Button>
-                            <a
-                              href={getGoogleMapsUrl(b.address)}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="inline-flex items-center justify-center rounded-full border border-primary px-3 py-2 text-sm font-semibold text-primary transition hover:bg-primary/10"
-                            >
-                              Open in Google Maps
-                            </a>
                           </div>
                         </div>
                       </div>
