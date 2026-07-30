@@ -24,6 +24,7 @@ function Admin() {
   const [activeTab, setActiveTab] = useState<"contacts" | "gallery" | "testimonials" | "branches">("contacts");
   const [submissions, setSubmissions] = useState(() => getContactSubmissions());
   const [gallery, setGallery] = useState(() => getGalleryItems());
+  const [isRemoteGallery, setIsRemoteGallery] = useState(false);
   const [testimonials, setTestimonials] = useState(() => getTestimonials());
   const [branches, setBranches] = useState(() => getBranchItems());
   const [username, setUsername] = useState("");
@@ -66,6 +67,36 @@ function Admin() {
 
   useEffect(() => {
     setLoggedIn(isAdminLoggedIn());
+  }, []);
+
+  // Load repo-backed gallery if available so admin can manage shared items
+  useEffect(() => {
+    let mounted = true;
+    fetch('/gallery.json', { cache: 'no-store' })
+      .then((res) => {
+        if (!res.ok) throw new Error('no gallery');
+        return res.json();
+      })
+      .then((data) => {
+        if (!mounted) return;
+        if (Array.isArray(data)) {
+          const items = data.map((it: any, idx: number) => ({
+            id: it.id ?? `shared-${idx}`,
+            name: it.name ?? it.title ?? `Member ${idx + 1}`,
+            role: it.role ?? it.position ?? '',
+            image: it.image ?? it.img ?? '',
+            addedAt: it.addedAt ?? new Date().toISOString(),
+          }));
+          setGallery(items);
+          setIsRemoteGallery(true);
+          return;
+        }
+      })
+      .catch(() => {
+        setGallery(getGalleryItems());
+        setIsRemoteGallery(false);
+      });
+    return () => { mounted = false; };
   }, []);
 
   useEffect(() => {
@@ -129,19 +160,49 @@ function Admin() {
 
   const handleAddGalleryItem = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isAdminLoggedIn()) { toast.error("You must be signed in as admin."); return; }
     if (!galleryName.trim() || !galleryRole.trim() || !galleryImageFile) {
       toast.error("Please fill all fields and select a photo.");
       return;
     }
 
     const reader = new FileReader();
-    reader.onload = () => {
+    reader.onload = async () => {
       const imageBase64 = String(reader.result ?? "");
-      addGalleryItem({
+      const newItem = {
         name: galleryName,
         role: galleryRole,
         image: imageBase64,
-      });
+        addedAt: new Date().toISOString(),
+      } as any;
+
+      if (isRemoteGallery) {
+        // fetch current remote array, append and publish
+        try {
+          const res = await fetch('/gallery.json', { cache: 'no-store' });
+          let remote = [] as any[];
+          if (res.ok) remote = await res.json();
+          remote.push(newItem);
+          // publish
+          const secret = typeof window !== 'undefined' ? window.localStorage.getItem('akrb-publish-secret') : null;
+          if (!secret) { toast.error('Publish secret not set.'); return; }
+          const p = await fetch('/api/publish-gallery', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-publish-secret': secret }, body: JSON.stringify({ gallery: remote }) });
+          if (!p.ok) { toast.error('Failed to publish gallery.'); return; }
+          // update admin view
+          const items = remote.map((it: any, idx: number) => ({ id: it.id ?? `shared-${idx}`, name: it.name, role: it.role, image: it.image, addedAt: it.addedAt ?? new Date().toISOString() }));
+          setGallery(items);
+          setGalleryName(''); setGalleryRole(''); setGalleryImageFile(null); setGalleryImagePreview(''); setGalleryImageError('');
+          toast.success('Photo added and published to gallery!');
+          return;
+        } catch (err) {
+          console.error(err);
+          toast.error('Failed to add to remote gallery.');
+          return;
+        }
+      }
+
+      // local-only gallery
+      addGalleryItem(newItem);
       setGallery(getGalleryItems());
       setGalleryName("");
       setGalleryRole("");
@@ -206,6 +267,27 @@ function Admin() {
   };
 
   const handleRemoveGalleryItem = (id: string) => {
+    if (!isAdminLoggedIn()) { toast.error("You must be signed in as admin."); return; }
+    // If managing remote gallery, remove by shared- index or by matching fields
+    if (isRemoteGallery && id.startsWith('shared-')) {
+      const idx = Number(id.split('-')[1]);
+      fetch('/gallery.json', { cache: 'no-store' }).then(async (res) => {
+        if (!res.ok) { toast.error('Failed to load remote gallery'); return; }
+        const remote = await res.json();
+        if (!Array.isArray(remote)) { toast.error('Invalid remote gallery'); return; }
+        remote.splice(idx, 1);
+        const secret = typeof window !== 'undefined' ? window.localStorage.getItem('akrb-publish-secret') : null;
+        if (!secret) { toast.error('Publish secret not set.'); return; }
+        const p = await fetch('/api/publish-gallery', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-publish-secret': secret }, body: JSON.stringify({ gallery: remote }) });
+        if (!p.ok) { toast.error('Failed to publish gallery update'); return; }
+        const items = remote.map((it: any, idx2: number) => ({ id: it.id ?? `shared-${idx2}`, name: it.name, role: it.role, image: it.image, addedAt: it.addedAt ?? new Date().toISOString() }));
+        setGallery(items);
+        toast.success('Photo removed from gallery.');
+      }).catch((err) => { console.error(err); toast.error('Failed to remove photo.'); });
+      return;
+    }
+
+    // Local-only removal
     removeGalleryItem(id);
     setGallery(getGalleryItems());
     toast.success("Photo removed from gallery.");
