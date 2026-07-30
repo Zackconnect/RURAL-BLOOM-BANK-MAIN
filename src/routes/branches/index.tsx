@@ -79,7 +79,12 @@ function Branches() {
           <div className="grid gap-4">
             {filtered.map((b) => (
                 <div key={b.id} className="rounded-3xl border bg-card p-6 shadow-card transition-all hover:-translate-y-0.5 hover:shadow-elegant">
-                <div className="flex items-start justify-between gap-3">
+                  {b.image ? (
+                    <div className="mb-4 h-44 w-full overflow-hidden rounded-3xl bg-muted">
+                      <img src={b.image} alt={b.name} className="h-full w-full object-contain" loading="lazy" />
+                    </div>
+                  ) : null}
+                  <div className="flex items-start justify-between gap-3">
                   <div>
                     <h3 className="text-lg font-bold">{b.name}</h3>
                     <div className="mt-0.5 text-xs font-semibold uppercase tracking-widest text-primary">{b.region}</div>
@@ -174,7 +179,7 @@ function Branches() {
               </div>
             ))}
           </div>
-          <div className="sticky top-24 h-[600px] overflow-hidden rounded-3xl border shadow-elegant bg-card p-4">
+          <div className="lg:sticky lg:top-24 lg:h-[600px] overflow-hidden rounded-3xl border shadow-elegant bg-card p-4">
             {items && selectedId ? (
               (() => {
                 const s = items.find((it) => it.id === selectedId) ?? items[0];
@@ -184,7 +189,7 @@ function Branches() {
                     <div className="mb-4 h-40 w-full overflow-hidden rounded-lg bg-muted">
                       {s.image ? (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={s.image} alt={s.name} className="h-full w-full object-cover" />
+                        <img src={s.image} alt={s.name} className="h-full w-full object-contain" />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center text-muted-foreground">
                           <ImageIcon />
