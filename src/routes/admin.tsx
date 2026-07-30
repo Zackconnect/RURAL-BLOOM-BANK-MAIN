@@ -180,8 +180,13 @@ function Admin() {
           let remote = [] as any[];
           if (res.ok) remote = await res.json();
           remote.push(newItem);
-          // publish
-          if (!publishSecret) { toast.error('Publish secret not configured.'); return; }
+          if (!publishSecret) {
+            const items = remote.map((it: any, idx: number) => ({ id: it.id ?? `shared-${idx}`, name: it.name, role: it.role, image: it.image, addedAt: it.addedAt ?? new Date().toISOString() }));
+            setGallery(items);
+            setGalleryName(''); setGalleryRole(''); setGalleryImageFile(null); setGalleryImagePreview(''); setGalleryImageError('');
+            toast.success('Photo added locally. Configure VITE_PUBLISH_SECRET to publish to the repo.');
+            return;
+          }
           const p = await fetch('/api/publish-gallery', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-publish-secret': publishSecret }, body: JSON.stringify({ gallery: remote }) });
           if (!p.ok) { toast.error('Failed to publish gallery.'); return; }
           // update admin view
@@ -407,7 +412,12 @@ function Admin() {
         let remote: any[] = [];
         if (res.ok) remote = await res.json();
         remote.push(...addedItems);
-        if (!publishSecret) { toast.error('Publish secret not configured.'); return; }
+        if (!publishSecret) {
+          const items = remote.map((it: any, idx: number) => ({ id: it.id ?? `shared-${idx}`, name: it.name, role: it.role, image: it.image, addedAt: it.addedAt ?? new Date().toISOString() }));
+          setGallery(items);
+          toast.success('Photos added locally. Configure VITE_PUBLISH_SECRET to publish to the repo.');
+          return;
+        }
         const p = await fetch('/api/publish-gallery', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-publish-secret': publishSecret }, body: JSON.stringify({ gallery: remote }) });
         if (!p.ok) { toast.error('Failed to publish gallery.'); return; }
         const items = remote.map((it: any, idx: number) => ({ id: it.id ?? `shared-${idx}`, name: it.name, role: it.role, image: it.image, addedAt: it.addedAt ?? new Date().toISOString() }));
