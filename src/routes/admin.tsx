@@ -89,6 +89,12 @@ function Admin() {
           }));
           setGallery(items);
           setIsRemoteGallery(true);
+          // clear any local-only gallery to avoid conflicts when remote is authoritative
+          try {
+            if (typeof window !== 'undefined') window.localStorage.removeItem('akrb-gallery');
+          } catch (e) {
+            // ignore
+          }
           return;
         }
       })
@@ -296,6 +302,7 @@ function Admin() {
 
   const tryPublishGallery = async () => {
     try {
+      if (!isAdminLoggedIn()) return;
       if (typeof window === 'undefined') return;
       const secret = window.localStorage.getItem('akrb-publish-secret');
       if (!secret) return;
@@ -382,22 +389,42 @@ function Admin() {
 
   // Bulk add images to gallery
   const handleBulkAddGallery = async (files: FileList | null) => {
+    if (!isAdminLoggedIn()) { toast.error("You must be signed in as admin."); return; }
     if (!files || files.length === 0) return;
     const toAdd = Array.from(files);
     try {
-      await Promise.all(
-        toAdd.map(async (file) => {
-          if (!file.type.startsWith("image/")) return;
-          const base64 = await new Promise<string>((res, rej) => {
-            const r = new FileReader();
-            r.onload = () => res(String(r.result ?? ""));
-            r.onerror = rej;
-            r.readAsDataURL(file);
-          });
-          const name = file.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ");
-          addGalleryItem({ name: name, role: "", image: base64 });
-        }),
-      );
+      const addedItems: any[] = [];
+      for (const file of toAdd) {
+        if (!file.type.startsWith("image/")) continue;
+        const base64 = await new Promise<string>((res, rej) => {
+          const r = new FileReader();
+          r.onload = () => res(String(r.result ?? ""));
+          r.onerror = rej;
+          r.readAsDataURL(file);
+        });
+        const name = file.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ");
+        const item = { name, role: "", image: base64, addedAt: new Date().toISOString() };
+        addedItems.push(item);
+      }
+
+      if (isRemoteGallery) {
+        // fetch remote, append, publish
+        const res = await fetch('/gallery.json', { cache: 'no-store' });
+        let remote: any[] = [];
+        if (res.ok) remote = await res.json();
+        remote.push(...addedItems);
+        const secret = typeof window !== 'undefined' ? window.localStorage.getItem('akrb-publish-secret') : null;
+        if (!secret) { toast.error('Publish secret not set.'); return; }
+        const p = await fetch('/api/publish-gallery', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-publish-secret': secret }, body: JSON.stringify({ gallery: remote }) });
+        if (!p.ok) { toast.error('Failed to publish gallery.'); return; }
+        const items = remote.map((it: any, idx: number) => ({ id: it.id ?? `shared-${idx}`, name: it.name, role: it.role, image: it.image, addedAt: it.addedAt ?? new Date().toISOString() }));
+        setGallery(items);
+        toast.success('Added images to gallery and published.');
+        return;
+      }
+
+      // local fallback
+      for (const it of addedItems) addGalleryItem(it);
       setGallery(getGalleryItems());
       toast.success("Added images to gallery.");
       tryPublishGallery();
