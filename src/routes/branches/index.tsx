@@ -97,9 +97,7 @@ function Branches() {
                       </a>
                     </Button>
                   </div>
-                  <Button size="sm" variant="secondary" asChild className="shrink-0 rounded-full">
-                    <Link to={`/branches/${b.id}`}>More information</Link>
-                  </Button>
+                  {/* Details link removed - branch details accessed via branch card or dedicated page navigation */}
                 </div>
                   {/* thumbnail under actions - clickable to open details */}
                   <div className="mt-3">
@@ -152,9 +150,7 @@ function Branches() {
                         <div className="flex-1">
                           <div className="mb-2 text-sm text-muted-foreground">Preview</div>
                           <div className="flex flex-wrap gap-2">
-                            <Button size="sm" asChild>
-                              <Link to={`/branches/${b.id}`}>More information</Link>
-                            </Button>
+                            {/* Details preview link removed */}
                             <Button size="sm" variant="outline" asChild>
                               <a href={getGoogleMapsDirectionUrl(b.address)} target="_blank" rel="noreferrer">
                                 Get directions

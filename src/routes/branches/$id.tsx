@@ -12,7 +12,7 @@ export const Route = createFileRoute("/branches/$id")({
   head: ({ params }) => ({
     meta: [
       { title: `Branch — ${params.id}` },
-      { name: "description", content: `More information about branch ${params.id}.` },
+      { name: "description", content: `Details about branch ${params.id}.` },
     ],
   }),
   component: BranchDetail,
@@ -59,7 +59,7 @@ function BranchDetail() {
 
   return (
     <>
-      <PageHeader eyebrow="Branch details" title={branch.name} desc={`More information for ${branch.name} in ${branch.region}.`} />
+      <PageHeader eyebrow="Branch details" title={branch.name} desc={`Details for ${branch.name} in ${branch.region}.`} />
       <Section>
         <div className="grid gap-8 lg:grid-cols-[1.2fr,0.8fr]">
           <div className="space-y-8">
