@@ -21,8 +21,35 @@ function Gallery() {
   const [selectedIdx, setSelectedIdx] = useState(-1);
 
   useEffect(() => {
-    // Reload gallery when component mounts
-    setGallery(getGalleryItems());
+    // Try to load shared gallery from public/gallery.json so updates
+    // committed to the repo (and deployed) are visible to everyone.
+    // Fall back to localStorage-backed gallery (admin-managed) if fetch fails.
+    let mounted = true;
+    fetch(`/gallery.json`, { cache: "no-store" })
+      .then((res) => {
+        if (!res.ok) throw new Error("no gallery file");
+        return res.json();
+      })
+      .then((data) => {
+        if (!mounted) return;
+        if (Array.isArray(data)) {
+          // Normalize items to match GalleryItem shape
+          const items = data.map((it: any, idx: number) => ({
+            id: it.id ?? `shared-${idx}`,
+            name: it.name ?? it.title ?? `Member ${idx + 1}`,
+            role: it.role ?? it.position ?? "",
+            image: it.image ?? it.img ?? "",
+            addedAt: it.addedAt ?? new Date().toISOString(),
+          }));
+          setGallery(items);
+          return;
+        }
+        setGallery(getGalleryItems());
+      })
+      .catch(() => {
+        setGallery(getGalleryItems());
+      });
+    return () => { mounted = false; };
   }, []);
 
   if (gallery.length === 0) {
