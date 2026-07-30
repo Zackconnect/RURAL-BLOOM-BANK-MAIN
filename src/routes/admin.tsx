@@ -53,7 +53,7 @@ function Admin() {
   const [galleryImagePreview, setGalleryImagePreview] = useState("");
   const [galleryImageError, setGalleryImageError] = useState("");
   const [isDragging, setIsDragging] = useState(false);
-  const [publishSecretInput, setPublishSecretInput] = useState(() => (typeof window !== 'undefined' ? window.localStorage.getItem('akrb-publish-secret') ?? '' : ''));
+  const publishSecret = typeof import.meta !== 'undefined' ? (import.meta as any).env?.VITE_PUBLISH_SECRET ?? '' : '';
 
   // Testimonial form states
   const [testimonialName, setTestimonialName] = useState("");
@@ -115,15 +115,6 @@ function Admin() {
       }
     };
   }, [galleryImagePreview, testimonialAvatarPreview]);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    try {
-      window.localStorage.setItem('akrb-publish-secret', publishSecretInput ?? '');
-    } catch (e) {
-      // ignore
-    }
-  }, [publishSecretInput]);
 
   const activeSubmission = useMemo(
     () => submissions.find((item) => item.id === selectedId) ?? null,
@@ -190,9 +181,8 @@ function Admin() {
           if (res.ok) remote = await res.json();
           remote.push(newItem);
           // publish
-          const secret = typeof window !== 'undefined' ? window.localStorage.getItem('akrb-publish-secret') : null;
-          if (!secret) { toast.error('Publish secret not set.'); return; }
-          const p = await fetch('/api/publish-gallery', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-publish-secret': secret }, body: JSON.stringify({ gallery: remote }) });
+          if (!publishSecret) { toast.error('Publish secret not configured.'); return; }
+          const p = await fetch('/api/publish-gallery', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-publish-secret': publishSecret }, body: JSON.stringify({ gallery: remote }) });
           if (!p.ok) { toast.error('Failed to publish gallery.'); return; }
           // update admin view
           const items = remote.map((it: any, idx: number) => ({ id: it.id ?? `shared-${idx}`, name: it.name, role: it.role, image: it.image, addedAt: it.addedAt ?? new Date().toISOString() }));
@@ -282,9 +272,8 @@ function Admin() {
         const remote = await res.json();
         if (!Array.isArray(remote)) { toast.error('Invalid remote gallery'); return; }
         remote.splice(idx, 1);
-        const secret = typeof window !== 'undefined' ? window.localStorage.getItem('akrb-publish-secret') : null;
-        if (!secret) { toast.error('Publish secret not set.'); return; }
-        const p = await fetch('/api/publish-gallery', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-publish-secret': secret }, body: JSON.stringify({ gallery: remote }) });
+        if (!publishSecret) { toast.error('Publish secret not configured.'); return; }
+        const p = await fetch('/api/publish-gallery', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-publish-secret': publishSecret }, body: JSON.stringify({ gallery: remote }) });
         if (!p.ok) { toast.error('Failed to publish gallery update'); return; }
         const items = remote.map((it: any, idx2: number) => ({ id: it.id ?? `shared-${idx2}`, name: it.name, role: it.role, image: it.image, addedAt: it.addedAt ?? new Date().toISOString() }));
         setGallery(items);
@@ -303,13 +292,11 @@ function Admin() {
   const tryPublishGallery = async () => {
     try {
       if (!isAdminLoggedIn()) return;
-      if (typeof window === 'undefined') return;
-      const secret = window.localStorage.getItem('akrb-publish-secret');
-      if (!secret) return;
+      if (!publishSecret) return;
       const items = getGalleryItems().map((it) => ({ name: it.name, role: it.role, image: it.image }));
       const resp = await fetch('/api/publish-gallery', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-publish-secret': secret },
+        headers: { 'Content-Type': 'application/json', 'x-publish-secret': publishSecret },
         body: JSON.stringify({ gallery: items }),
       });
       if (!resp.ok) {
@@ -420,9 +407,8 @@ function Admin() {
         let remote: any[] = [];
         if (res.ok) remote = await res.json();
         remote.push(...addedItems);
-        const secret = typeof window !== 'undefined' ? window.localStorage.getItem('akrb-publish-secret') : null;
-        if (!secret) { toast.error('Publish secret not set.'); return; }
-        const p = await fetch('/api/publish-gallery', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-publish-secret': secret }, body: JSON.stringify({ gallery: remote }) });
+        if (!publishSecret) { toast.error('Publish secret not configured.'); return; }
+        const p = await fetch('/api/publish-gallery', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-publish-secret': publishSecret }, body: JSON.stringify({ gallery: remote }) });
         if (!p.ok) { toast.error('Failed to publish gallery.'); return; }
         const items = remote.map((it: any, idx: number) => ({ id: it.id ?? `shared-${idx}`, name: it.name, role: it.role, image: it.image, addedAt: it.addedAt ?? new Date().toISOString() }));
         setGallery(items);
@@ -793,9 +779,7 @@ function Admin() {
                     Add to Gallery
                   </Button>
                   <div className="mt-4">
-                    <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Publish Secret (optional)</Label>
-                    <Input value={publishSecretInput} onChange={(e) => setPublishSecretInput(e.target.value)} placeholder="Set publish secret for repo commits" />
-                    <p className="mt-2 text-xs text-muted-foreground">When set, gallery changes are automatically published to the repository.</p>
+                    <p className="text-sm text-muted-foreground">Gallery publishes automatically when deployed with <code>VITE_PUBLISH_SECRET</code> configured.</p>
                   </div>
                 </form>
               </div>
