@@ -52,6 +52,7 @@ function Admin() {
   const [galleryImagePreview, setGalleryImagePreview] = useState("");
   const [galleryImageError, setGalleryImageError] = useState("");
   const [isDragging, setIsDragging] = useState(false);
+  const [publishSecretInput, setPublishSecretInput] = useState(() => (typeof window !== 'undefined' ? window.localStorage.getItem('akrb-publish-secret') ?? '' : ''));
 
   // Testimonial form states
   const [testimonialName, setTestimonialName] = useState("");
@@ -77,6 +78,15 @@ function Admin() {
       }
     };
   }, [galleryImagePreview, testimonialAvatarPreview]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      window.localStorage.setItem('akrb-publish-secret', publishSecretInput ?? '');
+    } catch (e) {
+      // ignore
+    }
+  }, [publishSecretInput]);
 
   const activeSubmission = useMemo(
     () => submissions.find((item) => item.id === selectedId) ?? null,
@@ -139,6 +149,7 @@ function Admin() {
       setGalleryImagePreview("");
       setGalleryImageError("");
       toast.success("Photo added to gallery!");
+      tryPublishGallery();
     };
     reader.onerror = () => {
       toast.error("Failed to read the selected photo. Please try again.");
@@ -198,6 +209,29 @@ function Admin() {
     removeGalleryItem(id);
     setGallery(getGalleryItems());
     toast.success("Photo removed from gallery.");
+    tryPublishGallery();
+  };
+
+  const tryPublishGallery = async () => {
+    try {
+      if (typeof window === 'undefined') return;
+      const secret = window.localStorage.getItem('akrb-publish-secret');
+      if (!secret) return;
+      const items = getGalleryItems().map((it) => ({ name: it.name, role: it.role, image: it.image }));
+      const resp = await fetch('/api/publish-gallery', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-publish-secret': secret },
+        body: JSON.stringify({ gallery: items }),
+      });
+      if (!resp.ok) {
+        const t = await resp.text().catch(() => '');
+        console.warn('publish failed', t);
+        return;
+      }
+      toast.success('Published gallery to repo (visible to all).');
+    } catch (err) {
+      console.error('publish error', err);
+    }
   };
 
   const handleAddBranch = (e: React.FormEvent) => {
@@ -284,6 +318,7 @@ function Admin() {
       );
       setGallery(getGalleryItems());
       toast.success("Added images to gallery.");
+      tryPublishGallery();
     } catch (err) {
       console.error(err);
       toast.error("Failed to add gallery images.");
@@ -641,6 +676,11 @@ function Admin() {
                   <Button type="submit" className="w-full rounded-full gradient-primary text-primary-foreground">
                     Add to Gallery
                   </Button>
+                  <div className="mt-4">
+                    <Label className="mb-2 block text-xs uppercase tracking-widest text-muted-foreground">Publish Secret (optional)</Label>
+                    <Input value={publishSecretInput} onChange={(e) => setPublishSecretInput(e.target.value)} placeholder="Set publish secret for repo commits" />
+                    <p className="mt-2 text-xs text-muted-foreground">When set, gallery changes are automatically published to the repository.</p>
+                  </div>
                 </form>
               </div>
 
