@@ -210,9 +210,6 @@ function Home() {
         <div className="grid gap-6 md:grid-cols-3">
           {news.map((n) => (
             <article key={n.title} className="group overflow-hidden rounded-3xl border bg-card shadow-card transition-all hover:-translate-y-1 hover:shadow-elegant">
-              <div className="aspect-[16/10] overflow-hidden">
-                <img src={n.img} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-              </div>
               <div className="p-6">
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   <Calendar className="h-3.5 w-3.5" /> {n.date}
