@@ -98,7 +98,7 @@ export const testimonials = [
 export const news = [
   { title: "St. Margaret Co-operative Savings and Development Society. Launches New Mobile App 3.0", date: "18 July 2026", excerpt: "A completely redesigned app with AI insights, budgeting and instant loans.", img: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&auto=format&fit=crop" },
   { title: "GHS 20 Million Committed to Youth Agri-Finance", date: "02 July 2026", excerpt: "New program targets 5,000 young farmers with concessional loans and mentorship.", img: "https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=800&auto=format&fit=crop" },
-  { title: "AKRB Wins Best Rural Bank of the Year 2026", date: "20 June 2026", excerpt: "Recognized for outstanding community impact and digital transformation.", img: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&auto=format&fit=crop" },
+  
 ];
 
 export const branches = [
