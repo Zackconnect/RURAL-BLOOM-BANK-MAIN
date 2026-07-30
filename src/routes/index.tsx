@@ -116,7 +116,7 @@ function Home() {
             <ProductGrid items={[
               { icon: Wallet, title: 'Current account', desc: 'Fast transactional banking for individuals and businesses.', meta: 'Open now', to: '/current-accounts' },
               { icon: PiggyBank, title: 'Susu account', desc: 'Community savings and rotating contributions.', meta: 'Group based', to: '/susu-account' },
-              { icon: PiggyBank, title: 'Savings account', desc: 'Regular, youth and children savings to grow your money.', meta: 'From GHS 5', to: '/savings' },
+              { icon: PiggyBank, title: 'Savings account', desc: 'Regular, youth and children savings to grow your money.', meta: 'Open now', to: '/savings' },
               { icon: TrendingUp, title: 'Afihyia pa account', desc: 'Family savings plan with seasonal bonuses.', meta: 'Rewards', to: '/afihyia-pa' },
               { icon: Baby, title: 'Abofra pa account', desc: 'Children and youth savings to build early saving habits.', meta: 'Youth focused', to: '/abofra-pa' },
             ]} />
