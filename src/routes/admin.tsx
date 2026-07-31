@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { PageHeader, Section } from "@/components/site/Section";
-import { getContactSubmissions, isAdminLoggedIn, loginAdmin, logoutAdmin, updateContactSubmission, getGalleryItems, addGalleryItem, removeGalleryItem, getTestimonials, addTestimonialItem, removeTestimonialItem, getBranchItems, addBranchItem, updateBranchItem, removeBranchItem } from "@/lib/admin";
+import { getContactSubmissions, isAdminLoggedIn, loginAdmin, logoutAdmin, updateContactSubmission, getTestimonials, addTestimonialItem, removeTestimonialItem, getBranchItems, addBranchItem, updateBranchItem, removeBranchItem, getGalleryItems, addGalleryItem, removeGalleryItem } from "@/lib/admin";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
 
@@ -23,8 +23,7 @@ function Admin() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [activeTab, setActiveTab] = useState<"contacts" | "gallery" | "testimonials" | "branches">("contacts");
   const [submissions, setSubmissions] = useState(() => getContactSubmissions());
-  const [gallery, setGallery] = useState(() => getGalleryItems());
-  const [isRemoteGallery, setIsRemoteGallery] = useState(false);
+  const [gallery, setGallery] = useState<any[]>(() => getGalleryItems());
   const [testimonials, setTestimonials] = useState(() => getTestimonials());
   const [branches, setBranches] = useState(() => getBranchItems());
   const [username, setUsername] = useState("");
@@ -53,7 +52,6 @@ function Admin() {
   const [galleryImagePreview, setGalleryImagePreview] = useState("");
   const [galleryImageError, setGalleryImageError] = useState("");
   const [isDragging, setIsDragging] = useState(false);
-  const publishSecret = typeof import.meta !== 'undefined' ? (import.meta as any).env?.VITE_PUBLISH_SECRET ?? '' : '';
 
   // Testimonial form states
   const [testimonialName, setTestimonialName] = useState("");
@@ -72,6 +70,7 @@ function Admin() {
   // Load repo-backed gallery if available so admin can manage shared items
   useEffect(() => {
     let mounted = true;
+    const localGallery = getGalleryItems();
     fetch('/gallery.json', { cache: 'no-store' })
       .then((res) => {
         if (!res.ok) throw new Error('no gallery');
@@ -87,20 +86,14 @@ function Admin() {
             image: it.image ?? it.img ?? '',
             addedAt: it.addedAt ?? new Date().toISOString(),
           }));
-          setGallery(items);
-          setIsRemoteGallery(true);
-          // clear any local-only gallery to avoid conflicts when remote is authoritative
-          try {
-            if (typeof window !== 'undefined') window.localStorage.removeItem('akrb-gallery');
-          } catch (e) {
-            // ignore
-          }
+          setGallery([...items, ...localGallery]);
           return;
         }
+        setGallery(localGallery);
       })
       .catch(() => {
-        setGallery(getGalleryItems());
-        setIsRemoteGallery(false);
+        if (!mounted) return;
+        setGallery(localGallery);
       });
     return () => { mounted = false; };
   }, []);
@@ -157,61 +150,26 @@ function Admin() {
 
   const handleAddGalleryItem = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isAdminLoggedIn()) { toast.error("You must be signed in as admin."); return; }
     if (!galleryName.trim() || !galleryRole.trim() || !galleryImageFile) {
       toast.error("Please fill all fields and select a photo.");
       return;
     }
 
     const reader = new FileReader();
-    reader.onload = async () => {
+    reader.onload = () => {
       const imageBase64 = String(reader.result ?? "");
-      const newItem = {
+      const newItem = addGalleryItem({
         name: galleryName,
         role: galleryRole,
         image: imageBase64,
-        addedAt: new Date().toISOString(),
-      } as any;
-
-      if (isRemoteGallery) {
-        // fetch current remote array, append and publish
-        try {
-          const res = await fetch('/gallery.json', { cache: 'no-store' });
-          let remote = [] as any[];
-          if (res.ok) remote = await res.json();
-          remote.push(newItem);
-          if (!publishSecret) {
-            const items = remote.map((it: any, idx: number) => ({ id: it.id ?? `shared-${idx}`, name: it.name, role: it.role, image: it.image, addedAt: it.addedAt ?? new Date().toISOString() }));
-            setGallery(items);
-            setGalleryName(''); setGalleryRole(''); setGalleryImageFile(null); setGalleryImagePreview(''); setGalleryImageError('');
-            toast.success('Photo added locally. Configure VITE_PUBLISH_SECRET to publish to the repo.');
-            return;
-          }
-          const p = await fetch('/api/publish-gallery', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-publish-secret': publishSecret }, body: JSON.stringify({ gallery: remote }) });
-          if (!p.ok) { toast.error('Failed to publish gallery.'); return; }
-          // update admin view
-          const items = remote.map((it: any, idx: number) => ({ id: it.id ?? `shared-${idx}`, name: it.name, role: it.role, image: it.image, addedAt: it.addedAt ?? new Date().toISOString() }));
-          setGallery(items);
-          setGalleryName(''); setGalleryRole(''); setGalleryImageFile(null); setGalleryImagePreview(''); setGalleryImageError('');
-          toast.success('Photo added and published to gallery!');
-          return;
-        } catch (err) {
-          console.error(err);
-          toast.error('Failed to add to remote gallery.');
-          return;
-        }
-      }
-
-      // local-only gallery
-      addGalleryItem(newItem);
-      setGallery(getGalleryItems());
-      setGalleryName("");
-      setGalleryRole("");
+      });
+      setGallery((prev) => [...prev, newItem]);
+      setGalleryName('');
+      setGalleryRole('');
       setGalleryImageFile(null);
-      setGalleryImagePreview("");
-      setGalleryImageError("");
-      toast.success("Photo added to gallery!");
-      tryPublishGallery();
+      setGalleryImagePreview('');
+      setGalleryImageError('');
+      toast.success('Photo added to gallery!');
     };
     reader.onerror = () => {
       toast.error("Failed to read the selected photo. Please try again.");
@@ -268,59 +226,11 @@ function Admin() {
   };
 
   const handleRemoveGalleryItem = (id: string) => {
-    if (!isAdminLoggedIn()) { toast.error("You must be signed in as admin."); return; }
-    // If managing remote gallery, remove by shared- index or by matching fields
-    if (isRemoteGallery && id.startsWith('shared-')) {
-      const idx = Number(id.split('-')[1]);
-      fetch('/gallery.json', { cache: 'no-store' }).then(async (res) => {
-        if (!res.ok) { toast.error('Failed to load remote gallery'); return; }
-        const remote = await res.json();
-        if (!Array.isArray(remote)) { toast.error('Invalid remote gallery'); return; }
-        remote.splice(idx, 1);
-        if (!publishSecret) { toast.error('Publish secret not configured.'); return; }
-        const p = await fetch('/api/publish-gallery', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-publish-secret': publishSecret }, body: JSON.stringify({ gallery: remote }) });
-        if (!p.ok) { toast.error('Failed to publish gallery update'); return; }
-        const items = remote.map((it: any, idx2: number) => ({ id: it.id ?? `shared-${idx2}`, name: it.name, role: it.role, image: it.image, addedAt: it.addedAt ?? new Date().toISOString() }));
-        setGallery(items);
-        toast.success('Photo removed from gallery.');
-      }).catch((err) => { console.error(err); toast.error('Failed to remove photo.'); });
-      return;
-    }
-
-    // Local-only removal
     removeGalleryItem(id);
-    setGallery(getGalleryItems());
-    toast.success("Photo removed from gallery.");
-    tryPublishGallery();
+    setGallery((prev) => prev.filter((item) => item.id !== id));
+    toast.success('Photo removed from gallery.');
   };
 
-  const tryPublishGallery = async () => {
-    try {
-      if (!isAdminLoggedIn()) return;
-      if (!publishSecret) return;
-      const items = getGalleryItems().map((it) => ({ name: it.name, role: it.role, image: it.image }));
-      const resp = await fetch('/api/publish-gallery', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-publish-secret': publishSecret },
-        body: JSON.stringify({ gallery: items }),
-      });
-      if (!resp.ok) {
-        let bodyText = '';
-        try {
-          const j = await resp.json();
-          bodyText = j && (j.error || j.details || JSON.stringify(j));
-        } catch (e) {
-          bodyText = await resp.text().catch(() => '');
-        }
-        console.warn('publish failed', bodyText);
-        toast.error(`Publish failed: ${bodyText || resp.statusText}`);
-        return;
-      }
-      toast.success('Published gallery to repo (visible to all).');
-    } catch (err) {
-      console.error('publish error', err);
-    }
-  };
 
   const handleAddBranch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -388,7 +298,6 @@ function Admin() {
 
   // Bulk add images to gallery
   const handleBulkAddGallery = async (files: FileList | null) => {
-    if (!isAdminLoggedIn()) { toast.error("You must be signed in as admin."); return; }
     if (!files || files.length === 0) return;
     const toAdd = Array.from(files);
     try {
@@ -402,35 +311,16 @@ function Admin() {
           r.readAsDataURL(file);
         });
         const name = file.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ");
-        const item = { name, role: "", image: base64, addedAt: new Date().toISOString() };
+        const item = addGalleryItem({
+          name,
+          role: "",
+          image: base64,
+        });
         addedItems.push(item);
       }
 
-      if (isRemoteGallery) {
-        // fetch remote, append, publish
-        const res = await fetch('/gallery.json', { cache: 'no-store' });
-        let remote: any[] = [];
-        if (res.ok) remote = await res.json();
-        remote.push(...addedItems);
-        if (!publishSecret) {
-          const items = remote.map((it: any, idx: number) => ({ id: it.id ?? `shared-${idx}`, name: it.name, role: it.role, image: it.image, addedAt: it.addedAt ?? new Date().toISOString() }));
-          setGallery(items);
-          toast.success('Photos added locally. Configure VITE_PUBLISH_SECRET to publish to the repo.');
-          return;
-        }
-        const p = await fetch('/api/publish-gallery', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-publish-secret': publishSecret }, body: JSON.stringify({ gallery: remote }) });
-        if (!p.ok) { toast.error('Failed to publish gallery.'); return; }
-        const items = remote.map((it: any, idx: number) => ({ id: it.id ?? `shared-${idx}`, name: it.name, role: it.role, image: it.image, addedAt: it.addedAt ?? new Date().toISOString() }));
-        setGallery(items);
-        toast.success('Added images to gallery and published.');
-        return;
-      }
-
-      // local fallback
-      for (const it of addedItems) addGalleryItem(it);
-      setGallery(getGalleryItems());
-      toast.success("Added images to gallery.");
-      tryPublishGallery();
+      setGallery((prev) => [...prev, ...addedItems]);
+      toast.success('Added images to gallery.');
     } catch (err) {
       console.error(err);
       toast.error("Failed to add gallery images.");

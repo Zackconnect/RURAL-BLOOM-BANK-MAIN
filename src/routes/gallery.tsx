@@ -17,14 +17,12 @@ export const Route = createFileRoute("/gallery")({
 });
 
 function Gallery() {
-  const [gallery, setGallery] = useState(() => getGalleryItems());
+  const [gallery, setGallery] = useState<any[]>([]);
   const [selectedIdx, setSelectedIdx] = useState(-1);
 
   useEffect(() => {
-    // Try to load shared gallery from public/gallery.json so updates
-    // committed to the repo (and deployed) are visible to everyone.
-    // Fall back to localStorage-backed gallery (admin-managed) if fetch fails.
     let mounted = true;
+    const localGallery = getGalleryItems();
     fetch(`/gallery.json`, { cache: "no-store" })
       .then((res) => {
         if (!res.ok) throw new Error("no gallery file");
@@ -33,7 +31,6 @@ function Gallery() {
       .then((data) => {
         if (!mounted) return;
         if (Array.isArray(data)) {
-          // Normalize items to match GalleryItem shape
           const items = data.map((it: any, idx: number) => ({
             id: it.id ?? `shared-${idx}`,
             name: it.name ?? it.title ?? `Member ${idx + 1}`,
@@ -41,13 +38,14 @@ function Gallery() {
             image: it.image ?? it.img ?? "",
             addedAt: it.addedAt ?? new Date().toISOString(),
           }));
-          setGallery(items);
+          setGallery([...items, ...localGallery]);
           return;
         }
-        setGallery(getGalleryItems());
+        setGallery(localGallery);
       })
       .catch(() => {
-        setGallery(getGalleryItems());
+        if (!mounted) return;
+        setGallery(localGallery);
       });
     return () => { mounted = false; };
   }, []);

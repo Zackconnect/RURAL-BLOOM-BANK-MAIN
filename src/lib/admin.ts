@@ -200,6 +200,53 @@ export function removeBranchItem(id: string) {
   return filtered;
 }
 
+export type GalleryItem = {
+  id: string;
+  name: string;
+  role: string;
+  image: string;
+  addedAt: string;
+};
+
+const GALLERY_STORAGE_KEY = "akrb-gallery";
+
+function readGalleryItems(): GalleryItem[] {
+  if (!isBrowser) return [];
+  try {
+    return JSON.parse(window.localStorage.getItem(GALLERY_STORAGE_KEY) ?? "[]") as GalleryItem[];
+  } catch {
+    return [];
+  }
+}
+
+function writeGalleryItems(items: GalleryItem[]) {
+  if (!isBrowser) return;
+  window.localStorage.setItem(GALLERY_STORAGE_KEY, JSON.stringify(items));
+}
+
+export function getGalleryItems(): GalleryItem[] {
+  return readGalleryItems();
+}
+
+export function addGalleryItem(item: Omit<GalleryItem, "id" | "addedAt">): GalleryItem {
+  const galleryItems = readGalleryItems();
+  const newItem: GalleryItem = {
+    ...item,
+    id: window.crypto?.randomUUID?.() ?? `${Date.now()}`,
+    addedAt: new Date().toISOString(),
+  };
+  galleryItems.push(newItem);
+  writeGalleryItems(galleryItems);
+  return newItem;
+}
+
+export function removeGalleryItem(id: string) {
+  const galleryItems = readGalleryItems();
+  const filtered = galleryItems.filter((item) => item.id !== id);
+  writeGalleryItems(filtered);
+  return filtered;
+}
+
 // Testimonial avatar management
 export type TestimonialItem = {
   id: string;
@@ -253,57 +300,4 @@ export function updateTestimonialItem(id: string, updates: Partial<Omit<Testimon
   const testimonials = readTestimonials();
   const updated = testimonials.map((item) => (item.id === id ? { ...item, ...updates } : item));
   writeTestimonials(updated);
-}
-
-// Gallery Management
-export type GalleryItem = {
-  id: string;
-  name: string;
-  role: string;
-  image: string;
-  addedAt: string;
-};
-
-const GALLERY_STORAGE_KEY = "akrb-gallery";
-
-function readGallery(): GalleryItem[] {
-  if (!isBrowser) return [];
-  try {
-    return JSON.parse(window.localStorage.getItem(GALLERY_STORAGE_KEY) ?? "[]") as GalleryItem[];
-  } catch {
-    return [];
-  }
-}
-
-function writeGallery(items: GalleryItem[]) {
-  if (!isBrowser) return;
-  window.localStorage.setItem(GALLERY_STORAGE_KEY, JSON.stringify(items));
-}
-
-export function getGalleryItems(): GalleryItem[] {
-  return readGallery();
-}
-
-export function addGalleryItem(item: Omit<GalleryItem, "id" | "addedAt">): GalleryItem {
-  const gallery = readGallery();
-  const newItem: GalleryItem = {
-    ...item,
-    id: window.crypto?.randomUUID?.() ?? `${Date.now()}`,
-    addedAt: new Date().toISOString(),
-  };
-  gallery.push(newItem);
-  writeGallery(gallery);
-  return newItem;
-}
-
-export function removeGalleryItem(id: string) {
-  const gallery = readGallery();
-  const filtered = gallery.filter((item) => item.id !== id);
-  writeGallery(filtered);
-}
-
-export function updateGalleryItem(id: string, updates: Partial<Omit<GalleryItem, "id" | "addedAt">>) {
-  const gallery = readGallery();
-  const updated = gallery.map((item) => (item.id === id ? { ...item, ...updates } : item));
-  writeGallery(updated);
 }
