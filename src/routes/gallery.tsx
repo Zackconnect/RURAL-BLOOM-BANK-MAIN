@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader, Section } from "@/components/site/Section";
-import { getGalleryItems } from "@/lib/admin";
+import { getGalleryItems, getDeletedGalleryItemIds } from "@/lib/admin";
 import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 
@@ -23,6 +23,7 @@ function Gallery() {
   useEffect(() => {
     let mounted = true;
     const localGallery = getGalleryItems();
+    const deletedIds = getDeletedGalleryItemIds();
     fetch(`/gallery.json`, { cache: "no-store" })
       .then((res) => {
         if (!res.ok) throw new Error("no gallery file");
@@ -38,14 +39,14 @@ function Gallery() {
             image: it.image ?? it.img ?? "",
             addedAt: it.addedAt ?? new Date().toISOString(),
           }));
-          setGallery([...items, ...localGallery]);
+          setGallery([...items, ...localGallery].filter((item) => !deletedIds.includes(item.id)));
           return;
         }
-        setGallery(localGallery);
+        setGallery(localGallery.filter((item) => !deletedIds.includes(item.id)));
       })
       .catch(() => {
         if (!mounted) return;
-        setGallery(localGallery);
+        setGallery(localGallery.filter((item) => !deletedIds.includes(item.id)));
       });
     return () => { mounted = false; };
   }, []);

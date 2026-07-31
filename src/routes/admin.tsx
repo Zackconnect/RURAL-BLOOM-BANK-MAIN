@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { PageHeader, Section } from "@/components/site/Section";
-import { getContactSubmissions, isAdminLoggedIn, loginAdmin, logoutAdmin, updateContactSubmission, getTestimonials, addTestimonialItem, removeTestimonialItem, getBranchItems, addBranchItem, updateBranchItem, removeBranchItem, getGalleryItems, addGalleryItem, removeGalleryItem } from "@/lib/admin";
+import { getContactSubmissions, isAdminLoggedIn, loginAdmin, logoutAdmin, updateContactSubmission, getTestimonials, addTestimonialItem, removeTestimonialItem, getBranchItems, addBranchItem, updateBranchItem, removeBranchItem, getGalleryItems, getDeletedGalleryItemIds, markGalleryItemDeleted, addGalleryItem, removeGalleryItem } from "@/lib/admin";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
 
@@ -24,6 +24,7 @@ function Admin() {
   const [activeTab, setActiveTab] = useState<"contacts" | "gallery" | "testimonials" | "branches">("contacts");
   const [submissions, setSubmissions] = useState(() => getContactSubmissions());
   const [gallery, setGallery] = useState<any[]>(() => getGalleryItems());
+  const [deletedGalleryIds, setDeletedGalleryIds] = useState<string[]>(() => getDeletedGalleryItemIds());
   const [testimonials, setTestimonials] = useState(() => getTestimonials());
   const [branches, setBranches] = useState(() => getBranchItems());
   const [username, setUsername] = useState("");
@@ -71,6 +72,7 @@ function Admin() {
   useEffect(() => {
     let mounted = true;
     const localGallery = getGalleryItems();
+    const deletedIds = getDeletedGalleryItemIds();
     fetch('/gallery.json', { cache: 'no-store' })
       .then((res) => {
         if (!res.ok) throw new Error('no gallery');
@@ -86,14 +88,14 @@ function Admin() {
             image: it.image ?? it.img ?? '',
             addedAt: it.addedAt ?? new Date().toISOString(),
           }));
-          setGallery([...items, ...localGallery]);
+          setGallery([...items, ...localGallery].filter((item) => !deletedIds.includes(item.id)));
           return;
         }
-        setGallery(localGallery);
+        setGallery(localGallery.filter((item) => !deletedIds.includes(item.id)));
       })
       .catch(() => {
         if (!mounted) return;
-        setGallery(localGallery);
+        setGallery(localGallery.filter((item) => !deletedIds.includes(item.id)));
       });
     return () => { mounted = false; };
   }, []);
@@ -226,7 +228,14 @@ function Admin() {
   };
 
   const handleRemoveGalleryItem = (id: string) => {
-    removeGalleryItem(id);
+    const localGallery = getGalleryItems();
+    const isLocal = localGallery.some((item) => item.id === id);
+    if (isLocal) {
+      removeGalleryItem(id);
+    } else {
+      markGalleryItemDeleted(id);
+      setDeletedGalleryIds((prev) => [...prev, id]);
+    }
     setGallery((prev) => prev.filter((item) => item.id !== id));
     toast.success('Photo removed from gallery.');
   };

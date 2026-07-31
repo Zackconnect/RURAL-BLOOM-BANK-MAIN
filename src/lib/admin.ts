@@ -209,6 +209,7 @@ export type GalleryItem = {
 };
 
 const GALLERY_STORAGE_KEY = "akrb-gallery";
+const GALLERY_DELETED_STORAGE_KEY = "akrb-gallery-deleted";
 
 function readGalleryItems(): GalleryItem[] {
   if (!isBrowser) return [];
@@ -224,8 +225,35 @@ function writeGalleryItems(items: GalleryItem[]) {
   window.localStorage.setItem(GALLERY_STORAGE_KEY, JSON.stringify(items));
 }
 
+function readDeletedGalleryItemIds(): string[] {
+  if (!isBrowser) return [];
+  try {
+    return JSON.parse(window.localStorage.getItem(GALLERY_DELETED_STORAGE_KEY) ?? "[]") as string[];
+  } catch {
+    return [];
+  }
+}
+
+function writeDeletedGalleryItemIds(ids: string[]) {
+  if (!isBrowser) return;
+  window.localStorage.setItem(GALLERY_DELETED_STORAGE_KEY, JSON.stringify(ids));
+}
+
 export function getGalleryItems(): GalleryItem[] {
   return readGalleryItems();
+}
+
+export function getDeletedGalleryItemIds() {
+  return readDeletedGalleryItemIds();
+}
+
+export function markGalleryItemDeleted(id: string) {
+  const ids = readDeletedGalleryItemIds();
+  if (!ids.includes(id)) {
+    ids.push(id);
+    writeDeletedGalleryItemIds(ids);
+  }
+  return ids;
 }
 
 export function addGalleryItem(item: Omit<GalleryItem, "id" | "addedAt">): GalleryItem {
