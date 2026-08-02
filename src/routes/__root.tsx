@@ -125,19 +125,5 @@ function RootShell({ children }: { children: ReactNode }) {
 }
 
 function RootComponent() {
-  return <DisabledSite />;
-}
-
-function DisabledSite() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4 py-20 text-white">
-      <div className="max-w-xl rounded-3xl border border-red-500/20 bg-slate-900/95 p-10 shadow-2xl">
-        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-red-400">Site Disabled</p>
-        <h1 className="mt-6 text-4xl font-bold">This site is no longer available</h1>
-        <p className="mt-4 text-base leading-7 text-slate-300">
-          The app has been disabled from the repository and is not accessible to the public.
-        </p>
-      </div>
-    </div>
-  );
+  throw new Error("Public deployment disabled.");
 }
