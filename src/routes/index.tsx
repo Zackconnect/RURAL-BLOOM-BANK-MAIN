@@ -41,11 +41,17 @@ function Home() {
   return (
     <>
       {/* HERO */}
-      <section className="relative min-h-[85vh] overflow-hidden">
-        <div className="absolute inset-0 -z-10">
-          <img src={heroImg} alt="Community banking" className="h-full w-full object-cover" width={1600} height={1100} />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary-dark/95 via-primary-dark/80 to-primary/40" />
-          <div className="absolute inset-0 bg-black/20" />
+      <section className="relative min-h-[85vh] overflow-hidden bg-primary-dark text-white">
+        <div className="absolute inset-0 -z-10 bg-primary-dark">
+          <img
+            src={heroImg}
+            alt="Community banking"
+            className="h-full w-full object-cover opacity-25"
+            width={1600}
+            height={1100}
+          />
+          <div className="absolute inset-0 bg-primary-dark/85" />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary-dark/90 via-primary/70 to-primary/30" />
         </div>
         <div className="container-x relative py-24 md:py-32 text-primary-foreground">
           <div className="max-w-2xl">
