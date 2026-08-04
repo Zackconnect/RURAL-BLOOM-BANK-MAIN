@@ -41,20 +41,22 @@ function Home() {
   return (
     <>
       {/* HERO */}
-      <section className="relative overflow-hidden">
+      <section className="relative min-h-[85vh] overflow-hidden">
         <div className="absolute inset-0 -z-10">
-          <img src={heroImg} alt="" className="h-full w-full object-cover" width={1600} height={1100} />
+          <img src={heroImg} alt="Community banking" className="h-full w-full object-cover" width={1600} height={1100} />
           <div className="absolute inset-0 bg-gradient-to-r from-primary-dark/95 via-primary-dark/80 to-primary/40" />
+          <div className="absolute inset-0 bg-black/20" />
         </div>
-        <div className="container-x relative py-20 md:py-32 text-primary-foreground">
+        <div className="container-x relative py-24 md:py-32 text-primary-foreground">
           <div className="max-w-2xl">
             <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-primary-foreground/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest backdrop-blur">
               <span className="h-1.5 w-1.5 rounded-full bg-gold" />
               Trusted since 2024
             </div>
-            <h1 className="text-4xl font-extrabold leading-tight tracking-tight md:text-6xl lg:text-7xl">
-              Welcome to <span className="text-gradient-gold">{bank.name}</span>            </h1>
-            <p className="mt-5 max-w-xl text-lg opacity-90 md:text-xl">
+            <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-white md:text-6xl lg:text-7xl">
+              Welcome to <span className="text-gradient-gold">{bank.name}</span>
+            </h1>
+            <p className="mt-5 max-w-xl text-lg text-white/90 md:text-xl">
               From the farm to the city — grow your money, fund your dreams and bank
               on your terms with {bank.name}.
             </p>
@@ -62,11 +64,11 @@ function Home() {
               <Button asChild size="lg" className="rounded-full gradient-gold text-gold-foreground shadow-elegant hover:opacity-95">
                 <Link to="/contact">Open an Account <ArrowRight className="ml-1 h-4 w-4" /></Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="rounded-full bg-transparent border-primary-foreground/40 text-primary-foreground hover:bg-primary-foreground/10">
+              <Button asChild size="lg" variant="outline" className="rounded-full bg-white/10 border-white/20 text-white hover:bg-white/15">
                 <Link to="/about">Learn More</Link>
               </Button>
               {showAdminFromHome ? (
-                <Button asChild size="lg" variant="outline" className="rounded-full bg-transparent border-gold/40 text-gold hover:bg-gold/10">
+                <Button asChild size="lg" variant="outline" className="rounded-full bg-white/10 border-white/20 text-white hover:bg-white/15">
                   <Link to="/admin">Admin Portal</Link>
                 </Button>
               ) : null}
@@ -74,7 +76,7 @@ function Home() {
 
             <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4 max-w-2xl">
               {stats.map((s) => (
-                <div key={s.label} className="rounded-2xl bg-primary-foreground/10 p-4 backdrop-blur">
+                <div key={s.label} className="rounded-2xl bg-white/10 p-4 backdrop-blur border border-white/10 text-white">
                   <div className="text-2xl font-extrabold md:text-3xl text-gold">
                     <AnimatedCounter value={s.value} suffix={s.suffix} />
                   </div>
